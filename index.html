@@ -683,111 +683,138 @@
       </div>
     </section>
 
-    <!-- Footer Section -->
     <footer class="w-full bg-green-900 text-white mt-24">
-      <div class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <!-- Column 1: Logo + Alamat + GMap -->
-          <div class="flex flex-col items-center md:items-start space-y-4">
-            <!-- Logo & Name -->
-            <div class="flex items-center">
+      <div class="container mx-auto px-24 py-8">
+        <!-- section 1 -->
+        <div
+          class="flex flex-col md:flex-row justify-between items-center pb-8 mb-8 border-b border-green-800"
+        >
+          <!-- Kiri: Logo dan Teks -->
+          <div
+            class="flex flex-col md:items-start items-center text-center md:text-left mb-4 md:mb-0"
+          >
+            <div class="flex items-center mb-2">
               <img
-                src="image/icon.jpg"
-                alt="Company Logo"
-                class="w-12 h-12 rounded-full mr-3"
+                src="image/icon.JPG"
+                alt="SKAWAN INDUSTRIES Logo"
+                class="w-10 h-10 rounded-full mr-3"
               />
-              <div>
-                <h3 class="font-bold text-xl">SKAWAN INDUSTRIES</h3>
-                <p class="text-green-300">Custom Apparel Specialist</p>
-              </div>
+              <h3 class="font-bold text-2xl">SKAWAN INDUSTRIES</h3>
             </div>
+            <h6 class="text-sm text-white">
+              Start order now and get a cool design product
+            </h6>
+          </div>
 
-            <!-- Alamat -->
-            <p class="text-sm text-green-200">
+          <!-- Placeholder kanan (bisa dihapus jika tak diperlukan) -->
+          <div class="hidden md:block"></div>
+        </div>
+
+        <!-- section 2 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div
+            class="flex flex-col items-center md:items-start text-center md:text-left w-full"
+          >
+            <h4 class="font-bold text-lg text-white">Alamat</h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4 md:mx-0 mx-auto"></div>
+            <p class="text-white mb-4">
               Jl. Contoh Alamat No. 123, Sidoarjo, Jawa Timur
             </p>
-
-            <!-- Google Map -->
-            <div
-              class="w-full md:w-[400px] lg:w-[480px] xl:w-[550px] h-64 rounded-lg overflow-hidden"
-            >
+            <div class="w-full h-[300px] rounded-lg overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3955.041756283618!2d112.7182763152586!3d-7.457519994623432!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7e5d85f6a5885%3A0x301e8f1fc28b8d0!2sSidoarjo%2C%20Jawa%20Timur!5e0!3m2!1sen!2sid!4v1620000000000!5m2!1sen!2sid"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.4553500450837!2d112.71516307580588!3d-7.191808971272498!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7e3bb2f6e9c61%3A0x90243f18c29569dc!2sAlun-Alun%20Sidoarjo!5e0!3m2!1sid!2sid!4v1718645050000!5m2!1sid!2sid"
                 width="100%"
                 height="100%"
                 style="border: 0"
                 allowfullscreen=""
                 loading="lazy"
-                class="filter grayscale contrast-110"
+                referrerpolicy="no-referrer-when-downgrade"
+                class="w-full h-full filter grayscale contrast-110"
               ></iframe>
             </div>
           </div>
 
-          <!-- Column 2: Quick Links -->
-          <div class="text-center md:text-left md:pl-24">
-            <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+          <div class="flex flex-col items-center md:items-start">
+            <h4 class="font-bold text-lg text-white">Follow Us On :</h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4 md:mx-0 mx-auto"></div>
+            <div class="flex flex-col space-y-4">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
+                >
+                  <img
+                    src="image/whatsapp_icon.png"
+                    alt="WhatsApp"
+                    class="w-5 h-5"
+                  />
+                </div>
+                <span class="text-white">WhatsApp</span>
+              </div>
+
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
+                >
+                  <img
+                    src="image/instagram_icon.png"
+                    alt="Instagram"
+                    class="w-5 h-5"
+                  />
+                </div>
+                <span class="text-white">Instagram</span>
+              </div>
+
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
+                >
+                  <img
+                    src="image/shopee_icon.png"
+                    alt="Shopee"
+                    class="w-5 h-5"
+                  />
+                </div>
+                <span class="text-white">Shopee</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center md:text-left">
+            <h4 class="font-bold text-lg text-white">Jam Operasional</h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4 md:mx-0 mx-auto"></div>
+            <p class="text-white">Monday–Friday:</p>
+            <p class="text-white">09.00 am – 08.00 pm</p>
+            <p class="text-white mt-2">Saturday:</p>
+            <p class="text-white">10.00 am – 06.00 pm</p>
+          </div>
+
+          <div class="text-center md:text-left">
+            <h4 class="font-bold text-lg text-white">Quick Links</h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4 md:mx-0 mx-auto"></div>
             <ul class="space-y-2">
               <li>
-                <a href="#" class="text-green-300 hover:text-white">HOME</a>
+                <a href="#" class="text-white hover:text-green-300">HOME</a>
               </li>
               <li>
-                <a href="#" class="text-green-300 hover:text-white"
+                <a href="#" class="text-white hover:text-green-300"
                   >LOW T-SHIRT</a
                 >
               </li>
               <li>
-                <a href="#" class="text-green-300 hover:text-white"
-                  >LONG-T-SHIRT</a
+                <a href="#" class="text-white hover:text-green-300"
+                  >LONG T-SHIRT</a
                 >
               </li>
               <li>
-                <a href="#" class="text-green-300 hover:text-white">KEMEJA</a>
+                <a href="#" class="text-white hover:text-green-300">HOODIE</a>
               </li>
               <li>
-                <a href="#" class="text-green-300 hover:text-white">HOODIE</a>
+                <a href="#" class="text-white hover:text-green-300">JACKET</a>
+              </li>
+              <li>
+                <a href="#" class="text-white hover:text-green-300">KEMEJA</a>
               </li>
             </ul>
-          </div>
-
-          <!-- Column 3: Social Icons -->
-          <div class="flex flex-col items-center md:items-end space-y-6">
-            <!-- Social Media Circle Icons -->
-            <div class="flex space-x-4">
-              <!-- WhatsApp Circle Icon -->
-              <a
-                href="https://wa.me/6281234567890"
-                target="_blank"
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
-              >
-                <img
-                  src="image/whatsapp_icon.png"
-                  alt="WhatsApp"
-                  class="w-5 h-5"
-                />
-              </a>
-
-              <!-- Instagram Circle Icon -->
-              <a
-                href="https://instagram.com/skawan.official"
-                target="_blank"
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
-              >
-                <img
-                  src="image/instagram_icon.png"
-                  alt="Instagram"
-                  class="w-5 h-5"
-                />
-              </a>
-
-              <!-- Shopee Circle Icon -->
-              <a
-                href="https://shopee.co.id/skawan.official"
-                target="_blank"
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
-              >
-                <img src="image/shopee_icon.png" alt="Shopee" class="w-5 h-5" />
-              </a>
-            </div>
           </div>
         </div>
 
@@ -795,7 +822,7 @@
         <div
           class="border-t border-green-800 mt-8 pt-6 text-center text-sm text-green-300"
         >
-          <p>&copy; 2025 SKAWAN INDUSTRIES. All rights reserved.</p>
+          <p>© 2025 SKAWAN INDUSTRIES. All rights reserved.</p>
           <p class="mt-1">Made with ❤️ in Sidoarjo, East Java</p>
         </div>
       </div>
