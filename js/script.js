@@ -36,4 +36,24 @@ document.addEventListener("DOMContentLoaded", () => {
       clickable: true,
     },
   });
+
+  // scroll top button
+  const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+  // Tampilkan tombol saat user scroll ke bawah 300px
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      scrollToTopBtn.classList.remove("hidden");
+    } else {
+      scrollToTopBtn.classList.add("hidden");
+    }
+  });
+
+  // Scroll ke atas saat tombol diklik
+  scrollToTopBtn.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
 });
