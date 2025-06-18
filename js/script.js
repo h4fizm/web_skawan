@@ -72,3 +72,19 @@ function changeMainImage(thumbnail) {
     mainImage.classList.remove("opacity-0");
   }, 200); // tunggu 200ms untuk animasi
 }
+
+// copylink design checkout page
+function copyLink() {
+  const input = document.getElementById("linkDesain");
+  const message = document.getElementById("copyMessage");
+
+  input.select();
+  input.setSelectionRange(0, 99999); // Mobile support
+  document.execCommand("copy");
+
+  // Tampilkan pesan berhasil
+  message.classList.remove("hidden");
+  setTimeout(() => {
+    message.classList.add("hidden");
+  }, 2000);
+}

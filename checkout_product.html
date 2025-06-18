@@ -3,9 +3,531 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Checkout Product</title>
+    <title>Checkout Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- favicon -->
+    <link rel="icon" href="image/icon.JPG" type="image/png" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <!-- Swiper CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <!-- Material Icon -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- AOS JS Fade Up/Fade Down -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   </head>
-  <body>
-    <h1>laman checkout product</h1>
+
+  <body class="bg-white text-gray-900">
+    <!-- Navbar Top -->
+    <nav
+      class="fixed top-0 left-0 w-full px-4 md:px-10 py-3 border-b shadow-sm flex items-center justify-between bg-white z-[1000]"
+      data-aos="fade-down"
+      data-aos-duration="800"
+    >
+      <!-- Left: Logo -->
+      <div class="flex items-center space-x-2 z-[1001]">
+        <img src="image/icon.JPG" alt="Logo" class="w-8 h-8 object-contain" />
+        <span class="text-md font-extrabold tracking-wide">
+          SKAWAN INDUSTRIES
+        </span>
+      </div>
+
+      <!-- Right: Auth Buttons (hidden in mobile) -->
+      <div class="hidden lg:flex items-center space-x-3 z-[1001]">
+        <button
+          class="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 rounded-full hover:bg-gray-200 transition"
+          title="Light/Dark Mode"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-800"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              d="M17.293 13.293a8 8 0 01-10.586-10.586A8 8 0 1017.293 13.293z"
+            />
+          </svg>
+          <span class="text-sm font-medium text-gray-800"
+            >Light Mode / Dark Mode</span
+          >
+        </button>
+
+        <button
+          class="text-sm px-4 py-1.5 border border-gray-800 rounded-full hover:bg-gray-100 transition"
+        >
+          Sign In
+        </button>
+        <button
+          class="text-sm px-4 py-1.5 bg-black text-white rounded-full hover:bg-gray-800 transition"
+        >
+          Get Started
+        </button>
+      </div>
+
+      <!-- Burger Button -->
+      <button
+        id="mobile-menu-toggle"
+        class="lg:hidden focus:outline-none z-[1001]"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 text-gray-900"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div
+      id="mobile-menu"
+      class="lg:hidden hidden flex-col px-4 pb-32 border-b bg-white z-[999] fixed top-[20px] w-full"
+      data-aos="fade-down"
+      data-aos-duration="800"
+    >
+      <!-- Produk List -->
+      <div class="space-y-4 text-lg font-semibold mt-6 pt-5 border-t">
+        <a href="index.html" class="block border-b py-3 uppercase">HOME</a>
+        <a href="list_product.html" class="block border-b py-3 uppercase"
+          >LOW T-SHIRT</a
+        >
+        <a href="list_product.html" class="block border-b py-3 uppercase"
+          >LONG T-SHIRT</a
+        >
+        <a href="list_product.html" class="block border-b py-3 uppercase"
+          >HOODIE</a
+        >
+        <a href="list_product.html" class="block border-b py-3 uppercase"
+          >JACKET</a
+        >
+        <a href="list_product.html" class="block border-b py-3 uppercase"
+          >KEMEJA</a
+        >
+      </div>
+
+      <!-- Contact Us Button -->
+      <div class="mt-4">
+        <button
+          class="bg-black text-white text-base px-6 py-3 rounded-full hover:bg-gray-800 transition w-fit"
+        >
+          CONTACT US NOW
+        </button>
+      </div>
+
+      <!-- Utility Buttons: Positioned bottom right -->
+      <div class="absolute bottom-6 right-4 flex items-center gap-2">
+        <!-- Light/Dark -->
+        <button
+          class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-full text-base"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-800"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              d="M17.293 13.293a8 8 0 01-10.586-10.586A8 8 0 1017.293 13.293z"
+            />
+          </svg>
+          Mode
+        </button>
+
+        <!-- Sign In -->
+        <button class="px-4 py-2 border border-gray-800 rounded-full text-base">
+          Sign In
+        </button>
+
+        <!-- Get Started -->
+        <button
+          class="px-4 py-2 bg-black text-white rounded-full text-base hover:bg-gray-800 transition"
+        >
+          Get Started
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Product Menu (desktop only) -->
+    <div
+      class="hidden lg:flex justify-between items-center px-4 md:px-8 py-4 text-sm uppercase font-semibold border-b bg-white fixed top-[50px] w-full z-[998]"
+      data-aos="fade-down"
+      data-aos-duration="800"
+    >
+      <div class="space-x-6 tracking-wide">
+        <a href="index.html" class="hover:text-black text-gray-700">HOME</a>
+        <a href="list_product.html" class="hover:text-black text-gray-700"
+          >LOW T-SHIRT</a
+        >
+        <a href="list_product.html" class="hover:text-black text-gray-700"
+          >LONG T-SHIRT</a
+        >
+        <a href="list_product.html" class="hover:text-black text-gray-700"
+          >HOODIE</a
+        >
+        <a href="list_product.html" class="hover:text-black text-gray-700"
+          >JACKET</a
+        >
+        <a href="list_product.html" class="hover:text-black text-gray-700"
+          >KEMEJA</a
+        >
+        <button
+          class="bg-black text-white text-xs px-5 py-2 rounded-full hover:bg-gray-800 transition"
+        >
+          CONTACT US NOW
+        </button>
+      </div>
+    </div>
+
+    <!-- Checkout Product Section -->
+    <section class="pt-[90px] sm:pt-[140px] pb-6 px-4">
+      <div class="max-w-7xl mx-auto">
+        <!-- Tombol Back -->
+        <div class="mb-4" data-aos="fade-down" data-aos-delay="200">
+          <a
+            href=""
+            class="inline-flex items-center text-sm text-gray-600 hover:text-black font-medium transition"
+          >
+            <!-- Icon panah kiri -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Kembali
+          </a>
+        </div>
+
+        <!-- Title -->
+        <div
+          class="text-center mb-6 sm:mb-10"
+          data-aos="fade-down"
+          data-aos-delay="200"
+        >
+          <h2 class="text-3xl font-bold text-black">Checkout Product</h2>
+          <p class="text-gray-600 text-sm mt-2 max-w-xl mx-auto">
+            Periksa kembali detail pesanan Anda, dan kirim link desain ke
+            WhatsApp admin untuk melanjutkan proses pemesanan.
+          </p>
+        </div>
+
+        <!-- Card Wrapper -->
+        <div
+          class="bg-white shadow-md border border-black p-6 rounded-none grid grid-cols-1 md:grid-cols-2 gap-8 items-start"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <!-- Kiri: Ringkasan Produk -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-black">
+              Produk yang Dipesan
+            </h3>
+            <div class="flex items-center gap-4 border p-4 rounded">
+              <img
+                src="image/image1.jpg"
+                alt="Product"
+                class="w-24 h-24 object-cover rounded"
+              />
+              <div>
+                <p class="font-medium text-black">Black Basic Tee</p>
+                <p class="text-sm text-gray-600">Ukuran : L</p>
+                <p class="text-gray-800 font-semibold mt-1">Rp 129.000</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Link Desain Anda:
+              </label>
+              <div class="relative">
+                <input
+                  type="text"
+                  id="linkDesain"
+                  readonly
+                  value="nanti berupa link disini ... "
+                  class="w-full bg-gray-100 border border-gray-300 rounded px-3 py-2 text-sm text-gray-800 pr-10 focus:outline-none"
+                />
+                <!-- Icon Copy -->
+                <button
+                  onclick="copyLink()"
+                  class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-black"
+                  title="Copy link"
+                >
+                  <!-- Heroicons Clipboard Copy Icon -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 16h8m-4-4h4m-6-4h2M4 4h16v16H4V4z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <p id="copyMessage" class="text-green-600 text-sm mt-1 hidden">
+                Link berhasil disalin!
+              </p>
+            </div>
+          </div>
+
+          <!-- Kanan: Petunjuk dan Tombol -->
+          <div class="space-y-6">
+            <h3 class="text-xl font-semibold text-black">Langkah Pemesanan</h3>
+            <ol class="list-decimal text-sm text-gray-700 ml-5 space-y-2">
+              <li>Klik tombol "Kirim ke WhatsApp Admin" di bawah ini.</li>
+              <li>
+                Pesan otomatis akan terkirim berisi produk dan link desain kamu.
+              </li>
+              <li>
+                Admin akan memverifikasi desain dan memberikan instruksi
+                pembayaran.
+              </li>
+              <li>
+                Pembayaran dilakukan melalui transfer manual atau marketplace.
+              </li>
+              <li>Admin akan verifikasi ulang dan memproses pesanan kamu.</li>
+            </ol>
+
+            <button
+              class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded transition"
+            >
+              Kirim ke WhatsApp Admin
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="w-full bg-green-900 text-white mt-10">
+      <div
+        class="max-w-[1500px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20 xl:px-24 py-12"
+      >
+        <!-- Top Section -->
+        <div
+          class="flex flex-col md:flex-row justify-between items-center pb-8 mb-8 border-b border-green-800"
+        >
+          <!-- Logo and Tagline -->
+          <div
+            class="flex flex-col md:items-start items-center text-center md:text-left mb-4 md:mb-0"
+          >
+            <div class="flex items-center mb-2">
+              <img
+                src="image/icon.JPG"
+                alt="SKAWAN INDUSTRIES Logo"
+                class="w-10 h-10 rounded-full mr-3"
+              />
+              <h3 class="font-bold text-2xl">SKAWAN INDUSTRIES</h3>
+            </div>
+            <h6 class="text-sm text-white">
+              Start order now and get a cool design product
+            </h6>
+          </div>
+        </div>
+
+        <!-- Grid Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Alamat -->
+          <div class="flex flex-col items-start text-left">
+            <h4 class="font-bold text-lg text-white">Alamat</h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4"></div>
+            <p class="text-white mb-4">
+              Jl. Contoh Alamat No. 123, Sidoarjo, Jawa Timur
+            </p>
+            <div
+              class="w-full h-[280px] md:h-[320px] rounded-lg overflow-hidden"
+            >
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.4553500450837!2d112.71516307580588!3d-7.191808971272498!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7e3bb2f6e9c61%3A0x90243f18c29569dc!2sAlun-Alun%20Sidoarjo!5e0!3m2!1sid!2sid!4v1718645050000!5m2!1sid!2sid"
+                width="100%"
+                height="100%"
+                style="border: 0"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                class="w-full h-full filter grayscale contrast-110"
+              ></iframe>
+            </div>
+          </div>
+
+          <!-- Follow Us On -->
+          <div class="flex flex-col items-start text-left">
+            <h4 class="font-bold text-lg text-white">Follow Us On :</h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4"></div>
+            <div class="flex flex-col space-y-4">
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
+                >
+                  <img
+                    src="image/whatsapp_icon.png"
+                    alt="WhatsApp"
+                    class="w-5 h-5"
+                  />
+                </div>
+                <span class="text-white">WhatsApp</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
+                >
+                  <img
+                    src="image/instagram_icon.png"
+                    alt="Instagram"
+                    class="w-5 h-5"
+                  />
+                </div>
+                <span class="text-white">Instagram</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
+                >
+                  <img
+                    src="image/shopee_icon.png"
+                    alt="Shopee"
+                    class="w-5 h-5"
+                  />
+                </div>
+                <span class="text-white">Shopee</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Get In Touch -->
+          <div class="flex flex-col items-start text-left">
+            <h4 class="font-bold text-lg text-white">Get In Touch With Us</h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4"></div>
+            <p class="text-white">Phone: +62 812 3456 7890</p>
+            <p class="text-white mt-4">Monday–Friday:<br />9.00 am – 8.00 pm</p>
+            <p class="text-white mt-4">Saturday:<br />10.00 am – 6.00 pm</p>
+            <p class="text-white mt-4">support@skawanindustries.com</p>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="flex flex-col items-start text-left">
+            <h4 class="font-bold text-lg text-white">Quick Links</h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4"></div>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-white hover:text-green-300">HOME</a>
+              </li>
+              <li>
+                <a href="#" class="text-white hover:text-green-300"
+                  >LOW T-SHIRT</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-white hover:text-green-300"
+                  >LONG T-SHIRT</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-white hover:text-green-300">HOODIE</a>
+              </li>
+              <li>
+                <a href="#" class="text-white hover:text-green-300">JACKET</a>
+              </li>
+              <li>
+                <a href="#" class="text-white hover:text-green-300">KEMEJA</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div
+          class="mt-12 pt-6 border-t border-green-800 flex flex-col md:flex-row justify-between items-center text-sm text-white gap-4"
+        >
+          <!-- Left: Follow Us On -->
+          <div class="flex items-center space-x-4">
+            <span>Follow Us On:</span>
+            <a href="#" class="hover:text-green-300 transition">
+              <img
+                src="image/whatsapp_icon.png"
+                alt="WhatsApp"
+                class="w-5 h-5"
+              />
+            </a>
+            <a href="#" class="hover:text-green-300 transition">
+              <img
+                src="image/instagram_icon.png"
+                alt="Instagram"
+                class="w-5 h-5"
+              />
+            </a>
+          </div>
+
+          <!-- Center: Copyright -->
+          <p class="text-center w-full md:w-auto">
+            © 2025 SKAWAN INDUSTRIES. All rights reserved.
+          </p>
+
+          <!-- Right: Kosong -->
+          <div class="w-[120px] h-5 hidden md:block"></div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button
+      id="scrollToTopBtn"
+      class="fixed bottom-6 right-6 z-50 hidden p-3 bg-green-700 text-white rounded-lg shadow-lg hover:bg-green-800 transition"
+      aria-label="Scroll to top"
+    >
+      <!-- Icon (Heroicons arrow-up) -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-6 h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 10l7-7m0 0l7 7m-7-7v18"
+        />
+      </svg>
+    </button>
+
+    <!-- swiper js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- AOS JS Fade Up/Fade Down -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+    <!-- custom js -->
+    <script src="js/script.js"></script>
   </body>
 </html>
