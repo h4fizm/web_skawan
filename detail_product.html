@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LOW T-SHIRT - Product List</title>
+    <title>LOW T-SHIRT - Black Basic Tee</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- favicon -->
     <link rel="icon" href="image/icon.JPG" type="image/png" />
@@ -192,15 +192,11 @@
       </div>
     </div>
 
-    <!-- Card List Product Section -->
-    <section class="pt-[90px] sm:pt-[140px] pb-16 px-4">
+    <!-- Product Detail Section -->
+    <section class="pt-[90px] sm:pt-[140px] pb-6 px-4">
       <div class="max-w-7xl mx-auto">
         <!-- Breadcrumb -->
-        <nav
-          class="text-sm text-gray-500 mb-4 mt-2 sm:mt-0"
-          aria-label="Breadcrumb"
-          data-aos="fade-right"
-        >
+        <nav class="text-sm text-gray-500 mb-10 sm:mb-12">
           <ol class="list-none p-0 inline-flex space-x-1">
             <li>
               <a
@@ -218,197 +214,161 @@
               >
               <span>/</span>
             </li>
-            <li class="text-black font-semibold">LOW T-SHIRT</li>
+            <li>
+              <a
+                href="list_product.html"
+                class="hover:underline hover:text-black font-medium"
+                >LOW T-SHIRT</a
+              >
+              <span>/</span>
+            </li>
+            <li class="text-black font-semibold">Black Basic Tee</li>
           </ol>
         </nav>
 
-        <!-- Title -->
-        <div class="text-center mb-6" data-aos="fade-up" data-aos-delay="200">
-          <h2 class="text-3xl font-bold text-black">LOW T-SHIRT</h2>
-          <p class="text-sm text-gray-600 mt-2">
-            Pilih Koleksi Kaos untuk Anda Desain.
-          </p>
-        </div>
-
-        <!-- Search Bar -->
+        <!-- Card Wrapper -->
         <div
-          class="max-w-md mx-auto mb-12"
+          class="bg-white shadow-md border border-black p-6 rounded-none grid grid-cols-1 md:grid-cols-2 gap-8 items-start"
           data-aos="fade-up"
-          data-aos-delay="300"
+          data-aos-delay="100"
         >
-          <div class="relative">
-            <input
-              type="text"
-              placeholder="Cari desain atau nama produk..."
-              class="w-full border border-gray-300 rounded-full py-3 pl-5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+          <!-- LEFT: Image -->
+          <div class="flex flex-col items-center">
+            <img
+              id="mainImage"
+              src="image/image1.jpg"
+              alt="Black Basic Tee"
+              class="w-full max-w-sm h-auto object-contain"
             />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-gray-500 absolute right-4 top-1/2 transform -translate-y-1/2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-3.85z"
+            <!-- Thumbnail gallery -->
+            <div class="flex space-x-3 mt-4">
+              <img
+                src="image/image1.jpg"
+                data-img="image/image1.jpg"
+                onclick="changeMainImage(this)"
+                class="w-12 h-12 object-cover border cursor-pointer"
               />
-            </svg>
+              <img
+                src="image/image2.jpg"
+                data-img="image/image2.jpg"
+                onclick="changeMainImage(this)"
+                class="w-12 h-12 object-cover border cursor-pointer"
+              />
+              <img
+                src="image/image3.jpg"
+                data-img="image/image3.jpg"
+                onclick="changeMainImage(this)"
+                class="w-12 h-12 object-cover border cursor-pointer"
+              />
+            </div>
+          </div>
+
+          <!-- RIGHT: Info -->
+          <div class="flex flex-col justify-start h-full mt-6 space-y-6">
+            <h1 class="text-2xl sm:text-3xl font-bold text-black">
+              Black Basic Tee
+            </h1>
+
+            <p class="text-sm font-medium flex items-center gap-1">
+              <!-- Icon T-Shirt -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 text-black"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M4 4l2-2h12l2 2v3l-5 2v11h-6V9L4 7V4z" />
+              </svg>
+              Category :
+              <span class="font-medium text-black ml-1">LOW T-SHIRT</span>
+            </p>
+
+            <div>
+              <span class="text-2xl font-medium text-black">Rp 129.000</span>
+            </div>
+
+            <p class="text-gray-700 text-sm leading-relaxed text-justify">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+              Doloremque nostrum magnam laudantium enim molestias, rem minus, ut
+              a accusantium, distinctio officia ullam soluta inventore corporis
+              ad velit saepe ipsam? Quasi!
+            </p>
+
+            <button
+              class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-all inline-flex items-center gap-2 w-full max-w-xs justify-center mx-auto md:w-fit md:mx-0 md:justify-start"
+            >
+              <!-- Icon Kuas Lukis -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 text-white"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536M9 11l6-6m2 2a2.828 2.828 0 114-4 2.828 2.828 0 01-4 4zM4 20h4l10-10-4-4L4 16v4z"
+                />
+              </svg>
+              Start Design
+            </button>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Grid Cards Products -->
+    <!-- Description & Information Section -->
+    <section class="pt-4 pb-16 px-4">
+      <div class="max-w-7xl mx-auto">
         <div
-          class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-4"
+          class="bg-white shadow-md border border-black p-6 rounded-none grid grid-cols-1 md:grid-cols-2 gap-8 items-start"
+          data-aos="fade-up"
+          data-aos-delay="150"
         >
-          <!-- Card 1 -->
-          <a href="detail_product.html">
-            <div
-              class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <img
-                src="image/image1.jpg"
-                alt="Product 1"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-4 text-center">
-                <h3 class="text-lg font-semibold text-black">
-                  Black Basic Tee
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Rp 129.000</p>
-              </div>
-            </div>
-          </a>
+          <!-- LEFT: Description -->
+          <div class="flex flex-col space-y-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-black">
+              Description
+            </h2>
+            <p class="text-sm text-gray-700 leading-relaxed text-justify">
+              Kaos basic warna hitam ini dirancang menggunakan bahan katun
+              combed 24s yang lembut dan ringan. Cocok digunakan untuk aktivitas
+              harian, baik di dalam maupun luar ruangan. Teksturnya nyaman di
+              kulit dan tidak panas saat dikenakan.
+            </p>
+            <p class="text-sm text-gray-700 leading-relaxed text-justify">
+              Dengan desain yang simpel namun tetap stylish, kaos ini dapat
+              dipadukan dengan berbagai jenis bawahan. Jahitan rapi dan kerah
+              menggunakan rib berkualitas membuatnya tetap nyaman meski dicuci
+              berulang kali.
+            </p>
+          </div>
 
-          <!-- Card 2 -->
-          <a href="detail_product.html">
-            <div
-              class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <img
-                src="image/image2.jpg"
-                alt="Product 2"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-4 text-center">
-                <h3 class="text-lg font-semibold text-black">
-                  Black Basic Tee
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Rp 129.000</p>
-              </div>
-            </div>
-          </a>
-
-          <!-- Card 3 -->
-          <a href="detail_product.html">
-            <div
-              class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <img
-                src="image/image3.jpg"
-                alt="Product 3"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-4 text-center">
-                <h3 class="text-lg font-semibold text-black">
-                  Black Basic Tee
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Rp 129.000</p>
-              </div>
-            </div>
-          </a>
-
-          <!-- Card 4 -->
-          <a href="detail_product.html">
-            <div
-              class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <img
-                src="image/image4.jpg"
-                alt="Product 4"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-4 text-center">
-                <h3 class="text-lg font-semibold text-black">
-                  Black Basic Tee
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Rp 129.000</p>
-              </div>
-            </div>
-          </a>
-
-          <!-- Card 5 -->
-          <a href="detail_product.html">
-            <div
-              class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <img
-                src="image/image1.jpg"
-                alt="Product 5"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-4 text-center">
-                <h3 class="text-lg font-semibold text-black">
-                  Black Basic Tee
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Rp 129.000</p>
-              </div>
-            </div>
-          </a>
-
-          <!-- Card 6 -->
-          <a href="detail_product.html">
-            <div
-              class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <img
-                src="image/image3.jpg"
-                alt="Product 6"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-4 text-center">
-                <h3 class="text-lg font-semibold text-black">
-                  Black Basic Tee
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Rp 129.000</p>
-              </div>
-            </div>
-          </a>
-
-          <!-- Card 7 -->
-          <a href="detail_product.html">
-            <div
-              class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <img
-                src="image/image2.jpg"
-                alt="Product 7"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-4 text-center">
-                <h3 class="text-lg font-semibold text-black">
-                  Black Basic Tee
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Rp 129.000</p>
-              </div>
-            </div>
-          </a>
+          <!-- RIGHT: Information -->
+          <div class="flex flex-col space-y-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-black">
+              Information
+            </h2>
+            <p class="text-sm text-gray-700 leading-relaxed text-justify">
+              Bahan: 100% Cotton Combed 24s
+            </p>
+            <p class="text-sm text-gray-700 leading-relaxed text-justify">
+              Warna: Hitam
+            </p>
+            <p class="text-sm text-gray-700 leading-relaxed text-justify">
+              Tersedia ukuran S, M, L, dan XL dengan detail sebagai berikut: - S
+              (Lebar 46 cm | Panjang 66 cm), - M (Lebar 50 cm | Panjang 69 cm),
+              - L (Lebar 53 cm | Panjang 72 cm), - XL (Lebar 56 cm | Panjang 75
+              cm).
+            </p>
+            <p class="text-sm text-gray-700 leading-relaxed text-justify">
+              Petunjuk perawatan: Cuci dengan air dingin, hindari pemutih,
+              jangan disikat keras, setrika suhu sedang. Produk dikemas dalam
+              plastik zipper reusable untuk menjaga kualitas saat pengiriman.
+            </p>
+          </div>
         </div>
       </div>
     </section>

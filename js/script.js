@@ -57,3 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// change image detail_product
+function changeMainImage(thumbnail) {
+  const mainImage = document.getElementById("mainImage");
+  const newSrc = thumbnail.getAttribute("data-img");
+  mainImage.src = newSrc;
+}
