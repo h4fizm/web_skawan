@@ -62,5 +62,13 @@ document.addEventListener("DOMContentLoaded", () => {
 function changeMainImage(thumbnail) {
   const mainImage = document.getElementById("mainImage");
   const newSrc = thumbnail.getAttribute("data-img");
-  mainImage.src = newSrc;
+
+  // Tambahkan efek fade-out
+  mainImage.classList.add("opacity-0");
+
+  setTimeout(() => {
+    mainImage.src = newSrc;
+    // Setelah gambar diganti, fade-in lagi
+    mainImage.classList.remove("opacity-0");
+  }, 200); // tunggu 200ms untuk animasi
 }
