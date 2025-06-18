@@ -88,3 +88,8 @@ function copyLink() {
     message.classList.add("hidden");
   }, 2000);
 }
+
+// modal pop-up
+document.getElementById("infoButton").addEventListener("click", () => {
+  document.getElementById("infoModal").classList.remove("hidden");
+});

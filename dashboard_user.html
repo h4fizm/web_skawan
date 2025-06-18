@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LOW T-SHIRT - Black Basic Tee</title>
+    <title>Dashboard User Page</title>
     <!-- favicon -->
     <link rel="icon" href="image/icon.JPG" type="image/png" />
     <link rel="stylesheet" href="css/styles.css" />
@@ -191,184 +191,302 @@
       </div>
     </div>
 
-    <!-- Product Detail Section -->
+    <!-- Dashboard User Section -->
     <section class="pt-[90px] sm:pt-[140px] pb-6 px-4">
       <div class="max-w-7xl mx-auto">
-        <!-- Breadcrumb -->
-        <nav class="text-sm text-gray-500 mb-10 sm:mb-12">
-          <ol class="list-none p-0 inline-flex space-x-1" data-aos="fade-right">
-            <li>
-              <a
-                href="index.html"
-                class="hover:underline hover:text-black font-medium"
-                >Home</a
-              >
-              <span>/</span>
-            </li>
-            <li>
-              <a
-                href="list_category.html"
-                class="hover:underline hover:text-black font-medium"
-                >Category</a
-              >
-              <span>/</span>
-            </li>
-            <li>
-              <a
-                href="list_product.html"
-                class="hover:underline hover:text-black font-medium"
-                >LOW T-SHIRT</a
-              >
-              <span>/</span>
-            </li>
-            <li class="text-black font-semibold">Black Basic Tee</li>
-          </ol>
-        </nav>
-
-        <!-- Card Wrapper -->
+        <!-- Title -->
         <div
-          class="bg-white shadow-md border border-black p-6 rounded-none grid grid-cols-1 md:grid-cols-2 gap-8 items-start"
-          data-aos="fade-up"
-          data-aos-delay="100"
+          class="text-center mb-6 sm:mb-10"
+          data-aos="fade-down"
+          data-aos-delay="200"
         >
-          <!-- LEFT: Image -->
-          <div class="flex flex-col items-center">
-            <img
-              id="mainImage"
-              src="image/image1.jpg"
-              alt="Black Basic Tee"
-              class="w-full max-w-sm h-[450px] object-cover transition-opacity duration-300 ease-in-out"
-            />
+          <h2 class="text-3xl font-bold text-black">Kumpulan Desain</h2>
+          <p class="text-gray-600 text-sm mt-2 max-w-xl mx-auto">
+            Berikut adalah daftar desain yang telah kamu kirimkan untuk proses
+            verifikasi dan produksi.
+          </p>
+        </div>
 
-            <!-- Thumbnail gallery -->
-            <div class="flex space-x-3 mt-4">
-              <img
-                src="image/image1.jpg"
-                data-img="image/image1.jpg"
-                onclick="changeMainImage(this)"
-                class="w-12 h-12 object-cover border cursor-pointer"
+        <!-- Header Action Row -->
+        <div
+          class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6"
+        >
+          <!-- Left Action: Search + Filter -->
+          <div
+            class="flex flex-col sm:flex-row sm:items-center gap-3 w-full sm:w-3/4"
+          >
+            <!-- Search Bar -->
+            <div class="relative w-full">
+              <input
+                type="text"
+                placeholder="Cari desain atau produk..."
+                class="w-full border border-gray-300 rounded-full pl-10 pr-4 py-2 text-sm shadow focus:outline-none focus:ring-2 focus:ring-black"
               />
-              <img
-                src="image/image2.jpg"
-                data-img="image/image2.jpg"
-                onclick="changeMainImage(this)"
-                class="w-12 h-12 object-cover border cursor-pointer"
-              />
-              <img
-                src="image/image3.jpg"
-                data-img="image/image3.jpg"
-                onclick="changeMainImage(this)"
-                class="w-12 h-12 object-cover border cursor-pointer"
-              />
+              <span
+                class="absolute inset-y-0 left-3 flex items-center text-gray-400"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.386a1 1 0 01-1.414 1.415l-4.386-4.387zM14 8a6 6 0 11-12 0 6 6 0 0112 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </div>
+
+            <!-- Sort Dropdown -->
+            <div>
+              <select
+                class="border border-gray-300 rounded-md text-sm px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 transition text-gray-700 bg-white"
+              >
+                <option disabled selected>Pilih Urutan</option>
+                <option>Urutkan: Terbaru</option>
+                <option>Urutkan: Terlama</option>
+                <option>Status: Pending</option>
+                <option>Status: Diterima</option>
+                <option>Status: Ditolak</option>
+              </select>
             </div>
           </div>
 
-          <!-- RIGHT: Info -->
-          <div class="flex flex-col justify-start h-full mt-6 space-y-6">
-            <h1 class="text-2xl sm:text-3xl font-bold text-black">
-              Black Basic Tee
-            </h1>
-
-            <p class="text-sm font-medium flex items-center gap-1">
-              <!-- Icon T-Shirt -->
+          <!-- Right Action (Buttons) -->
+          <div class="flex gap-2 w-full sm:w-auto justify-start sm:justify-end">
+            <!-- Button Desain Baru -->
+            <button
+              class="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-md text-sm font-semibold transition shadow-sm"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-black"
+                class="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                />
+              </svg>
+              Desain Baru
+            </button>
+
+            <!-- Button Info -->
+            <button
+              id="infoButton"
+              class="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-md text-sm font-semibold transition shadow-sm"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
-                <path d="M4 4l2-2h12l2 2v3l-5 2v11h-6V9L4 7V4z" />
-              </svg>
-              Category :
-              <span class="font-medium text-black ml-1">LOW T-SHIRT</span>
-            </p>
-
-            <div>
-              <span class="text-2xl font-medium text-black">Rp 129.000</span>
-            </div>
-
-            <p class="text-gray-700 text-sm leading-relaxed text-justify">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Doloremque nostrum magnam laudantium enim molestias, rem minus, ut
-              a accusantium, distinctio officia ullam soluta inventore corporis
-              ad velit saepe ipsam? Quasi!
-            </p>
-
-            <a
-              href="design_product.html"
-              class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-all inline-flex items-center gap-2 w-full max-w-xs justify-center mx-auto md:w-fit md:mx-0 md:justify-start"
-            >
-              <!-- Icon Kuas Lukis -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-white"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-              >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15.232 5.232l3.536 3.536M9 11l6-6m2 2a2.828 2.828 0 114-4 2.828 2.828 0 01-4 4zM4 20h4l10-10-4-4L4 16v4z"
+                  d="M12 2a10 10 0 100 20 10 10 0 000-20zm.25 15.25h-1.5v-1.5h1.5v1.5zm1.39-4.905l-.905.66a1.747 1.747 0 00-.685.855c-.09.276-.13.525-.13.89h-1.5c0-.495.07-.915.23-1.32.16-.405.39-.765.68-1.035l1.065-.78a1.19 1.19 0 00.44-.96 1.25 1.25 0 00-1.25-1.25c-.69 0-1.25.56-1.25 1.25h-1.5a2.75 2.75 0 015.5 0c0 .765-.345 1.44-.945 1.94z"
                 />
               </svg>
-              Start Design
-            </a>
+              Info
+            </button>
+
+            <!-- Modal Wrapper -->
+            <div
+              id="infoModal"
+              class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+            >
+              <div
+                class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 relative animate-fade-in"
+              >
+                <!-- Close Button -->
+                <button
+                  onclick="document.getElementById('infoModal').classList.add('hidden')"
+                  class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                >
+                  ✕
+                </button>
+
+                <!-- Modal Title -->
+                <h3 class="text-lg font-bold text-gray-800 mb-4">
+                  Penjelasan Status Desain
+                </h3>
+
+                <!-- Status Cards -->
+                <div class="space-y-3 text-sm text-gray-700">
+                  <!-- Pending -->
+                  <div class="flex items-start gap-2">
+                    <span
+                      class="inline-block px-2 py-1 text-xs font-medium rounded-full bg-yellow-200 text-yellow-800"
+                      >Pending</span
+                    >
+                    <p>
+                      Desain kamu sedang dalam tahap verifikasi oleh tim admin
+                      kami.
+                    </p>
+                  </div>
+
+                  <!-- Diterima -->
+                  <div class="flex items-start gap-2">
+                    <span
+                      class="inline-block px-2 py-1 text-xs font-medium rounded-full bg-green-200 text-green-800"
+                      >Diterima</span
+                    >
+                    <p>
+                      Desain telah lolos verifikasi dan akan diproses untuk
+                      produksi.
+                    </p>
+                  </div>
+
+                  <!-- Ditolak -->
+                  <div class="flex items-start gap-2">
+                    <span
+                      class="inline-block px-2 py-1 text-xs font-medium rounded-full bg-red-200 text-red-800"
+                      >Ditolak</span
+                    >
+                    <p>
+                      Desain tidak sesuai ketentuan atau terdapat kesalahan,
+                      silakan revisi.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- Description & Information Section -->
-    <section class="pt-4 pb-16 px-4">
-      <div class="max-w-7xl mx-auto">
-        <div
-          class="bg-white shadow-md border border-black p-6 rounded-none grid grid-cols-1 md:grid-cols-2 gap-8 items-start"
-          data-aos="fade-up"
-          data-aos-delay="150"
-        >
-          <!-- LEFT: Description -->
-          <div class="flex flex-col space-y-4">
-            <h2 class="text-xl sm:text-2xl font-bold text-black">
-              Description
-            </h2>
-            <p class="text-sm text-gray-700 leading-relaxed text-justify">
-              Kaos basic warna hitam ini dirancang menggunakan bahan katun
-              combed 24s yang lembut dan ringan. Cocok digunakan untuk aktivitas
-              harian, baik di dalam maupun luar ruangan. Teksturnya nyaman di
-              kulit dan tidak panas saat dikenakan.
-            </p>
-            <p class="text-sm text-gray-700 leading-relaxed text-justify">
-              Dengan desain yang simpel namun tetap stylish, kaos ini dapat
-              dipadukan dengan berbagai jenis bawahan. Jahitan rapi dan kerah
-              menggunakan rib berkualitas membuatnya tetap nyaman meski dicuci
-              berulang kali.
-            </p>
+        <!-- Cards Wrapper -->
+        <div class="grid gap-6">
+          <!-- Card -->
+          <div
+            class="flex flex-col sm:flex-row items-start bg-white border shadow rounded overflow-hidden p-4"
+          >
+            <img
+              src="image/image1.jpg"
+              alt="Desain"
+              class="w-full sm:w-32 h-32 object-cover rounded mb-4 sm:mb-0 sm:mr-4"
+            />
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-black">Black Basic Tee</h3>
+              <p class="text-sm text-gray-600">Kategori: Kaos</p>
+              <p class="text-sm text-gray-600">
+                Link:
+                <a href="#" class="text-blue-600 underline">Lihat Produk</a>
+              </p>
+              <p class="text-sm text-gray-600">Harga: Rp 129.000</p>
+              <p class="text-sm text-gray-600">Dikirim: 10 Juni 2025</p>
+              <span
+                class="inline-block mt-2 text-xs font-medium px-2 py-1 bg-yellow-200 text-yellow-800 rounded"
+                >Pending</span
+              >
+            </div>
           </div>
 
-          <!-- RIGHT: Information -->
-          <div class="flex flex-col space-y-4">
-            <h2 class="text-xl sm:text-2xl font-bold text-black">
-              Information
-            </h2>
-            <p class="text-sm text-gray-700 leading-relaxed text-justify">
-              Bahan: 100% Cotton Combed 24s
-            </p>
-            <p class="text-sm text-gray-700 leading-relaxed text-justify">
-              Warna: Hitam
-            </p>
-            <p class="text-sm text-gray-700 leading-relaxed text-justify">
-              Tersedia ukuran S, M, L, dan XL dengan detail sebagai berikut: - S
-              (Lebar 46 cm | Panjang 66 cm), - M (Lebar 50 cm | Panjang 69 cm),
-              - L (Lebar 53 cm | Panjang 72 cm), - XL (Lebar 56 cm | Panjang 75
-              cm).
-            </p>
-            <p class="text-sm text-gray-700 leading-relaxed text-justify">
-              Petunjuk perawatan: Cuci dengan air dingin, hindari pemutih,
-              jangan disikat keras, setrika suhu sedang. Produk dikemas dalam
-              plastik zipper reusable untuk menjaga kualitas saat pengiriman.
-            </p>
+          <!-- Card 2 -->
+          <div
+            class="flex flex-col sm:flex-row items-start bg-white border shadow rounded overflow-hidden p-4"
+          >
+            <img
+              src="image/image2.jpg"
+              alt="Desain"
+              class="w-full sm:w-32 h-32 object-cover rounded mb-4 sm:mb-0 sm:mr-4"
+            />
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-black">
+                White Oversized Tee
+              </h3>
+              <p class="text-sm text-gray-600">Kategori: Kaos</p>
+              <p class="text-sm text-gray-600">
+                Link:
+                <a href="#" class="text-blue-600 underline">Lihat Produk</a>
+              </p>
+              <p class="text-sm text-gray-600">Harga: Rp 145.000</p>
+              <p class="text-sm text-gray-600">Dikirim: 8 Juni 2025</p>
+              <span
+                class="inline-block mt-2 text-xs font-medium px-2 py-1 bg-green-200 text-green-800 rounded"
+                >Diterima</span
+              >
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div
+            class="flex flex-col sm:flex-row items-start bg-white border shadow rounded overflow-hidden p-4"
+          >
+            <img
+              src="image/image3.jpg"
+              alt="Desain"
+              class="w-full sm:w-32 h-32 object-cover rounded mb-4 sm:mb-0 sm:mr-4"
+            />
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-black">
+                Graphic Print Tee
+              </h3>
+              <p class="text-sm text-gray-600">Kategori: Kaos Grafis</p>
+              <p class="text-sm text-gray-600">
+                Link:
+                <a href="#" class="text-blue-600 underline">Lihat Produk</a>
+              </p>
+              <p class="text-sm text-gray-600">Harga: Rp 159.000</p>
+              <p class="text-sm text-gray-600">Dikirim: 7 Juni 2025</p>
+              <span
+                class="inline-block mt-2 text-xs font-medium px-2 py-1 bg-red-200 text-red-800 rounded"
+                >Ditolak</span
+              >
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div
+            class="flex flex-col sm:flex-row items-start bg-white border shadow rounded overflow-hidden p-4"
+          >
+            <img
+              src="image/image4.jpg"
+              alt="Desain"
+              class="w-full sm:w-32 h-32 object-cover rounded mb-4 sm:mb-0 sm:mr-4"
+            />
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-black">
+                Vintage Washed Tee
+              </h3>
+              <p class="text-sm text-gray-600">Kategori: Vintage</p>
+              <p class="text-sm text-gray-600">
+                Link:
+                <a href="#" class="text-blue-600 underline">Lihat Produk</a>
+              </p>
+              <p class="text-sm text-gray-600">Harga: Rp 139.000</p>
+              <p class="text-sm text-gray-600">Dikirim: 6 Juni 2025</p>
+              <span
+                class="inline-block mt-2 text-xs font-medium px-2 py-1 bg-green-200 text-green-800 rounded"
+                >Diterima</span
+              >
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div
+            class="flex flex-col sm:flex-row items-start bg-white border shadow rounded overflow-hidden p-4"
+          >
+            <img
+              src="image/image2.jpg"
+              alt="Desain"
+              class="w-full sm:w-32 h-32 object-cover rounded mb-4 sm:mb-0 sm:mr-4"
+            />
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-black">Tie Dye Tee</h3>
+              <p class="text-sm text-gray-600">Kategori: Tie Dye</p>
+              <p class="text-sm text-gray-600">
+                Link:
+                <a href="#" class="text-blue-600 underline">Lihat Produk</a>
+              </p>
+              <p class="text-sm text-gray-600">Harga: Rp 165.000</p>
+              <p class="text-sm text-gray-600">Dikirim: 5 Juni 2025</p>
+              <span
+                class="inline-block mt-2 text-xs font-medium px-2 py-1 bg-yellow-200 text-yellow-800 rounded"
+                >Pending</span
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -575,7 +693,7 @@
     <script>
       AOS.init();
     </script>
-    <!-- tailwind -->
+    <!-- tailwind js -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- custom js -->
     <script src="js/script.js"></script>
