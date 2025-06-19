@@ -93,6 +93,26 @@ window.addEventListener("scroll", () => {
   });
 });
 
+// SWIPPER JS SECTION TESTIMONIALS
+const swiper = new Swiper(".testimonialSwiper", {
+  loop: true,
+  grabCursor: true,
+  slidesPerView: 1,
+  spaceBetween: 30,
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+  autoplay: {
+    delay: 5000,
+  },
+  breakpoints: {
+    768: {
+      slidesPerView: 1,
+    },
+  },
+});
+
 // =============================
 // GANTI GAMBAR (DETAIL PRODUCT)
 // =============================
