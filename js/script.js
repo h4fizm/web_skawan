@@ -3,6 +3,7 @@
 // =============================
 window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
+<<<<<<< HEAD
   if (preloader) {
     preloader.classList.add("opacity-0");
     setTimeout(() => {
@@ -10,6 +11,13 @@ window.addEventListener("load", () => {
     }, 500);
   }
 });
+=======
+  preloader.classList.add("opacity-0");
+  setTimeout(() => {
+    preloader.style.display = "none";
+  }, 500);
+}
+>>>>>>> d10e04e68391437bf300ada4a0774c2c998c6127
 
 // Saat DOM siap: sembunyikan preloader
 document.addEventListener("DOMContentLoaded", hidePreloader);
