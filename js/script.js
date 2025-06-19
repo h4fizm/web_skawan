@@ -68,6 +68,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// ===========================================
+// PARALLAX EFFECT untuk .parallax-container
+// ===========================================
+window.addEventListener("scroll", () => {
+  const parallaxContainers = document.querySelectorAll(".parallax-container");
+
+  parallaxContainers.forEach((container) => {
+    const img = container.querySelector(".parallax-img");
+    if (!img) return;
+
+    const rect = container.getBoundingClientRect();
+    const scrollSpeed = 0.25; // kamu bisa ubah percepatannya
+    const maxTranslate = 30;
+
+    const offset = rect.top - window.innerHeight / 2;
+    const rawTranslate = offset * scrollSpeed;
+    const translateY = Math.max(
+      -maxTranslate,
+      Math.min(maxTranslate, rawTranslate)
+    );
+
+    img.style.transform = `translateY(${translateY}px)`;
+  });
+});
+
 // =============================
 // GANTI GAMBAR (DETAIL PRODUCT)
 // =============================
