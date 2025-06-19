@@ -79,7 +79,7 @@ window.addEventListener("scroll", () => {
     if (!img) return;
 
     const rect = container.getBoundingClientRect();
-    const scrollSpeed = 0.25; // kamu bisa ubah percepatannya
+    const scrollSpeed = 0.5; // kamu bisa ubah percepatannya
     const maxTranslate = 30;
 
     const offset = rect.top - window.innerHeight / 2;
@@ -128,7 +128,23 @@ function copyLink() {
   }
 }
 
+// upload edit user photo profile
 function previewPhoto(event) {
   const image = document.querySelector("img[alt='Foto Profil']");
   image.src = URL.createObjectURL(event.target.files[0]);
 }
+
+// dropdown menu user profile
+const avatarBtn = document.getElementById("avatar-btn");
+const dropdown = document.getElementById("avatar-dropdown");
+
+avatarBtn.addEventListener("click", function (e) {
+  e.stopPropagation();
+  dropdown.classList.toggle("hidden");
+});
+
+document.addEventListener("click", function (e) {
+  if (!avatarBtn.contains(e.target)) {
+    dropdown.classList.add("hidden");
+  }
+});
