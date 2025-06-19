@@ -1,7 +1,7 @@
 // =============================
 // PRELOADER (LOADING EFFECT)
 // =============================
-function hidePreloader() {
+window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
   if (preloader) {
     preloader.classList.add("opacity-0");
@@ -9,7 +9,7 @@ function hidePreloader() {
       preloader.style.display = "none";
     }, 500);
   }
-}
+});
 
 // Saat DOM siap: sembunyikan preloader
 document.addEventListener("DOMContentLoaded", hidePreloader);
@@ -27,118 +27,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const isHidden = mobileMenu.classList.contains("hidden");
 
     if (isHidden) {
-      // Show menu with smooth effect
       mobileMenu.classList.remove("hidden");
 
-      // Force reflow to enable transition
+      // Force reflow for transition
       void mobileMenu.offsetWidth;
 
-      mobileMenu.classList.add("opacity-100", "translate-y-0");
-      mobileMenu.classList.remove("opacity-0", "-translate-y-4");
+      mobileMenu.classList.add(
+        "opacity-100",
+        "translate-y-0",
+        "pointer-events-auto"
+      );
+      mobileMenu.classList.remove(
+        "opacity-0",
+        "-translate-y-4",
+        "invisible",
+        "pointer-events-none"
+      );
     } else {
-      // Hide menu with transition, then remove from DOM flow
-      mobileMenu.classList.remove("opacity-100", "translate-y-0");
-      mobileMenu.classList.add("opacity-0", "-translate-y-4");
-
-      // Delay `hidden` until animation ends
-      setTimeout(() => {
-        mobileMenu.classList.add("hidden");
-      }, 300); // match `transition duration-300`
-    }
-  });
-
-  // ---------------------------------------
-  // 2. HERO SECTION: Swiper Carousel
-  // ---------------------------------------
-  const heroSwiper = new Swiper(".mySwiper", {
-    loop: true,
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
-    effect: "fade",
-    speed: 800,
-  });
-
-  // ---------------------------------------
-  // 3. PARALLAX EFFECT: Untuk gambar dalam card
-  // ---------------------------------------
-  const parallaxContainers = document.querySelectorAll(".parallax-container");
-
-  window.addEventListener("scroll", () => {
-    parallaxContainers.forEach((container) => {
-      const img = container.querySelector(".parallax-img");
-      const rect = container.getBoundingClientRect();
-      const scrollSpeed = 0.2;
-      const maxTranslate = 40;
-
-      const offset = rect.top - window.innerHeight / 2;
-      const rawTranslate = offset * scrollSpeed;
-      const translateY = Math.max(
-        -maxTranslate,
-        Math.min(maxTranslate, rawTranslate)
+      mobileMenu.classList.remove(
+        "opacity-100",
+        "translate-y-0",
+        "pointer-events-auto"
+      );
+      mobileMenu.classList.add(
+        "opacity-0",
+        "-translate-y-4",
+        "pointer-events-none"
       );
 
-      if (img) img.style.transform = `translateY(${translateY}px)`;
-    });
-  });
-
-  // ---------------------------------------
-  // 4. TESTIMONIAL SWIPER
-  // ---------------------------------------
-  const testimonialSwiper = new Swiper(".testimonialSwiper", {
-    slidesPerView: 1,
-    spaceBetween: 30,
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false,
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-  });
-
-  // ---------------------------------------
-  // 5. SCROLL TO TOP BUTTON
-  // ---------------------------------------
-  const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-
-  window.addEventListener("scroll", () => {
-    if (scrollToTopBtn) {
-      if (window.scrollY > 300) {
-        scrollToTopBtn.classList.remove("hidden");
-      } else {
-        scrollToTopBtn.classList.add("hidden");
-      }
+      setTimeout(() => {
+        mobileMenu.classList.add("hidden", "invisible");
+      }, 300); // sesuai transition
     }
   });
-
-  if (scrollToTopBtn) {
-    scrollToTopBtn.addEventListener("click", () => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    });
-  }
-
-  // ---------------------------------------
-  // 6. MODAL POPUP: Info Button
-  // ---------------------------------------
-  const infoBtn = document.getElementById("infoButton");
-  const infoModal = document.getElementById("infoModal");
-
-  if (infoBtn && infoModal) {
-    infoBtn.addEventListener("click", () => {
-      infoModal.classList.remove("hidden");
-    });
-  }
 });
 
 // =============================
