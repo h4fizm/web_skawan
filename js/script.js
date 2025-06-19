@@ -113,6 +113,26 @@ const swiper = new Swiper(".testimonialSwiper", {
   },
 });
 
+// BUTTON SCROLL TOP
+const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+// Tampilkan tombol saat user scroll ke bawah 200px
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 200) {
+    scrollToTopBtn.classList.remove("hidden");
+  } else {
+    scrollToTopBtn.classList.add("hidden");
+  }
+});
+
+// Scroll smooth ke atas saat tombol ditekan
+scrollToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+});
+
 // =============================
 // GANTI GAMBAR (DETAIL PRODUCT)
 // =============================
