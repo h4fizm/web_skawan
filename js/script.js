@@ -18,6 +18,27 @@ document.addEventListener("DOMContentLoaded", () => {
     speed: 800,
   });
 
+  // Parallax Effect
+  const parallaxContainers = document.querySelectorAll(".parallax-container");
+
+  window.addEventListener("scroll", () => {
+    parallaxContainers.forEach((container) => {
+      const img = container.querySelector(".parallax-img");
+      const rect = container.getBoundingClientRect();
+      const scrollSpeed = 0.2; // Lebih ringan
+      const maxTranslate = 40; // Maksimal gerakan 40px
+
+      const offset = rect.top - window.innerHeight / 2;
+      const rawTranslate = offset * scrollSpeed;
+      const translateY = Math.max(
+        -maxTranslate,
+        Math.min(maxTranslate, rawTranslate)
+      );
+
+      img.style.transform = `translateY(${translateY}px)`;
+    });
+  });
+
   // Testimonial Swiper
   const testimonialSwiper = new Swiper(".testimonialSwiper", {
     slidesPerView: 1,
