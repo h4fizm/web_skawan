@@ -1,11 +1,17 @@
 // loading effect
-window.addEventListener("load", () => {
+function hidePreloader() {
   const preloader = document.getElementById("preloader");
   preloader.classList.add("opacity-0");
   setTimeout(() => {
     preloader.style.display = "none";
-  }, 300); // Delay agar transisi opacity selesai
-});
+  }, 300);
+}
+
+// Utama: ketika DOM siap
+document.addEventListener("DOMContentLoaded", hidePreloader);
+
+// Backup: paksa hilang setelah 5 detik jika belum juga hilang
+setTimeout(hidePreloader, 5000);
 
 // burger button
 document.addEventListener("DOMContentLoaded", () => {
