@@ -127,3 +127,8 @@ function copyLink() {
     }, 2000);
   }
 }
+
+function previewPhoto(event) {
+  const image = document.querySelector("img[alt='Foto Profil']");
+  image.src = URL.createObjectURL(event.target.files[0]);
+}
