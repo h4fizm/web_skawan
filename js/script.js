@@ -4,7 +4,7 @@ function hidePreloader() {
   preloader.classList.add("opacity-0");
   setTimeout(() => {
     preloader.style.display = "none";
-  }, 300);
+  }, 500);
 }
 
 // Utama: ketika DOM siap
