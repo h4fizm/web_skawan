@@ -21,6 +21,16 @@
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   </head>
 
+  <!-- Preloader -->
+  <div
+    id="preloader"
+    class="fixed inset-0 bg-white z-50 flex items-center justify-center transition-opacity duration-500"
+  >
+    <div
+      class="w-10 h-10 border-4 border-gray-200 border-t-green-500 rounded-full animate-spin"
+    ></div>
+  </div>
+
   <body class="bg-white text-gray-900">
     <!-- Navbar Top -->
     <nav
@@ -611,11 +621,13 @@
         class="bg-green-900 text-white rounded-2xl overflow-hidden flex flex-col md:flex-row items-center p-6 md:p-10 shadow-lg min-h-[380px] md:h-[300px] max-w-[95%] md:max-w-[1500px] mx-auto"
       >
         <!-- Left: Gambar -->
-        <div class="w-full md:w-1/2 h-48 md:h-full">
+        <div
+          class="w-full md:w-1/2 h-48 md:h-full relative overflow-hidden rounded-lg parallax-container"
+        >
           <img
             src="image/image3.jpg"
             alt="Start Design Image"
-            class="w-full h-full object-cover rounded-lg"
+            class="parallax-img absolute top-[-10%] left-0 w-full h-[130%] object-cover transition-transform duration-300"
           />
         </div>
 
@@ -862,9 +874,7 @@
             <div class="w-12 h-1 bg-white mt-1 mb-4"></div>
             <ul class="space-y-2">
               <li>
-                <a
-                  href="list_category.html"
-                  class="text-white hover:text-green-300"
+                <a href="index.html" class="text-white hover:text-green-300"
                   >HOME</a
                 >
               </li>
