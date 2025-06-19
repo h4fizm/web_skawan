@@ -3,7 +3,6 @@
 // =============================
 window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
-<<<<<<< HEAD
   if (preloader) {
     preloader.classList.add("opacity-0");
     setTimeout(() => {
@@ -11,63 +10,62 @@ window.addEventListener("load", () => {
     }, 500);
   }
 });
-=======
-  preloader.classList.add("opacity-0");
-  setTimeout(() => {
-    preloader.style.display = "none";
-  }, 500);
-}
->>>>>>> d10e04e68391437bf300ada4a0774c2c998c6127
 
-// Saat DOM siap: sembunyikan preloader
-document.addEventListener("DOMContentLoaded", hidePreloader);
 // Backup fallback: paksa hilang setelah 5 detik
-setTimeout(hidePreloader, 5000);
+setTimeout(() => {
+  const preloader = document.getElementById("preloader");
+  if (preloader) {
+    preloader.style.display = "none";
+  }
+}, 5000);
 
 // =============================
 // DOM READY FUNCTION
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
+  // Burger Menu Toggle
   const toggleBtn = document.getElementById("mobile-menu-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
 
-  toggleBtn.addEventListener("click", () => {
-    const isHidden = mobileMenu.classList.contains("hidden");
+  if (toggleBtn && mobileMenu) {
+    toggleBtn.addEventListener("click", () => {
+      const isHidden = mobileMenu.classList.contains("hidden");
 
-    if (isHidden) {
-      mobileMenu.classList.remove("hidden");
+      if (isHidden) {
+        mobileMenu.classList.remove("hidden");
 
-      // Force reflow for transition
-      void mobileMenu.offsetWidth;
+        // Force reflow for transition
+        void mobileMenu.offsetWidth;
 
-      mobileMenu.classList.add(
-        "opacity-100",
-        "translate-y-0",
-        "pointer-events-auto"
-      );
-      mobileMenu.classList.remove(
-        "opacity-0",
-        "-translate-y-4",
-        "invisible",
-        "pointer-events-none"
-      );
-    } else {
-      mobileMenu.classList.remove(
-        "opacity-100",
-        "translate-y-0",
-        "pointer-events-auto"
-      );
-      mobileMenu.classList.add(
-        "opacity-0",
-        "-translate-y-4",
-        "pointer-events-none"
-      );
+        mobileMenu.classList.add(
+          "opacity-100",
+          "translate-y-0",
+          "pointer-events-auto"
+        );
+        mobileMenu.classList.remove(
+          "opacity-0",
+          "-translate-y-4",
+          "invisible",
+          "pointer-events-none"
+        );
+      } else {
+        mobileMenu.classList.remove(
+          "opacity-100",
+          "translate-y-0",
+          "pointer-events-auto"
+        );
+        mobileMenu.classList.add(
+          "opacity-0",
+          "-translate-y-4",
+          "pointer-events-none"
+        );
 
-      setTimeout(() => {
-        mobileMenu.classList.add("hidden", "invisible");
-      }, 300); // sesuai transition
-    }
-  });
+        setTimeout(() => {
+          mobileMenu.classList.add("hidden", "invisible");
+        }, 300); // Sesuai durasi transition
+      }
+    });
+  }
 });
 
 // =============================
