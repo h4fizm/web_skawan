@@ -71,6 +71,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// SWIPER HERO SECTION
+document.addEventListener("DOMContentLoaded", function () {
+  const heroSwiper = new Swiper(".mySwiper", {
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    speed: 1000,
+    effect: "fade", // opsional: efek fade antar slide
+    fadeEffect: {
+      crossFade: true,
+    },
+    keyboard: {
+      enabled: true,
+    },
+    allowTouchMove: true, // bisa digeser manual di mobile
+  });
+});
+
 // ===========================================
 // PARALLAX EFFECT untuk .parallax-container
 // ===========================================
