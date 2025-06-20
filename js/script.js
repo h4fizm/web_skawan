@@ -23,18 +23,21 @@ setTimeout(() => {
 // DOM READY FUNCTION
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
-  // Burger Menu Toggle
   const toggleBtn = document.getElementById("mobile-menu-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
 
   if (toggleBtn && mobileMenu) {
+    // Reset state awal
+    mobileMenu.classList.remove("invisible", "opacity-0", "-translate-y-4");
+    mobileMenu.classList.add("visible", "opacity-100", "translate-y-0");
+
     toggleBtn.addEventListener("click", () => {
       const isHidden = mobileMenu.classList.contains("hidden");
 
       if (isHidden) {
         mobileMenu.classList.remove("hidden");
 
-        // Force reflow for transition
+        // Force reflow to enable transition
         void mobileMenu.offsetWidth;
 
         mobileMenu.classList.add(
@@ -62,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
           mobileMenu.classList.add("hidden", "invisible");
-        }, 300); // Sesuai durasi transition
+        }, 300);
       }
     });
   }
