@@ -27,44 +27,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileMenu = document.getElementById("mobile-menu");
 
   if (toggleBtn && mobileMenu) {
-    // Reset state awal
-    mobileMenu.classList.remove("invisible", "opacity-0", "-translate-y-4");
-    mobileMenu.classList.add("visible", "opacity-100", "translate-y-0");
-
     toggleBtn.addEventListener("click", () => {
-      const isHidden = mobileMenu.classList.contains("hidden");
+      const isHidden = mobileMenu.classList.contains("opacity-0");
 
       if (isHidden) {
-        mobileMenu.classList.remove("hidden");
-
-        // Force reflow to enable transition
-        void mobileMenu.offsetWidth;
-
-        mobileMenu.classList.add(
-          "opacity-100",
-          "translate-y-0",
-          "pointer-events-auto"
-        );
         mobileMenu.classList.remove(
+          "hidden",
           "opacity-0",
-          "-translate-y-4",
-          "invisible",
           "pointer-events-none"
         );
+        mobileMenu.classList.add("opacity-100", "pointer-events-auto");
       } else {
-        mobileMenu.classList.remove(
-          "opacity-100",
-          "translate-y-0",
-          "pointer-events-auto"
-        );
-        mobileMenu.classList.add(
-          "opacity-0",
-          "-translate-y-4",
-          "pointer-events-none"
-        );
-
+        mobileMenu.classList.remove("opacity-100", "pointer-events-auto");
+        mobileMenu.classList.add("opacity-0", "pointer-events-none");
         setTimeout(() => {
-          mobileMenu.classList.add("hidden", "invisible");
+          mobileMenu.classList.add("hidden");
         }, 300);
       }
     });
