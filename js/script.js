@@ -18,25 +18,53 @@ const toggleButton = document.getElementById("theme-toggle");
 const toggleCircle = document.getElementById("toggle-circle");
 const themeLabel = document.getElementById("theme-label");
 
-// Inisialisasi awal saat halaman dibuka
-if (localStorage.getItem("theme") === "dark") {
-  document.documentElement.classList.add("dark");
-  toggleCircle.classList.add("translate-x-8");
-  themeLabel.textContent = "Mode Gelap";
-} else {
-  document.documentElement.classList.remove("dark");
-  toggleCircle.classList.remove("translate-x-8");
-  themeLabel.textContent = "Mode Terang";
+const mobileToggleButton = document.getElementById("mobile-theme-toggle");
+const mobileToggleCircle = document.getElementById("mobile-toggle-circle");
+const mobileThemeLabel = document.getElementById("mobile-theme-label");
+
+// Fungsi untuk set tema awal
+function setInitialTheme() {
+  const savedTheme = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const isDark = savedTheme === "dark" || (!savedTheme && prefersDark);
+
+  document.documentElement.classList.toggle("dark", isDark);
+
+  toggleCircle.classList.toggle("translate-x-8", isDark);
+  mobileToggleCircle.classList.toggle("translate-x-8", isDark);
+
+  const label = isDark ? "Mode Terang" : "Mode Gelap"; // label = aksi berikutnya
+  if (themeLabel) themeLabel.textContent = label;
+  if (mobileThemeLabel) mobileThemeLabel.textContent = label;
 }
 
-// Saat tombol diklik
-toggleButton.addEventListener("click", () => {
+// Fungsi untuk toggle tema
+function toggleTheme() {
   const html = document.documentElement;
   const isDark = html.classList.toggle("dark");
-  toggleCircle.classList.toggle("translate-x-8");
+
+  toggleCircle.classList.toggle("translate-x-8", isDark);
+  mobileToggleCircle.classList.toggle("translate-x-8", isDark);
+
+  const nextLabel = isDark ? "Mode Terang" : "Mode Gelap";
+  if (themeLabel) themeLabel.textContent = nextLabel;
+  if (mobileThemeLabel) mobileThemeLabel.textContent = nextLabel;
+
   localStorage.setItem("theme", isDark ? "dark" : "light");
-  themeLabel.textContent = isDark ? "Mode Gelap" : "Mode Terang";
-});
+}
+
+// Inisialisasi saat halaman dimuat
+setInitialTheme();
+
+// Event listener tombol desktop
+if (toggleButton) {
+  toggleButton.addEventListener("click", toggleTheme);
+}
+
+// Event listener tombol mobile
+if (mobileToggleButton) {
+  mobileToggleButton.addEventListener("click", toggleTheme);
+}
 
 // =============================
 // DOM READY FUNCTION
@@ -50,18 +78,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const isHidden = mobileMenu.classList.contains("opacity-0");
 
       if (isHidden) {
-        mobileMenu.classList.remove(
-          "hidden",
-          "opacity-0",
-          "pointer-events-none"
-        );
+        mobileMenu.classList.remove("hidden");
+        // Trigger reflow to allow transition to run
+        void mobileMenu.offsetWidth;
+
+        mobileMenu.classList.remove("opacity-0", "pointer-events-none");
         mobileMenu.classList.add("opacity-100", "pointer-events-auto");
       } else {
         mobileMenu.classList.remove("opacity-100", "pointer-events-auto");
         mobileMenu.classList.add("opacity-0", "pointer-events-none");
+
+        // Tunggu sampai animasi selesai baru `hidden`
         setTimeout(() => {
           mobileMenu.classList.add("hidden");
-        }, 300);
+        }, 300); // Harus sama dengan transition-duration di Tailwind (300ms)
       }
     });
   }
