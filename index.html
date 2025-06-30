@@ -167,10 +167,16 @@
       </div>
     </div>
 
-    <!-- Mobile Menu -->
+    <!-- BACKDROP -->
+    <div
+      id="mobile-backdrop"
+      class="fixed inset-0 bg-white bg-opacity-0 z-[998] hidden opacity-0 transition-opacity duration-300 pointer-events-auto lg:hidden"
+    ></div>
+
+    <!-- MOBILE MENU -->
     <div
       id="mobile-menu"
-      class="lg:hidden hidden flex-col px-4 pb-32 border-b bg-white z-50 fixed top-0 left-0 right-0 w-full pt-5 opacity-0 transition-opacity duration-300 ease-in-out pointer-events-none"
+      class="lg:hidden hidden flex-col px-4 pb-10 border-b bg-white/60 dark:bg-black/10 backdrop-blur-md z-[999] fixed top-0 left-0 right-0 w-full pt-5 opacity-0 transition-opacity duration-300 ease-in-out pointer-events-none"
     >
       <!-- Produk List -->
       <div class="space-y-4 text-lg font-semibold mt-6 pt-5 border-t">
@@ -192,7 +198,7 @@
         >
       </div>
 
-      <!-- Contact Us Button -->
+      <!-- Contact Us -->
       <div class="mt-4">
         <button
           class="bg-black text-white text-base px-6 py-3 rounded-full hover:bg-gray-800 transition w-fit"
@@ -201,10 +207,10 @@
         </button>
       </div>
 
-      <!-- Utility Buttons: Positioned bottom right -->
-      <div class="absolute bottom-6 right-4 flex items-center gap-2">
-        <!-- Light/Dark Toggle Mobile -->
-        <div class="flex items-center space-x-3">
+      <!-- Utility Buttons: Mobile Navbar Internal, Horizontal & Under Contact Button -->
+      <div class="mt-6 flex justify-end pr-3">
+        <div class="flex items-center gap-2">
+          <!-- Toggle Theme -->
           <button
             id="mobile-theme-toggle"
             class="relative w-16 h-8 flex items-center bg-white dark:bg-black border border-black rounded-full p-1 transition-colors duration-300 focus:outline-none"
@@ -240,28 +246,27 @@
               />
             </svg>
           </button>
-
           <!-- Teks -->
           <span id="mobile-theme-label" class="text-sm font-medium text-black">
             Mode Terang
           </span>
+
+          <!-- Sign In -->
+          <a
+            href="index.html"
+            class="px-3 py-1.5 border border-gray-800 rounded-full text-sm hover:bg-gray-100 transition"
+          >
+            Sign In
+          </a>
+
+          <!-- Get Started -->
+          <a
+            href="list_category.html"
+            class="px-4 py-1.5 bg-black text-white rounded-full text-sm hover:bg-gray-800 transition"
+          >
+            Start
+          </a>
         </div>
-
-        <!-- Sign In -->
-        <a
-          href="index.html"
-          class="inline-block px-4 py-2 border border-gray-800 rounded-full text-base text-center hover:bg-gray-100 transition"
-        >
-          Sign In
-        </a>
-
-        <!-- Get Started -->
-        <a
-          href="list_category.html"
-          class="inline-block px-4 py-2 bg-black text-white rounded-full text-base text-center hover:bg-gray-800 transition"
-        >
-          Get Started
-        </a>
       </div>
     </div>
 
@@ -280,8 +285,8 @@
           <!-- Slide 1 -->
           <div class="swiper-slide relative overflow-hidden">
             <div
-              class="absolute inset-0 bg-center bg-cover scale-110 transition-transform duration-1000"
-              style="background-image: url('image/carousel_1.png')"
+              class="absolute inset-0 bg-center bg-cover scale-110 transition-transform duration-1000 brightness-125"
+              style="background-image: url('image/carousel_3.jpg')"
             ></div>
             <div
               class="relative z-10 flex items-center justify-center h-full bg-black/30 px-4"
@@ -310,9 +315,10 @@
           <!-- Slide 2 -->
           <div class="swiper-slide relative overflow-hidden">
             <div
-              class="absolute inset-0 bg-center bg-cover scale-110 transition-transform duration-1000"
-              style="background-image: url('image/carousel_2.jpg')"
+              class="absolute inset-0 bg-center bg-cover scale-110 transition-transform duration-1000 brightness-125"
+              style="background-image: url('image/carousel_4.jpg')"
             ></div>
+
             <div
               class="relative z-10 flex items-center justify-center h-full bg-black/30 px-4"
             >
@@ -340,9 +346,10 @@
           <!-- Slide 3 -->
           <div class="swiper-slide relative overflow-hidden">
             <div
-              class="absolute inset-0 bg-center bg-cover scale-110 transition-transform duration-1000"
+              class="absolute inset-0 bg-center bg-cover scale-110 transition-transform duration-1000 brightness-125"
               style="background-image: url('image/carousel_3.jpg')"
             ></div>
+
             <div
               class="relative z-10 flex items-center justify-center h-full bg-black/30 px-4"
             >
@@ -371,7 +378,7 @@
           <div class="swiper-slide relative overflow-hidden">
             <div
               class="absolute inset-0 bg-center bg-cover scale-110 transition-transform duration-1000"
-              style="background-image: url('image/carousel_4.jpg')"
+              style="background-image: url('image/carousel_2.jpg')"
             ></div>
             <div
               class="relative z-10 flex items-center justify-center h-full bg-black/30 px-4"

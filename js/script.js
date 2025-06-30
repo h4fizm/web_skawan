@@ -11,88 +11,98 @@ window.addEventListener("load", () => {
   }
 });
 
-// =============================
-// TOGGLE BUTTON LIGHT/DARK MODE
-// =============================
-const toggleButton = document.getElementById("theme-toggle");
-const toggleCircle = document.getElementById("toggle-circle");
-const themeLabel = document.getElementById("theme-label");
-
-const mobileToggleButton = document.getElementById("mobile-theme-toggle");
-const mobileToggleCircle = document.getElementById("mobile-toggle-circle");
-const mobileThemeLabel = document.getElementById("mobile-theme-label");
-
-// Fungsi untuk set tema awal
-function setInitialTheme() {
-  const savedTheme = localStorage.getItem("theme");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const isDark = savedTheme === "dark" || (!savedTheme && prefersDark);
-
-  document.documentElement.classList.toggle("dark", isDark);
-
-  toggleCircle.classList.toggle("translate-x-8", isDark);
-  mobileToggleCircle.classList.toggle("translate-x-8", isDark);
-
-  const label = isDark ? "Mode Terang" : "Mode Gelap"; // label = aksi berikutnya
-  if (themeLabel) themeLabel.textContent = label;
-  if (mobileThemeLabel) mobileThemeLabel.textContent = label;
-}
-
-// Fungsi untuk toggle tema
-function toggleTheme() {
-  const html = document.documentElement;
-  const isDark = html.classList.toggle("dark");
-
-  toggleCircle.classList.toggle("translate-x-8", isDark);
-  mobileToggleCircle.classList.toggle("translate-x-8", isDark);
-
-  const nextLabel = isDark ? "Mode Terang" : "Mode Gelap";
-  if (themeLabel) themeLabel.textContent = nextLabel;
-  if (mobileThemeLabel) mobileThemeLabel.textContent = nextLabel;
-
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-}
-
-// Inisialisasi saat halaman dimuat
-setInitialTheme();
-
-// Event listener tombol desktop
-if (toggleButton) {
-  toggleButton.addEventListener("click", toggleTheme);
-}
-
-// Event listener tombol mobile
-if (mobileToggleButton) {
-  mobileToggleButton.addEventListener("click", toggleTheme);
-}
-
-// =============================
-// DOM READY FUNCTION
-// =============================
+// NAVBAR
 document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("mobile-menu-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
+  const backdrop = document.getElementById("mobile-backdrop");
+
+  // Toggle Theme Elements
+  const toggleButton = document.getElementById("theme-toggle");
+  const toggleCircle = document.getElementById("toggle-circle");
+  const themeLabel = document.getElementById("theme-label");
+
+  const mobileToggleButton = document.getElementById("mobile-theme-toggle");
+  const mobileToggleCircle = document.getElementById("mobile-toggle-circle");
+  const mobileThemeLabel = document.getElementById("mobile-theme-label");
+
+  // ================================
+  // Toggle Light/Dark Theme (Desktop + Mobile)
+  // ================================
+  const toggleTheme = () => {
+    const html = document.documentElement;
+    const isDark = html.classList.toggle("dark");
+
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+
+    if (toggleCircle) toggleCircle.classList.toggle("translate-x-8", isDark);
+    if (mobileToggleCircle)
+      mobileToggleCircle.classList.toggle("translate-x-8", isDark);
+
+    if (themeLabel)
+      themeLabel.textContent = isDark ? "Mode Terang" : "Mode Gelap";
+    if (mobileThemeLabel)
+      mobileThemeLabel.textContent = isDark ? "Mode Terang" : "Mode Gelap";
+  };
+
+  const setInitialTheme = () => {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    const isDark = savedTheme === "dark" || (!savedTheme && prefersDark);
+
+    document.documentElement.classList.toggle("dark", isDark);
+
+    if (toggleCircle) toggleCircle.classList.toggle("translate-x-8", isDark);
+    if (mobileToggleCircle)
+      mobileToggleCircle.classList.toggle("translate-x-8", isDark);
+
+    if (themeLabel)
+      themeLabel.textContent = isDark ? "Mode Terang" : "Mode Gelap";
+    if (mobileThemeLabel)
+      mobileThemeLabel.textContent = isDark ? "Mode Terang" : "Mode Gelap";
+  };
+
+  setInitialTheme();
+
+  if (toggleButton) toggleButton.addEventListener("click", toggleTheme);
+  if (mobileToggleButton)
+    mobileToggleButton.addEventListener("click", toggleTheme);
+
+  // ================================
+  // Mobile Menu Toggle
+  // ================================
+  function openMenu() {
+    mobileMenu.classList.remove("hidden", "opacity-0", "pointer-events-none");
+    mobileMenu.classList.add("opacity-100", "pointer-events-auto");
+
+    backdrop.classList.remove("hidden", "opacity-0", "pointer-events-none");
+    backdrop.classList.add("opacity-100", "pointer-events-auto");
+  }
+
+  function closeMenu() {
+    mobileMenu.classList.remove("opacity-100", "pointer-events-auto");
+    mobileMenu.classList.add("opacity-0", "pointer-events-none");
+    setTimeout(() => mobileMenu.classList.add("hidden"), 300);
+
+    backdrop.classList.remove("opacity-100", "pointer-events-auto");
+    backdrop.classList.add("opacity-0", "pointer-events-none");
+    setTimeout(() => backdrop.classList.add("hidden"), 300);
+  }
 
   if (toggleBtn && mobileMenu) {
     toggleBtn.addEventListener("click", () => {
-      const isHidden = mobileMenu.classList.contains("opacity-0");
+      const isHidden = mobileMenu.classList.contains("hidden");
+      if (isHidden) openMenu();
+      else closeMenu();
+    });
+  }
 
-      if (isHidden) {
-        mobileMenu.classList.remove("hidden");
-        // Trigger reflow to allow transition to run
-        void mobileMenu.offsetWidth;
-
-        mobileMenu.classList.remove("opacity-0", "pointer-events-none");
-        mobileMenu.classList.add("opacity-100", "pointer-events-auto");
-      } else {
-        mobileMenu.classList.remove("opacity-100", "pointer-events-auto");
-        mobileMenu.classList.add("opacity-0", "pointer-events-none");
-
-        // Tunggu sampai animasi selesai baru `hidden`
-        setTimeout(() => {
-          mobileMenu.classList.add("hidden");
-        }, 300); // Harus sama dengan transition-duration di Tailwind (300ms)
-      }
+  if (backdrop) {
+    // BACKDROP hanya menutup jika klik area kosong, bukan anak dalamnya
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) closeMenu();
     });
   }
 });
