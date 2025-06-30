@@ -11,13 +11,32 @@ window.addEventListener("load", () => {
   }
 });
 
-// Backup fallback: paksa hilang setelah 5 detik
-setTimeout(() => {
-  const preloader = document.getElementById("preloader");
-  if (preloader) {
-    preloader.style.display = "none";
-  }
-}, 5000);
+// =============================
+// TOGGLE BUTTON LIGHT/DARK MODE
+// =============================
+const toggleButton = document.getElementById("theme-toggle");
+const toggleCircle = document.getElementById("toggle-circle");
+const themeLabel = document.getElementById("theme-label");
+
+// Inisialisasi awal saat halaman dibuka
+if (localStorage.getItem("theme") === "dark") {
+  document.documentElement.classList.add("dark");
+  toggleCircle.classList.add("translate-x-8");
+  themeLabel.textContent = "Mode Gelap";
+} else {
+  document.documentElement.classList.remove("dark");
+  toggleCircle.classList.remove("translate-x-8");
+  themeLabel.textContent = "Mode Terang";
+}
+
+// Saat tombol diklik
+toggleButton.addEventListener("click", () => {
+  const html = document.documentElement;
+  const isDark = html.classList.toggle("dark");
+  toggleCircle.classList.toggle("translate-x-8");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+  themeLabel.textContent = isDark ? "Mode Gelap" : "Mode Terang";
+});
 
 // =============================
 // DOM READY FUNCTION

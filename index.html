@@ -52,24 +52,50 @@
 
       <!-- Right: Auth Buttons (hidden in mobile) -->
       <div class="hidden lg:flex items-center space-x-3 z-[1001]">
-        <button
-          class="flex items-center space-x-2 px-3 py-1.5 border border-gray-300 rounded-full hover:bg-gray-200 transition"
-          title="Light/Dark Mode"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-gray-800"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+        <!-- Toggle & Label -->
+        <div class="flex items-center space-x-3">
+          <!-- Toggle Switch -->
+          <button
+            id="theme-toggle"
+            class="relative w-16 h-8 flex items-center bg-white dark:bg-black border border-black rounded-full p-1 transition-colors duration-300 focus:outline-none"
+            title="Toggle Theme"
           >
-            <path
-              d="M17.293 13.293a8 8 0 01-10.586-10.586A8 8 0 1017.293 13.293z"
-            />
-          </svg>
-          <span class="text-sm font-medium text-gray-800"
-            >Light Mode / Dark Mode</span
-          >
-        </button>
+            <!-- Circle -->
+            <div
+              id="toggle-circle"
+              class="w-6 h-6 bg-black dark:bg-white rounded-full shadow-md transform transition-transform duration-300"
+            ></div>
+
+            <!-- Sun Icon -->
+            <svg
+              class="absolute left-1 w-4 h-4 text-black pointer-events-none"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M10 3.5a.75.75 0 01.75.75v1a.75.75 0 01-1.5 0v-1A.75.75 0 0110 3.5zm0 10a3.25 3.25 0 100-6.5 3.25 3.25 0 000 6.5zm0 1.5a.75.75 0 01.75.75v1a.75.75 0 01-1.5 0v-1a.75.75 0 01.75-.75zm6.5-5.25a.75.75 0 010 1.5h-1a.75.75 0 010-1.5h1zm-10 0a.75.75 0 010 1.5H5.5a.75.75 0 010-1.5H6.5zm8.03 4.03a.75.75 0 011.06 1.06l-.71.71a.75.75 0 11-1.06-1.06l.71-.71zM5.22 5.22a.75.75 0 011.06 0l.71.71a.75.75 0 11-1.06 1.06l-.71-.71a.75.75 0 010-1.06zm9.18 0a.75.75 0 010 1.06l-.71.71a.75.75 0 11-1.06-1.06l.71-.71a.75.75 0 011.06 0zM5.22 14.78a.75.75 0 010-1.06l.71-.71a.75.75 0 111.06 1.06l-.71.71a.75.75 0 01-1.06 0z"
+              />
+            </svg>
+
+            <!-- Moon Icon -->
+            <svg
+              class="absolute right-1 w-4 h-4 text-black dark:text-white pointer-events-none"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M17.293 13.293a8 8 0 01-10.586-10.586A8 8 0 1017.293 13.293z"
+              />
+            </svg>
+          </button>
+
+          <!-- Static Text -->
+          <span id="theme-label" class="text-sm font-medium text-black">
+            Mode Terang
+          </span>
+        </div>
 
         <!-- Sign In -->
         <a
