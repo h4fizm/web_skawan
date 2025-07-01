@@ -1,17 +1,21 @@
-.swiper-button-next:after,
-.swiper-button-prev:after {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: yellowgreen;
+@font-face {
+  font-family: "Bohemian Soul";
+  src: url("fonts/BohemianSoul-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
 }
 
-.swiper-pagination-bullet {
-  width: 10px;
-  height: 10px;
-  background-color: #9ca3af;
-  opacity: 1;
+@font-face {
+  font-family: "Alcazar";
+  src: url("fonts/Alcazar-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
-.swiper-pagination-bullet-active {
-  background-color: #111827;
+.font-bohemian {
+  font-family: "Bohemian Soul", cursive;
+}
+
+.font-alcazar {
+  font-family: "Alcazar", sans-serif;
 }
