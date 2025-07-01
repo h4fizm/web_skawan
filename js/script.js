@@ -17,59 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileMenu = document.getElementById("mobile-menu");
   const backdrop = document.getElementById("mobile-backdrop");
 
-  // Toggle Theme Elements
-  const toggleButton = document.getElementById("theme-toggle");
-  const toggleCircle = document.getElementById("toggle-circle");
-  const themeLabel = document.getElementById("theme-label");
-
-  const mobileToggleButton = document.getElementById("mobile-theme-toggle");
-  const mobileToggleCircle = document.getElementById("mobile-toggle-circle");
-  const mobileThemeLabel = document.getElementById("mobile-theme-label");
-
-  // ================================
-  // Toggle Light/Dark Theme (Desktop + Mobile)
-  // ================================
-  const toggleTheme = () => {
-    const html = document.documentElement;
-    const isDark = html.classList.toggle("dark");
-
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-
-    if (toggleCircle) toggleCircle.classList.toggle("translate-x-8", isDark);
-    if (mobileToggleCircle)
-      mobileToggleCircle.classList.toggle("translate-x-8", isDark);
-
-    if (themeLabel)
-      themeLabel.textContent = isDark ? "Mode Terang" : "Mode Gelap";
-    if (mobileThemeLabel)
-      mobileThemeLabel.textContent = isDark ? "Mode Terang" : "Mode Gelap";
-  };
-
-  const setInitialTheme = () => {
-    const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    const isDark = savedTheme === "dark" || (!savedTheme && prefersDark);
-
-    document.documentElement.classList.toggle("dark", isDark);
-
-    if (toggleCircle) toggleCircle.classList.toggle("translate-x-8", isDark);
-    if (mobileToggleCircle)
-      mobileToggleCircle.classList.toggle("translate-x-8", isDark);
-
-    if (themeLabel)
-      themeLabel.textContent = isDark ? "Mode Terang" : "Mode Gelap";
-    if (mobileThemeLabel)
-      mobileThemeLabel.textContent = isDark ? "Mode Terang" : "Mode Gelap";
-  };
-
-  setInitialTheme();
-
-  if (toggleButton) toggleButton.addEventListener("click", toggleTheme);
-  if (mobileToggleButton)
-    mobileToggleButton.addEventListener("click", toggleTheme);
-
   // ================================
   // Mobile Menu Toggle
   // ================================
