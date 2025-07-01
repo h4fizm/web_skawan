@@ -424,25 +424,24 @@
                 </h3>
 
                 <!-- Isi Status -->
-                <div class="space-y-4 text-sm text-gray-700">
-                  <!-- Pending -->
+                <div class="space-y-4 text-sm text-black">
+                  <!-- Dibuat -->
                   <div class="flex items-start gap-3">
                     <span
-                      class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-yellow-200 text-yellow-800 min-w-[70px] text-center"
+                      class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 min-w-[90px] text-center"
                     >
-                      Pending
+                      Dibuat
                     </span>
                     <p>
-                      Desain kamu sedang dalam tahap verifikasi oleh tim admin
-                      kami. Harap menunggu beberapa saat untuk proses
-                      pengecekan.
+                      Desain kamu berhasil dibuat dan telah masuk ke sistem
+                      kami. Silakan tunggu verifikasi dari tim admin.
                     </p>
                   </div>
 
                   <!-- Diterima -->
                   <div class="flex items-start gap-3">
                     <span
-                      class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-green-200 text-green-800 min-w-[70px] text-center"
+                      class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800 min-w-[90px] text-center"
                     >
                       Diterima
                     </span>
@@ -455,13 +454,39 @@
                   <!-- Ditolak -->
                   <div class="flex items-start gap-3">
                     <span
-                      class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-red-200 text-red-800 min-w-[70px] text-center"
+                      class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 min-w-[90px] text-center"
                     >
                       Ditolak
                     </span>
                     <p>
                       Desain tidak sesuai dengan ketentuan atau terdapat
                       kesalahan teknis. Silakan revisi dan unggah ulang.
+                    </p>
+                  </div>
+
+                  <!-- Dalam Perjalanan -->
+                  <div class="flex items-start gap-3">
+                    <span
+                      class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 min-w-[90px] text-center"
+                    >
+                      Dikirim
+                    </span>
+                    <p>
+                      Produk kamu telah selesai diproduksi dan sedang dalam
+                      proses pengiriman ke alamat tujuan.
+                    </p>
+                  </div>
+
+                  <!-- Selesai -->
+                  <div class="flex items-start gap-3">
+                    <span
+                      class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-lime-100 text-lime-800 min-w-[90px] text-center"
+                    >
+                      Selesai
+                    </span>
+                    <p>
+                      Produk telah sampai ke tanganmu. Terima kasih telah
+                      menggunakan layanan kami!
                     </p>
                   </div>
                 </div>
@@ -472,33 +497,27 @@
 
         <!-- Cards Wrapper -->
         <div class="grid gap-6">
-          <!-- Card Template -->
+          <!-- Dibuat -->
           <div
             class="flex flex-row items-start bg-white border shadow rounded-xl p-4 gap-4 flex-wrap sm:flex-nowrap"
           >
-            <!-- Gambar -->
             <img
               src="image/image1.jpg"
               alt="Desain"
               class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-md"
             />
-
-            <!-- Info -->
             <div class="flex-1 w-full">
-              <!-- Nama Produk + Badge -->
               <div class="flex justify-between items-start mb-2">
                 <h3 class="text-base sm:text-lg font-bold text-black">
                   Black Basic Tee
                 </h3>
                 <span
-                  class="text-xs sm:text-sm font-medium px-3 py-1 bg-yellow-200 text-yellow-800 rounded-md"
+                  class="text-xs sm:text-sm font-medium px-3 py-1 bg-yellow-100 text-yellow-800 rounded-md"
                 >
-                  Pending
+                  Dibuat
                 </span>
               </div>
-
-              <!-- Detail -->
-              <div class="text-sm text-gray-700 space-y-0.5">
+              <div class="text-sm text-black space-y-0.5">
                 <div class="flex gap-2">
                   <span class="w-20">Harga</span><span>:</span
                   ><span class="flex-1">Rp 129.000</span>
@@ -508,8 +527,8 @@
                   ><span class="flex-1">Kaos</span>
                 </div>
                 <div class="flex gap-2">
-                  <span class="w-20">Link Produk</span><span>:</span>
-                  <a href="#" class="text-blue-600 underline flex-1"
+                  <span class="w-20">Link Produk</span><span>:</span
+                  ><a href="#" class="text-blue-600 underline flex-1"
                     >Lihat Produk</a
                   >
                 </div>
@@ -521,7 +540,7 @@
             </div>
           </div>
 
-          <!-- Card 2 -->
+          <!-- Diterima -->
           <div
             class="flex flex-row items-start bg-white border shadow rounded-xl p-4 gap-4 flex-wrap sm:flex-nowrap"
           >
@@ -536,12 +555,12 @@
                   White Oversized Tee
                 </h3>
                 <span
-                  class="text-xs sm:text-sm font-medium px-3 py-1 bg-green-200 text-green-800 rounded-md"
+                  class="text-xs sm:text-sm font-medium px-3 py-1 bg-emerald-100 text-emerald-800 rounded-md"
                 >
                   Diterima
                 </span>
               </div>
-              <div class="text-sm text-gray-700 space-y-0.5">
+              <div class="text-sm text-black space-y-0.5">
                 <div class="flex gap-2">
                   <span class="w-20">Harga</span><span>:</span
                   ><span class="flex-1">Rp 145.000</span>
@@ -564,7 +583,7 @@
             </div>
           </div>
 
-          <!-- Card 3 -->
+          <!-- Ditolak -->
           <div
             class="flex flex-row items-start bg-white border shadow rounded-xl p-4 gap-4 flex-wrap sm:flex-nowrap"
           >
@@ -579,12 +598,12 @@
                   Graphic Print Tee
                 </h3>
                 <span
-                  class="text-xs sm:text-sm font-medium px-3 py-1 bg-red-200 text-red-800 rounded-md"
+                  class="text-xs sm:text-sm font-medium px-3 py-1 bg-red-100 text-red-800 rounded-md"
                 >
                   Ditolak
                 </span>
               </div>
-              <div class="text-sm text-gray-700 space-y-0.5">
+              <div class="text-sm text-black space-y-0.5">
                 <div class="flex gap-2">
                   <span class="w-20">Harga</span><span>:</span
                   ><span class="flex-1">Rp 159.000</span>
@@ -607,7 +626,7 @@
             </div>
           </div>
 
-          <!-- Card 4 -->
+          <!-- Dikirim -->
           <div
             class="flex flex-row items-start bg-white border shadow rounded-xl p-4 gap-4 flex-wrap sm:flex-nowrap"
           >
@@ -622,12 +641,12 @@
                   Vintage Washed Tee
                 </h3>
                 <span
-                  class="text-xs sm:text-sm font-medium px-3 py-1 bg-green-200 text-green-800 rounded-md"
+                  class="text-xs sm:text-sm font-medium px-3 py-1 bg-blue-100 text-blue-800 rounded-md"
                 >
-                  Diterima
+                  Dikirim
                 </span>
               </div>
-              <div class="text-sm text-gray-700 space-y-0.5">
+              <div class="text-sm text-black space-y-0.5">
                 <div class="flex gap-2">
                   <span class="w-20">Harga</span><span>:</span
                   ><span class="flex-1">Rp 139.000</span>
@@ -645,6 +664,49 @@
                 <div class="flex gap-2">
                   <span class="w-20">Pengajuan</span><span>:</span
                   ><span class="flex-1">6 Juni 2025</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Selesai -->
+          <div
+            class="flex flex-row items-start bg-white border shadow rounded-xl p-4 gap-4 flex-wrap sm:flex-nowrap"
+          >
+            <img
+              src="image/image5.jpg"
+              alt="Desain"
+              class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-md"
+            />
+            <div class="flex-1 w-full">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-base sm:text-lg font-bold text-black">
+                  Classic Fit Tee
+                </h3>
+                <span
+                  class="text-xs sm:text-sm font-medium px-3 py-1 bg-lime-100 text-lime-800 rounded-md"
+                >
+                  Selesai
+                </span>
+              </div>
+              <div class="text-sm text-black space-y-0.5">
+                <div class="flex gap-2">
+                  <span class="w-20">Harga</span><span>:</span
+                  ><span class="flex-1">Rp 165.000</span>
+                </div>
+                <div class="flex gap-2">
+                  <span class="w-20">Kategori</span><span>:</span
+                  ><span class="flex-1">Classic</span>
+                </div>
+                <div class="flex gap-2">
+                  <span class="w-20">Link Produk</span><span>:</span
+                  ><a href="#" class="text-blue-600 underline flex-1"
+                    >Lihat Produk</a
+                  >
+                </div>
+                <div class="flex gap-2">
+                  <span class="w-20">Pengajuan</span><span>:</span
+                  ><span class="flex-1">5 Juni 2025</span>
                 </div>
               </div>
             </div>
