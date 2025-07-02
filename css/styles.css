@@ -1,13 +1,6 @@
 @font-face {
   font-family: "Bohemian Soul";
-  src: url("font/Bohemian Soul.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Alcazar";
-  src: url("fonts/Alcazar-Regular.ttf") format("truetype");
+  src: url("../font/Bohemian Soul.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
@@ -16,6 +9,13 @@
   font-family: "Bohemian Soul", cursive;
 }
 
+@font-face {
+  font-family: "Alcazar";
+  src: url("../font/alcazar-regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .font-alcazar {
-  font-family: "Alcazar", sans-serif;
+  font-family: "Alcazar", cursive;
 }
