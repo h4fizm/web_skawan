@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Bohemian Soul";
-  src: url("fonts/Bohemian Soul.otf") format("opentype");
+  src: url("/path/to/Bohemian Soul.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
