@@ -1,21 +1,10 @@
 @font-face {
-  font-family: "Bohemian Soul";
-  src: url("../font/Bohemian Soul.woff2") format("woff2");
+  font-family: "Quantify";
+  src: url("../font/Quantify.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
-.font-bohemian {
-  font-family: "Bohemian Soul", cursive;
-}
-
-@font-face {
-  font-family: "Alcazar";
-  src: url("../font/alcazar-regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-
-.font-alcazar {
-  font-family: "Alcazar", cursive;
+.font-quantify {
+  font-family: "Quantify", cursive;
 }
