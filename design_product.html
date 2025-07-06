@@ -6,12 +6,558 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>Design Page</title>
+    <title>Desain Produk</title>
+    <!-- favicon -->
+    <link rel="icon" href="image/icon.JPG" type="image/png" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <!-- Swiper CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <!-- Material Icon -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- AOS JS Fade Up/Fade Down -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   </head>
-  <body>
-    <h1>Design Page</h1>
-    <a href="checkout_product.html">
-      <button>Laman Checkout</button>
-    </a>
+
+  <!-- Preloader -->
+  <div
+    id="preloader"
+    class="fixed inset-0 bg-white z-50 flex items-center justify-center transition-opacity duration-500"
+  >
+    <div
+      class="w-10 h-10 border-4 border-gray-200 border-t-[#d1a86f] rounded-full animate-spin"
+    ></div>
+  </div>
+
+  <body class="bg-white text-white">
+    <!-- Navbar Top -->
+    <nav
+      class="fixed top-0 left-0 w-full px-4 md:px-10 py-3 border-b border-[#d1a86f] shadow-sm flex items-center justify-between bg-[#0f2d25] z-[1000]"
+      data-aos="fade-down"
+      data-aos-duration="400"
+      data-aos-delay="0"
+    >
+      <!-- Left: Logo -->
+      <a href="index.html" class="flex items-center space-x-2 z-[1001]">
+        <img src="image/icon.JPG" alt="Logo" class="w-8 h-8 object-contain" />
+        <span
+          class="text-md font-quantify font-extrabold tracking-wide text-[#d1a86f]"
+        >
+          SKAWAN INDUSTRIES
+        </span>
+      </a>
+
+      <!-- Right: User Info with Dropdown -->
+      <div class="hidden lg:flex items-center space-x-3 relative z-[1000]">
+        <!-- Username -->
+        <span
+          class="text-md font-quantify font-extrabold tracking-wide text-white"
+        >
+          USERNAME
+        </span>
+
+        <div class="relative">
+          <!-- Avatar Button -->
+          <button
+            id="profile-menu-btn"
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-[#d1a86f] overflow-hidden focus:outline-none"
+          >
+            <img
+              src="image/usericon.jpg"
+              alt="User Profile"
+              class="w-full h-full object-cover cursor-pointer"
+            />
+          </button>
+
+          <!-- Dropdown -->
+          <div
+            id="profile-menu-dropdown"
+            class="hidden absolute right-0 top-full mt-3 w-52 bg-white rounded-lg shadow-xl ring-1 ring-gray-200 z-[1001]"
+          >
+            <a
+              href="user_profile.html"
+              class="flex items-center gap-3 px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 transition"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 text-gray-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 20h9"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 4H8m8 0v16M8 4v16"
+                />
+              </svg>
+              Edit Profil
+            </a>
+            <a
+              href="logout.html"
+              class="flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 text-red-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7"
+                />
+              </svg>
+              Logout
+            </a>
+          </div>
+
+          <!-- SCRIPT -->
+          <script>
+            document.addEventListener("DOMContentLoaded", function () {
+              const profileBtn = document.getElementById("profile-menu-btn");
+              const dropdown = document.getElementById("profile-menu-dropdown");
+
+              profileBtn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                dropdown.classList.toggle("hidden");
+              });
+
+              document.addEventListener("click", function (e) {
+                if (
+                  !dropdown.contains(e.target) &&
+                  !profileBtn.contains(e.target)
+                ) {
+                  dropdown.classList.add("hidden");
+                }
+              });
+            });
+          </script>
+        </div>
+      </div>
+
+      <!-- Burger Button -->
+      <button
+        id="mobile-menu-toggle"
+        class="lg:hidden focus:outline-none z-[1001]"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 text-white"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+    </nav>
+
+    <!-- Product Info Bar -->
+    <div
+      class="hidden lg:flex items-center justify-end px-4 md:px-10 py-4 bg-white border-b border-gray-200 fixed top-[68px] w-full z-[999]"
+    >
+      <!-- Nama Produk -->
+      <div class="absolute left-1/2 transform -translate-x-1/2">
+        <h1 class="text-lg font-quantify font-bold text-[#0f2d25]">
+          NAMA PRODUK KAOS
+        </h1>
+      </div>
+
+      <!-- Tombol Aksi -->
+      <div class="flex gap-3 ml-auto">
+        <!-- Tombol Download -->
+        <a
+          href="#"
+          class="flex items-center gap-2 text-sm font-quantify px-5 py-2 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-full hover:bg-[#c1985e] transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
+            />
+          </svg>
+          Download
+        </a>
+
+        <!-- Tombol Selesai -->
+        <a
+          href="#"
+          class="flex items-center gap-2 text-sm font-quantify px-5 py-2 border border-[#0f2d25] text-white bg-[#0f2d25] rounded-full hover:bg-[#143c31] transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+          Selesai
+        </a>
+      </div>
+    </div>
+
+    <!-- SECTION DESAIN PRODUK -->
+    <div
+      class="flex flex-col lg:flex-row gap-x-6 mt-[160px] px-4 mb-5 h-[700px]"
+    >
+      <!-- === KIRI: Desain Bar === -->
+      <div
+        class="w-full lg:w-80 bg-white border border-[#d1a86f] p-4 rounded-2xl shadow-lg"
+      >
+        <!-- Informasi Desain -->
+        <div class="mb-4">
+          <h2 class="text-sm font-bold text-[#0f2d25] uppercase">
+            Informasi Desain
+          </h2>
+          <p class="text-xs italic text-gray-500">(harus diisi !!)</p>
+        </div>
+
+        <!-- Dropdown Pilih Ukuran -->
+        <div class="mb-4">
+          <label class="block text-xs text-[#0f2d25] mb-1"
+            >Pilih Ukuran Size</label
+          >
+          <select
+            class="w-full border border-[#d1a86f] rounded px-3 py-2 text-sm text-[#0f2d25] focus:outline-none"
+          >
+            <option>XS</option>
+            <option>S</option>
+            <option>M</option>
+            <option>L</option>
+            <option>XL</option>
+          </select>
+        </div>
+
+        <!-- Button Buat Text -->
+        <div class="mb-4">
+          <button
+            class="w-full bg-[#d1a86f] text-[#0f2d25] border border-[#d1a86f] rounded px-4 py-2 text-sm font-semibold hover:bg-[#c1985e] transition"
+          >
+            Buat Teks
+          </button>
+        </div>
+
+        <!-- Fitur Teks -->
+        <div
+          class="mb-4 border border-gray-300 p-3 rounded text-xs text-[#0f2d25] bg-gray-50"
+        >
+          <p class="font-bold mb-1">Fitur Buat Teks:</p>
+          <ul class="list-disc list-inside leading-snug">
+            <li>Pilih font</li>
+            <li>Ukuran font</li>
+            <li>Warna</li>
+            <li>Text curve</li>
+            <li>Spacing</li>
+            <li>Align</li>
+          </ul>
+          <p class="mt-2">
+            Bagian ini muncul ketika button buat teks ditekan dan bisa
+            dihilangkan dengan tombol close di pojok kanan bagian ini.
+          </p>
+        </div>
+
+        <!-- Upload Foto/Logo -->
+        <div>
+          <button
+            class="w-full border border-[#0f2d25] text-[#0f2d25] rounded px-4 py-2 text-sm font-semibold hover:bg-gray-100 transition"
+          >
+            Upload Foto/Logo
+          </button>
+        </div>
+      </div>
+
+      <!-- === KANAN: Gambar Produk === -->
+      <div
+        class="flex-1 border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center text-gray-400 text-sm h-[700px]"
+      >
+        Gambar Produk (kosongkan dulu)
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="w-full bg-[#0f2d25] text-white mt-10">
+      <div
+        class="max-w-[1500px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20 xl:px-24 py-12"
+      >
+        <!-- Top Section -->
+        <div
+          class="flex flex-col md:flex-row justify-between items-center pb-8 mb-8 border-b border-[#15453a]"
+        >
+          <!-- Logo and Tagline -->
+          <div
+            class="flex flex-col md:items-start items-center text-center md:text-left mb-4 md:mb-0"
+          >
+            <div class="flex items-center mb-2">
+              <img
+                src="image/icon.JPG"
+                alt="SKAWAN INDUSTRIES Logo"
+                class="w-10 h-10 rounded-full mr-3"
+              />
+              <h3
+                class="font-quantify text-xl sm:text-2xl font-bold text-[#d1a86f]"
+              >
+                SKAWAN INDUSTRIES
+              </h3>
+            </div>
+            <h6 class="text-sm text-white font-quantify">
+              Start order now and get a cool design product
+            </h6>
+          </div>
+        </div>
+
+        <!-- Grid Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Alamat -->
+          <div class="flex flex-col items-start text-left">
+            <h4 class="font-bold text-lg text-white font-quantify">Alamat</h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4"></div>
+            <p class="text-white mb-4 font-quantify">
+              Jl. Puri Airlangga No.20 blok P, Kapasan, Sidokare, Sidoarjo,
+              Sidoarjo Regency, East Java 61214
+            </p>
+            <div
+              class="w-full h-[280px] md:h-[320px] rounded-lg overflow-hidden"
+            >
+              <iframe
+                src="https://www.google.com/maps?q=-7.446144,112.707078&hl=es;z=14&output=embed"
+                width="100%"
+                height="100%"
+                style="border: 0"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                class="w-full h-full filter grayscale contrast-110"
+              >
+              </iframe>
+            </div>
+          </div>
+
+          <!-- Follow Us On -->
+          <div class="flex flex-col items-start text-left">
+            <h4 class="font-bold text-lg text-white font-quantify">
+              Follow Us On :
+            </h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4"></div>
+            <div class="flex flex-col space-y-4">
+              <!-- WhatsApp -->
+              <a
+                href="https://wa.me/6289649710370"
+                target="_blank"
+                class="flex items-center space-x-3 group"
+              >
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition"
+                >
+                  <img
+                    src="image/whatsapp_icon.png"
+                    alt="WhatsApp"
+                    class="w-5 h-5"
+                  />
+                </div>
+                <span class="text-white font-quantify">WhatsApp</span>
+              </a>
+
+              <!-- Instagram -->
+              <a
+                href="https://www.instagram.com/skawanindustries?igsh=MzJqMWdwb294Mnk4"
+                target="_blank"
+                class="flex items-center space-x-3 group"
+              >
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition"
+                >
+                  <img
+                    src="image/instagram_icon.png"
+                    alt="Instagram"
+                    class="w-5 h-5"
+                  />
+                </div>
+                <span class="text-white font-quantify">Instagram</span>
+              </a>
+
+              <!-- Shopee -->
+              <a
+                href="http://shopee.co.id/skawanindustries"
+                target="_blank"
+                class="flex items-center space-x-3 group"
+              >
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 group-hover:bg-white/20 transition"
+                >
+                  <img
+                    src="image/shopee_icon.png"
+                    alt="Shopee"
+                    class="w-5 h-5"
+                  />
+                </div>
+                <span class="text-white font-quantify">Shopee</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Get In Touch -->
+          <div class="flex flex-col items-start text-left">
+            <h4 class="font-bold text-lg text-white font-quantify">
+              Get In Touch With Us
+            </h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4"></div>
+            <p class="text-white font-quantify">Phone: +62 8819 727 687</p>
+            <p class="text-white mt-4 font-quantify">
+              Senin–Jumat:<br />9.00 – 20.00
+            </p>
+            <p class="text-white mt-4 font-quantify">
+              Saturday-Minggu:<br />10.00 – 17.00
+            </p>
+            <p class="text-white mt-4 font-quantify">
+              support@skawanindustries.com
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="flex flex-col items-start text-left">
+            <h4 class="font-bold text-lg text-white font-quantify">
+              Quick Links
+            </h4>
+            <div class="w-12 h-1 bg-white mt-1 mb-4"></div>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="index.html"
+                  class="text-white hover:text-green-300 font-quantify"
+                  >Home Page</a
+                >
+              </li>
+              <li>
+                <a
+                  href="list_product.html"
+                  class="text-white hover:text-green-300 font-quantify"
+                  >category1</a
+                >
+              </li>
+              <li>
+                <a
+                  href="list_product.html"
+                  class="text-white hover:text-green-300 font-quantify"
+                  >category2</a
+                >
+              </li>
+              <li>
+                <a
+                  href="list_product.html"
+                  class="text-white hover:text-green-300 font-quantify"
+                  >category3</a
+                >
+              </li>
+              <li>
+                <a
+                  href="list_product.html"
+                  class="text-white hover:text-green-300 font-quantify"
+                  >category4</a
+                >
+              </li>
+              <li>
+                <a
+                  href="list_product.html"
+                  class="text-white hover:text-green-300 font-quantify"
+                  >category5</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div
+          class="mt-12 pt-6 border-t border-[#15453a] flex flex-col md:flex-row justify-between items-center text-sm text-white gap-4"
+        >
+          <!-- Left: Follow Us On -->
+          <div class="flex items-center space-x-4">
+            <span class="font-quantify text-white">Follow Us On:</span>
+
+            <!-- WhatsApp -->
+            <a
+              href="https://wa.me/6289649710370"
+              target="_blank"
+              class="hover:text-green-300 transition"
+            >
+              <img
+                src="image/whatsapp_icon.png"
+                alt="WhatsApp"
+                class="w-5 h-5"
+              />
+            </a>
+
+            <!-- Instagram -->
+            <a
+              href="https://www.instagram.com/skawanindustries?igsh=MzJqMWdwb294Mnk4"
+              target="_blank"
+              class="hover:text-green-300 transition"
+            >
+              <img
+                src="image/instagram_icon.png"
+                alt="Instagram"
+                class="w-5 h-5"
+              />
+            </a>
+          </div>
+
+          <!-- Center: Copyright -->
+          <p class="text-center w-full md:w-auto font-quantify">
+            © 2025 SKAWAN INDUSTRIES. All rights reserved.
+          </p>
+
+          <!-- Right: Kosong -->
+          <div class="w-[120px] h-5 hidden md:block"></div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- swiper js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- AOS JS Fade Up/Fade Down -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+    <!-- tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- custom js -->
+    <script src="js/script.js"></script>
   </body>
 </html>

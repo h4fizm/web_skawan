@@ -194,3 +194,24 @@ document.addEventListener("click", function (e) {
     dropdown.classList.add("hidden");
   }
 });
+
+// dropdown menu design product
+document.addEventListener("DOMContentLoaded", function () {
+  const profileBtn = document.getElementById("profile-menu-btn");
+  const dropdown = document.getElementById("profile-menu-dropdown");
+
+  profileBtn.addEventListener("click", function (e) {
+    e.stopPropagation(); // Hindari langsung tertutup saat klik avatar
+    dropdown.classList.toggle("hidden");
+  });
+
+  // Tutup dropdown jika klik di luar
+  document.addEventListener("click", function (e) {
+    if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });
+});
+window.addEventListener("scroll", function () {
+  document.getElementById("profile-menu-dropdown").classList.add("hidden");
+});
