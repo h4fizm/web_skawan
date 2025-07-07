@@ -266,7 +266,7 @@
 
     <!-- SECTION DESAIN PRODUK -->
     <div
-      class="relative overflow-visible z-0 flex flex-col lg:flex-row gap-x-6 mt-[160px] px-4 mb-5 h-[900px]"
+      class="relative overflow-visible z-0 flex flex-col lg:flex-row gap-x-6 mt-[160px] px-4 mb-5 h-[1000px]"
     >
       <!-- === KIRI: Desain Bar === -->
       <div
@@ -394,6 +394,31 @@
               />
             </div>
           </div>
+        </div>
+
+        <!-- Pilih Warna Dasar -->
+        <div class="mb-4">
+          <label class="block text-xs text-[#0f2d25] mb-2 font-quantify">
+            Pilih Warna untuk Ditampilkan
+          </label>
+
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input
+              type="radio"
+              name="warna-dasar"
+              value="#a92b2b"
+              class="sr-only peer"
+              checked
+            />
+            <!-- Kotak warna -->
+            <div
+              class="w-9 h-9 rounded-lg bg-[#a92b2b] border border-gray-300 group-hover:scale-105 transition transform peer-checked:ring-2 peer-checked:ring-[#a92b2b] peer-checked:ring-offset-2 peer-checked:ring-offset-white shadow-md"
+            ></div>
+            <!-- Label keterangan -->
+            <span class="text-sm text-[#0f2d25] font-medium"
+              >Warna Pilihan</span
+            >
+          </label>
         </div>
 
         <!-- Button Buat Text -->
