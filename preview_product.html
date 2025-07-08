@@ -53,19 +53,18 @@
       </a>
 
       <!-- Right: User Info with Dropdown -->
-      <div class="hidden lg:flex items-center space-x-3 relative z-[1000]">
+      <div class="flex items-center space-x-2 sm:space-x-3 relative z-[1000]">
         <!-- Username -->
         <span
-          class="text-md font-quantify font-extrabold tracking-wide text-white"
+          class="text-sm sm:text-md font-quantify font-extrabold tracking-wide text-white truncate max-w-[100px] sm:max-w-none"
         >
           USERNAME
         </span>
-
         <div class="relative">
           <!-- Avatar Button -->
           <button
             id="profile-menu-btn"
-            class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-[#d1a86f] overflow-hidden focus:outline-none"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-[#d1a86f] overflow-hidden focus:outline-none"
           >
             <img
               src="image/usericon.jpg"
@@ -150,38 +149,17 @@
           </script>
         </div>
       </div>
-
-      <!-- Burger Button -->
-      <button
-        id="mobile-menu-toggle"
-        class="lg:hidden focus:outline-none z-[1001]"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-white"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
     </nav>
 
     <!-- Product Info Bar -->
     <div
-      class="hidden lg:flex items-center justify-between px-4 md:px-10 py-4 bg-white border-b border-gray-200 fixed top-[68px] w-full z-[999]"
+      class="relative flex items-start sm:items-center justify-between px-4 md:px-10 pt-4 pb-8 sm:py-4 bg-white border-b border-gray-200 fixed top-[68px] w-full z-[999]"
     >
       <!-- Kiri: Tombol Back -->
-      <div class="flex items-center">
+      <div class="flex-shrink-0 mt-1 sm:mt-0">
         <a
-          href="design_product.html"
-          class="font-quantify inline-flex items-center text-sm text-gray-600 hover:text-black font-medium transition"
+          href="dashboard_user.html"
+          class="font-quantify inline-flex items-center text-sm sm:text-sm text-gray-600 hover:text-black font-medium transition"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -201,31 +179,30 @@
         </a>
       </div>
 
-      <!-- Tengah: Nama Produk dan Harga di satu baris -->
+      <!-- Tengah: Nama Produk dan Harga -->
       <div class="absolute left-1/2 transform -translate-x-1/2 text-center">
-        <div class="flex items-center gap-4">
-          <h1 class="text-xl font-quantify font-bold text-[#0f2d25]">
-            Nama Produk Kaos
-          </h1>
-          <span class="text-base font-quantify font-semibold text-[#0f2d25]"
-            >-</span
-          >
-          <span class="text-base font-quantify font-semibold text-[#0f2d25]">
-            Total Harga : Rp 125.000
-          </span>
-        </div>
+        <h1 class="text-base sm:text-lg font-quantify font-bold text-[#0f2d25]">
+          Nama Produk Kaos
+        </h1>
+        <span
+          class="text-sm sm:text-base font-quantify font-semibold text-[#0f2d25]"
+        >
+          Total Harga : Rp 125.000
+        </span>
       </div>
 
       <!-- Kanan: Tombol Aksi -->
-      <div class="flex gap-3 ml-auto">
-        <!-- Tombol Download -->
+      <div
+        class="hidden sm:flex sm:static sm:bottom-auto right-4 bottom-6 gap-2 sm:gap-3 flex-shrink-0"
+      >
+        <!-- Download -->
         <a
           href="#"
-          class="flex items-center gap-2 text-sm font-quantify px-5 py-2 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-full hover:bg-[#c1985e] transition"
+          class="flex items-center justify-center gap-2 text-xs sm:text-sm font-quantify px-3 py-1.5 sm:px-4 sm:py-2 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-full hover:bg-[#c1985e] transition"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
+            class="h-4 w-4 sm:h-5 sm:w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -240,14 +217,14 @@
           Download
         </a>
 
-        <!-- Tombol Selesai -->
+        <!-- Selesai -->
         <a
           href="#"
-          class="flex items-center gap-2 text-sm font-quantify px-5 py-2 border border-[#0f2d25] text-white bg-[#0f2d25] rounded-full hover:bg-[#143c31] transition"
+          class="flex items-center justify-center gap-2 text-xs sm:text-sm font-quantify px-3 py-1.5 sm:px-4 sm:py-2 border border-[#0f2d25] text-white bg-[#0f2d25] rounded-full hover:bg-[#143c31] transition"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
+            class="h-4 w-4 sm:h-5 sm:w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
