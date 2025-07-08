@@ -471,7 +471,7 @@
 
       <!-- === TENGAH: 3 Icon Button === -->
       <div
-        class="flex w-full lg:w-auto flex-row lg:flex-col gap-4 items-center justify-center mt-8 lg:mt-4 relative"
+        class="flex w-full lg:w-auto flex-row lg:flex-col gap-4 items-center justify-center mt-8 lg:mt-4 mb-6 relative"
       >
         <!-- Icon 1 - Panduan Spot Logo (TANDA TANYA) -->
         <div class="group relative">
@@ -495,7 +495,7 @@
             </svg>
           </button>
           <span
-            class="absolute left-14 top-1/2 transform -translate-y-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
+            class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
           >
             Panduan Spot Logo
           </span>
@@ -524,7 +524,7 @@
             </svg>
           </button>
           <span
-            class="absolute left-14 top-1/2 transform -translate-y-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
+            class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
           >
             Deskripsi Produk
           </span>
@@ -583,7 +583,7 @@
             </svg>
           </button>
           <span
-            class="absolute left-14 top-1/2 transform -translate-y-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
+            class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
           >
             Size/Ukuran Chart
           </span>
@@ -770,6 +770,55 @@
             Preview
           </a>
         </div>
+      </div>
+    </div>
+
+    <!-- === Tombol Aksi Mobile (Hanya muncul di mobile) === -->
+    <div class="sm:hidden mt-4 px-4 w-full">
+      <div class="flex flex-col gap-3 w-full max-w-xs mx-auto">
+        <!-- Download -->
+        <a
+          href="#"
+          class="w-full flex items-center justify-center gap-2 text-sm font-quantify px-4 py-3 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-xl hover:bg-[#c1985e] transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
+            />
+          </svg>
+          Download
+        </a>
+
+        <!-- Selesai -->
+        <a
+          href="#"
+          class="w-full flex items-center justify-center gap-2 text-sm font-quantify px-4 py-3 border border-[#0f2d25] text-white bg-[#0f2d25] rounded-xl hover:bg-[#143c31] transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+          Selesai
+        </a>
       </div>
     </div>
 
