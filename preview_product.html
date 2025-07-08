@@ -37,7 +37,7 @@
   <body class="bg-white text-white">
     <!-- Navbar Top -->
     <nav
-      class="fixed top-0 left-0 w-full px-4 md:px-10 py-3 border-b border-[#d1a86f] shadow-sm flex items-center justify-between bg-[#0f2d25] z-[1000]"
+      class="fixed top-0 left-0 w-full h-12 px-4 md:px-10 py-3 border-b border-[#d1a86f] shadow-sm flex items-center justify-between bg-[#0f2d25] z-[1000]"
       data-aos="fade-down"
       data-aos-duration="400"
       data-aos-delay="0"
@@ -153,7 +153,10 @@
 
     <!-- Product Info Bar -->
     <div
-      class="relative flex items-start sm:items-center justify-between px-4 md:px-10 pt-4 pb-8 sm:py-4 bg-white border-b border-gray-200 fixed top-[68px] w-full z-[999]"
+      class="fixed top-12 w-full z-[999] bg-white border-b border-gray-200 shadow-sm px-4 md:px-10 pt-4 pb-8 sm:py-4 flex items-start sm:items-center justify-between"
+      data-aos="fade-down"
+      data-aos-duration="400"
+      data-aos-delay="100"
     >
       <!-- Kiri: Tombol Back -->
       <div class="flex-shrink-0 mt-1 sm:mt-0">
@@ -260,15 +263,15 @@
 
         <!-- Panel Kontrol Interaktif -->
         <div
-          class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-xl shadow-xl px-8 py-4 flex items-center gap-4 z-30 min-w-[600px] max-w-full"
+          class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-xl shadow-xl px-2.5 sm:px-4 py-2 sm:py-3 flex flex-nowrap justify-center items-center gap-1.5 sm:gap-2 w-full max-w-[320px] sm:max-w-[560px] z-30 overflow-x-auto"
         >
-          <!-- Label Zoom + Dropdown -->
-          <div class="flex items-center gap-2">
-            <span class="text-sm sm:text-base text-gray-700 font-medium"
-              >Zoom :</span
+          <!-- Zoom -->
+          <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+            <span class="text-[10px] sm:text-sm text-gray-700 font-medium"
+              >Zoom:</span
             >
             <select
-              class="appearance-none bg-white border border-gray-300 text-gray-800 text-sm sm:text-base rounded-md px-3 py-1.5 focus:outline-none cursor-pointer"
+              class="appearance-none bg-white border border-gray-300 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded focus:outline-none cursor-pointer h-6 sm:h-8"
             >
               <option>50%</option>
               <option>75%</option>
@@ -278,16 +281,15 @@
             </select>
           </div>
 
-          <!-- Tombol Tampak Depan -->
+          <!-- Depan -->
           <button
-            class="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-sm sm:text-base px-3 py-1.5 rounded-md transition"
+            class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
+              class="w-3.5 h-3.5 sm:w-5 sm:h-5"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
                 stroke-linecap="round"
@@ -299,16 +301,15 @@
             Depan
           </button>
 
-          <!-- Tombol Tampak Belakang -->
+          <!-- Belakang -->
           <button
-            class="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-sm sm:text-base px-3 py-1.5 rounded-md transition"
+            class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
+              class="w-3.5 h-3.5 sm:w-5 sm:h-5"
               fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
                 stroke-linecap="round"
@@ -320,26 +321,26 @@
             Belakang
           </button>
 
-          <!-- Tombol Edit -->
+          <!-- Edit -->
           <a
             href="design_product.html"
-            class="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-sm sm:text-base px-3 py-1.5 rounded-md transition"
+            class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
           >
-            <!-- Icon: Pencil -->
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
+              class="w-3.5 h-3.5 sm:w-5 sm:h-5"
               fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
               stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                d="M16.862 3.487a2.25 2.25 0 1 1 3.182 3.182L6.75 19.963 3 21l1.037-3.75L16.862 3.487z"
+                stroke-width="2"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"
               />
             </svg>
+
             Edit
           </a>
         </div>
