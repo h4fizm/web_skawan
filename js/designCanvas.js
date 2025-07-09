@@ -12,7 +12,6 @@ const canvasHeight = canvas.getHeight();
 const savedDesign = localStorage.getItem("kaosDesign");
 if (savedDesign) {
   canvas.loadFromJSON(savedDesign, () => {
-    // Pulihkan properti name jika tidak tersedia
     canvas.getObjects().forEach((o) => {
       if (o.type === "image") {
         o.name = o.name || "Gambar";
@@ -38,32 +37,31 @@ function moveToPosition(position) {
   if (!active) return alert("Pilih objek terlebih dahulu!");
 
   switch (position) {
-    case "kiri": // Posisi dada kiri
+    case "kiri":
       active.set({ left: 100, top: 150 });
       break;
-    case "kanan": // Posisi dada kanan
+    case "kanan":
       active.set({ left: 400, top: 150 });
       break;
-    case "sponsor": // Posisi sponsor (tengah bawah)
+    case "sponsor":
       active.set({
         left: canvasWidth / 2 - active.getScaledWidth() / 2,
         top: 300,
       });
       break;
   }
-  canvas.renderAll(); // Perbarui tampilan
+  canvas.renderAll();
 }
 
-// Tombol-tombol pemindah posisi objek
 document.getElementById("posDadaKiri").onclick = () => moveToPosition("kiri");
 document.getElementById("posDadaKanan").onclick = () => moveToPosition("kanan");
 document.getElementById("posSponsor").onclick = () => moveToPosition("sponsor");
 
-// === GARIS BANTU CENTER VERTIKAL DAN HORIZONTAL ===
+// === GARIS BANTU CENTER ===
 const centerLineX = new fabric.Line(
   [canvasWidth / 2, 0, canvasWidth / 2, canvasHeight],
   {
-    stroke: "rgba(0,0,0,0.2)", // warna semi-transparan
+    stroke: "rgba(0,0,0,0.2)",
     selectable: false,
     evented: false,
   }
@@ -81,7 +79,7 @@ canvas.add(centerLineY);
 canvas.sendToBack(centerLineX);
 canvas.sendToBack(centerLineY);
 
-// === INISIALISASI FONT SIZE SELECT ===
+// === INISIALISASI FONT SIZE ===
 const fontSizeSelect = document.getElementById("fontSize");
 for (let i = 10; i <= 64; i += 2) {
   const option = document.createElement("option");
@@ -94,7 +92,6 @@ let currentFont = "Arial";
 let fontsList = [];
 const apiKey = "AIzaSyBbHsIzkkLsTKLNRcomvRlw-qZqWeC91OU";
 
-// Ambil daftar font dari Google Fonts
 fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}`)
   .then((r) => r.json())
   .then((d) => {
@@ -128,8 +125,13 @@ function renderFonts(arr) {
           ? ""
           : document.getElementById("textBgColor").value,
       });
+
       canvas.add(txt).setActiveObject(txt);
       updateList();
+
+      // Reset checkbox transparan saat teks baru ditambahkan
+      document.getElementById("bgTransparent").checked = false;
+
       bootstrap.Modal.getInstance(document.getElementById("fontModal")).hide();
     };
 
@@ -331,8 +333,21 @@ canvas.on("mouse:up", () => {
       "none";
 });
 
-const saveBtn = document.getElementById("saveDesign");
-saveBtn.onclick = () => {
+canvas.on("selection:created", updateUIFromActiveObject);
+canvas.on("selection:updated", updateUIFromActiveObject);
+
+function updateUIFromActiveObject() {
+  const o = canvas.getActiveObject();
+  if (o && o.type === "textbox") {
+    document.getElementById("textColor").value = o.fill || "#000000";
+    document.getElementById("fontSize").value = o.fontSize || 16;
+    document.getElementById("textBgColor").value =
+      o.backgroundColor || "#ffffff";
+    document.getElementById("bgTransparent").checked = !o.backgroundColor;
+  }
+}
+
+document.getElementById("saveDesign").onclick = () => {
   const json = JSON.stringify(canvas.toJSON());
   localStorage.setItem("kaosDesign", json);
   window.location.href = "preview.html";
