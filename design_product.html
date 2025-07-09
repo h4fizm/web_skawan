@@ -10,6 +10,7 @@
     <!-- favicon -->
     <link rel="icon" href="image/icon.JPG" type="image/png" />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/guideline.css" />
     <!-- Swiper CSS -->
     <link
       rel="stylesheet"
@@ -219,40 +220,18 @@
           </svg>
           Download
         </a>
-
-        <!-- Selesai -->
-        <a
-          href="#"
-          class="flex items-center justify-center gap-2 text-xs sm:text-sm font-quantify px-3 py-1.5 sm:px-4 sm:py-2 border border-[#0f2d25] text-white bg-[#0f2d25] rounded-full hover:bg-[#143c31] transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 sm:h-5 sm:w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-          Selesai
-        </a>
       </div>
     </div>
 
     <!-- SECTION DESAIN PRODUK -->
     <div
-      class="relative overflow-visible z-0 flex flex-col-reverse lg:flex-row gap-x-6 mt-[160px] px-4 mb-5 h-auto"
+      class="relative overflow-visible z-0 flex flex-col-reverse lg:flex-row gap-y-6 lg:gap-x-6 mt-[160px] px-4 mb-5 h-auto"
     >
-      <!-- === KIRI: Desain Bar === -->
+      <!-- === PANEL DESAIN KIRI === -->
       <div
         class="w-full lg:w-80 flex-none bg-white border border-[#d1a86f] p-4 rounded-2xl shadow-lg"
       >
-        <!-- Informasi Desain -->
+        <!-- Judul -->
         <div class="mb-4">
           <h2 class="text-sm font-bold text-[#0f2d25] uppercase">
             Informasi Desain
@@ -260,13 +239,13 @@
           <p class="text-xs italic text-gray-500">(harus diisi !!)</p>
         </div>
 
-        <!-- Pilih Ukuran Size & Jumlah -->
+        <!-- Ukuran & Jumlah -->
         <div class="mb-4">
-          <label class="block text-xs text-[#0f2d25] mb-2 font-quantify">
-            Pilih Ukuran Size & Jumlah
-          </label>
-
+          <label class="block text-xs text-[#0f2d25] mb-2 font-quantify"
+            >Pilih Ukuran Size & Jumlah</label
+          >
           <div class="grid grid-cols-3 gap-4">
+            <!-- Ukuran manual agar label tambahan tampil -->
             <!-- XS -->
             <div>
               <label class="block text-xs text-[#0f2d25]">XS</label>
@@ -376,70 +355,199 @@
           </div>
         </div>
 
-        <!-- Pilih Warna Dasar -->
+        <!-- Warna Pilihan -->
         <div class="mb-4">
-          <label class="block text-xs text-[#0f2d25] mb-2 font-quantify">
-            Pilih Warna untuk Ditampilkan
-          </label>
-
+          <label class="block text-xs text-[#0f2d25] mb-2 font-quantify"
+            >Pilih Warna untuk Ditampilkan</label
+          >
           <label class="flex items-center gap-3 cursor-pointer group">
             <input
               type="color"
               name="warna-dasar"
               value="#a92b2b"
               class="sr-only peer"
-              checked
             />
-            <!-- Kotak warna -->
             <div
               class="w-9 h-9 rounded-lg bg-[#a92b2b] border border-gray-300 group-hover:scale-105 transition transform peer-checked:ring-2 peer-checked:ring-[#a92b2b] peer-checked:ring-offset-2 peer-checked:ring-offset-white shadow-md"
             ></div>
-            <!-- Label keterangan -->
             <span class="text-sm text-[#0f2d25] font-medium"
               >Warna Pilihan</span
             >
           </label>
         </div>
 
-        <!-- Button Buat Text -->
+        <!-- Buat Teks -->
         <div class="mb-4">
-          <label class="block text-xs text-[#0f2d25] mb-2 font-quantify">
-            Tambahkan Teks pada Desainmu
-          </label>
+          <label class="block text-xs text-[#0f2d25] mb-2 font-quantify"
+            >Tambahkan Teks pada Desainmu</label
+          >
           <button
             class="w-full bg-[#d1a86f] text-[#0f2d25] border border-[#d1a86f] rounded px-4 py-2 text-sm font-semibold hover:bg-[#c1985e] transition"
           >
-            Buat Teks
+            Tambah Teks
           </button>
         </div>
 
-        <!-- Fitur Teks -->
+        <!-- Kontrol Teks -->
         <div
-          class="mb-4 border border-gray-300 p-3 rounded text-xs text-[#0f2d25] bg-gray-50 h-[260px]"
+          class="mb-4 border border-gray-300 p-3 rounded text-xs text-[#0f2d25] bg-gray-50"
         >
-          <p class="font-bold mb-1">Fitur Buat Teks:</p>
-          <ul class="list-disc list-inside leading-snug">
-            <li>Pilih font</li>
-            <li>Ukuran font</li>
-            <li>Warna</li>
-            <li>Text curve</li>
-            <li>Spacing</li>
-            <li>Align</li>
-          </ul>
-          <p class="mt-2">
-            Bagian ini muncul ketika button buat teks ditekan dan bisa
-            dihilangkan dengan tombol close di pojok kanan bagian ini.
-          </p>
+          <p class="font-bold mb-2">Kontrol Teks:</p>
+
+          <label class="text-xs">Warna Teks</label>
+          <input
+            type="color"
+            id="textColor"
+            class="w-full mb-2 h-8 cursor-pointer"
+            value="#000000"
+          />
+
+          <label class="text-xs">Background Teks</label>
+          <input
+            type="color"
+            id="textBgColor"
+            class="w-full mb-2 h-8 cursor-pointer"
+            value="#ffffff"
+          />
+
+          <label class="inline-flex items-center space-x-2 mb-2">
+            <input
+              type="checkbox"
+              id="bgTransparent"
+              class="accent-[#0f2d25]"
+            />
+            <span class="text-xs">Transparan</span>
+          </label>
+
+          <label class="text-xs">Ukuran Font</label>
+          <select
+            id="fontSize"
+            class="w-full text-sm mb-3 border-gray-300 rounded focus:ring-[#d1a86f]"
+          >
+            <option value="12">12px</option>
+            <option value="14">14px</option>
+            <option value="16">16px</option>
+            <option value="18">18px</option>
+            <option value="20">20px</option>
+            <option value="24">24px</option>
+            <option value="28">28px</option>
+          </select>
+
+          <!-- Baris 1: B / I -->
+          <div class="flex gap-2 mb-2 justify-center">
+            <button
+              id="boldBtn"
+              class="w-10 h-10 flex items-center justify-center rounded border hover:bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5 font-bold"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  d="M13 4H6v16h8a4 4 0 000-8h-4"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <button
+              id="italicBtn"
+              class="w-10 h-10 flex items-center justify-center rounded border hover:bg-gray-100 italic"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  d="M10 4h8M6 20h8M14 4l-4 16"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Baris 2: Align -->
+          <div class="flex gap-2 justify-center">
+            <!-- Left -->
+            <button
+              id="alignLeft"
+              class="w-10 h-10 flex items-center justify-center rounded border hover:bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  d="M3 6h18M3 12h12M3 18h18"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <!-- Center -->
+            <button
+              id="alignCenter"
+              class="w-10 h-10 flex items-center justify-center rounded border hover:bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  d="M6 6h12M4 12h16M6 18h12"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <!-- Right -->
+            <button
+              id="alignRight"
+              class="w-10 h-10 flex items-center justify-center rounded border hover:bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  d="M3 6h18M9 12h12M3 18h18"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <!-- Upload Foto/Logo -->
-        <div class="mt-4">
-          <label class="block text-xs text-[#0f2d25] mb-2 font-quantify">
-            Letakkan Gambar atau Icon pada Desainmu
-          </label>
+        <!-- Upload Gambar -->
+        <div class="mb-4">
+          <label class="block text-xs text-[#0f2d25] mb-2 font-quantify"
+            >Letakkan Gambar atau Icon pada Desainmu</label
+          >
           <label
             for="upload-photo"
-            class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#0f2d25] rounded cursor-pointer bg-white hover:bg-gray-50 transition h-[200px]"
+            class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-[#0f2d25] rounded cursor-pointer bg-white hover:bg-gray-50 transition"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -467,11 +575,36 @@
             />
           </label>
         </div>
+
+        <!-- Komponen Aktif & Aksi -->
+        <div class="mt-4">
+          <h6 class="text-sm font-semibold mb-2 text-[#0f2d25]">
+            Komponen Aktif
+          </h6>
+          <ul
+            id="designList"
+            class="list-disc pl-4 text-xs text-[#0f2d25] mb-2 max-h-32 overflow-y-auto"
+          ></ul>
+
+          <button
+            id="clearCanvas"
+            class="w-full bg-red-600 text-white rounded py-2 text-sm font-semibold hover:bg-red-700 transition"
+          >
+            Hapus Semua
+          </button>
+
+          <button
+            id="saveDesign"
+            class="w-full bg-green-600 text-white mt-2 rounded py-2 text-sm font-semibold hover:bg-green-700 transition"
+          >
+            Simpan & Preview
+          </button>
+        </div>
       </div>
 
-      <!-- === TENGAH: 3 Icon Button === -->
+      <!-- 3 button -->
       <div
-        class="flex w-full lg:w-auto flex-row lg:flex-col gap-4 items-center justify-center mt-8 lg:mt-4 mb-6 relative"
+        class="flex gap-4 items-center justify-center lg:flex-col lg:absolute lg:top-[30px] lg:left-[27%] lg:-translate-x-1/2 z-40 mt-2 lg:mt-0"
       >
         <!-- Icon 1 - Panduan Spot Logo (TANDA TANYA) -->
         <div class="group relative">
@@ -797,28 +930,6 @@
           </svg>
           Download
         </a>
-
-        <!-- Selesai -->
-        <a
-          href="#"
-          class="w-full flex items-center justify-center gap-2 text-sm font-quantify px-4 py-3 border border-[#0f2d25] text-white bg-[#0f2d25] rounded-xl hover:bg-[#143c31] transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-          Selesai
-        </a>
       </div>
     </div>
 
@@ -1071,5 +1182,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- custom js -->
     <script src="js/script.js"></script>
+    <script src="js/designCanvas.js"></script>
   </body>
 </html>
