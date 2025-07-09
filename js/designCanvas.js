@@ -4,11 +4,15 @@ const canvas = new fabric.Canvas("tshirtCanvas", {
   selection: true,
 });
 
-// Cek apakah ada data tersimpan sebelumnya di localStorage
+// Ambil ukuran canvas untuk referensi posisi objek & garis bantu
+const canvasWidth = canvas.getWidth();
+const canvasHeight = canvas.getHeight();
+
+// Cek apakah ada desain tersimpan di localStorage
 const savedDesign = localStorage.getItem("kaosDesign");
 if (savedDesign) {
   canvas.loadFromJSON(savedDesign, () => {
-    // Pulihkan properti name pada image jika tidak tersedia
+    // Pulihkan properti name jika tidak tersedia
     canvas.getObjects().forEach((o) => {
       if (o.type === "image") {
         o.name = o.name || "Gambar";
@@ -28,7 +32,56 @@ if (savedDesign) {
   );
 }
 
-// Inisialisasi font size options
+// === FUNGSI PEMINDAHAN OBJEK OTOMATIS ===
+function moveToPosition(position) {
+  const active = canvas.getActiveObject();
+  if (!active) return alert("Pilih objek terlebih dahulu!");
+
+  switch (position) {
+    case "kiri": // Posisi dada kiri
+      active.set({ left: 100, top: 150 });
+      break;
+    case "kanan": // Posisi dada kanan
+      active.set({ left: 400, top: 150 });
+      break;
+    case "sponsor": // Posisi sponsor (tengah bawah)
+      active.set({
+        left: canvasWidth / 2 - active.getScaledWidth() / 2,
+        top: 300,
+      });
+      break;
+  }
+  canvas.renderAll(); // Perbarui tampilan
+}
+
+// Tombol-tombol pemindah posisi objek
+document.getElementById("posDadaKiri").onclick = () => moveToPosition("kiri");
+document.getElementById("posDadaKanan").onclick = () => moveToPosition("kanan");
+document.getElementById("posSponsor").onclick = () => moveToPosition("sponsor");
+
+// === GARIS BANTU CENTER VERTIKAL DAN HORIZONTAL ===
+const centerLineX = new fabric.Line(
+  [canvasWidth / 2, 0, canvasWidth / 2, canvasHeight],
+  {
+    stroke: "rgba(0,0,0,0.2)", // warna semi-transparan
+    selectable: false,
+    evented: false,
+  }
+);
+const centerLineY = new fabric.Line(
+  [0, canvasHeight / 2, canvasWidth, canvasHeight / 2],
+  {
+    stroke: "rgba(0,0,0,0.2)",
+    selectable: false,
+    evented: false,
+  }
+);
+canvas.add(centerLineX);
+canvas.add(centerLineY);
+canvas.sendToBack(centerLineX);
+canvas.sendToBack(centerLineY);
+
+// === INISIALISASI FONT SIZE SELECT ===
 const fontSizeSelect = document.getElementById("fontSize");
 for (let i = 10; i <= 64; i += 2) {
   const option = document.createElement("option");
@@ -198,7 +251,6 @@ function updateList() {
   ul.innerHTML = "";
 
   canvas.getObjects().forEach((o) => {
-    // Filter hanya objek yang valid
     const isValidTextbox =
       o.type === "textbox" &&
       o.text &&
@@ -210,7 +262,6 @@ function updateList() {
       o.name.trim() !== "" &&
       o.name.toLowerCase() !== "komponen";
 
-    // Jika bukan textbox atau image yang valid, abaikan
     if (!isValidTextbox && !isValidImage) return;
 
     const li = document.createElement("li");
@@ -218,7 +269,6 @@ function updateList() {
       "list-group-item d-flex justify-content-between align-items-center";
 
     const label = isValidTextbox ? `Teks: ${o.text}` : `Gambar: ${o.name}`;
-
     li.textContent = label;
 
     const btn = document.createElement("button");

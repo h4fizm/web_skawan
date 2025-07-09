@@ -1,0 +1,40 @@
+/* Container utama canvas (elemen yang dibuat otomatis oleh Fabric.js) */
+.canvas-container {
+  border: 1px solid #ccc; /* Beri border tipis abu-abu */
+  position: relative; /* Agar elemen posisi absolut seperti penggaris bisa diposisikan relatif ke container ini */
+}
+
+/* Gaya tombol preview font */
+.font-preview {
+  font-size: 14px; /* Ukuran teks contoh font */
+  padding: 4px; /* Ruang dalam tombol */
+}
+
+/* Tampilan tombol toggle saat aktif (bold, italic, align) */
+.btn-toggle.active {
+  background-color: #0d6efd; /* Biru Bootstrap */
+  color: #fff; /* Teks putih */
+}
+
+/* Gaya umum untuk label penggaris koordinat (X dan Y) */
+.ruler {
+  position: absolute; /* Ditempatkan relatif terhadap .canvas-container */
+  font-size: 10px; /* Ukuran teks kecil */
+  color: #555; /* Abu-abu gelap */
+  pointer-events: none; /* Tidak mengganggu klik elemen di bawahnya */
+}
+
+/* Gaya garis bantu koordinat (horizontal dan vertikal) */
+.ruler-line {
+  position: absolute; /* Posisi bebas di atas canvas */
+  background: rgb(255, 0, 0); /* Warna merah mencolok */
+  z-index: 10; /* Ditampilkan di atas elemen lainnya */
+}
+
+/* Gaya tombol posisi objek saat di-hover (efek interaktif) */
+#posDadaKiri:hover,
+#posDadaKanan:hover,
+#posSponsor:hover {
+  background-color: #0d6efd; /* Warna biru Bootstrap saat hover */
+  color: white; /* Teks putih */
+}
