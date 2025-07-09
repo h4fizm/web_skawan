@@ -606,12 +606,11 @@
       <div
         class="flex gap-4 items-center justify-center lg:flex-col lg:absolute lg:top-[30px] lg:left-[27%] lg:-translate-x-1/2 z-40 mt-2 lg:mt-0"
       >
-        <!-- Icon 1 - Panduan Spot Logo (TANDA TANYA) -->
+        <!-- Icon 1 - Panduan Spot Logo -->
         <div class="group relative">
           <button
             class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
           >
-            <!-- Icon: Tanda Tanya -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -634,13 +633,12 @@
           </span>
         </div>
 
-        <!-- Icon 2 - Deskripsi Produk (Dokumen) -->
+        <!-- Icon 2 - Deskripsi Produk -->
         <div class="group relative">
           <button
             onclick="document.getElementById('modalDeskripsiProduk').classList.remove('hidden')"
             class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
           >
-            <!-- Icon: Document Text -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -662,44 +660,13 @@
             Deskripsi Produk
           </span>
         </div>
-        <!-- Modal: Deskripsi Produk -->
-        <div
-          id="modalDeskripsiProduk"
-          class="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center px-4 hidden"
-        >
-          <div
-            class="bg-white w-full max-w-md sm:rounded-xl shadow-xl p-6 relative animate-fade-in"
-          >
-            <!-- Tombol Close -->
-            <button
-              onclick="document.getElementById('modalDeskripsiProduk').classList.add('hidden')"
-              class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
-            >
-              ✕
-            </button>
 
-            <!-- Judul -->
-            <h3 class="text-lg font-bold text-[#0f2d25] font-quantify mb-4">
-              Deskripsi Produk
-            </h3>
-
-            <!-- Isi Deskripsi -->
-            <p class="text-sm text-gray-700 leading-relaxed">
-              Produk ini merupakan kaos berkualitas tinggi yang terbuat dari
-              bahan katun premium, nyaman dipakai sepanjang hari. Desain
-              minimalis namun elegan membuatnya cocok digunakan dalam berbagai
-              suasana baik formal maupun santai.
-            </p>
-          </div>
-        </div>
-
-        <!-- Icon 3 - Size Chart (Bar Chart) -->
+        <!-- Icon 3 - Size Chart -->
         <div class="group relative">
           <button
             onclick="document.getElementById('modalSizeChart').classList.remove('hidden')"
             class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
           >
-            <!-- Icon: Bar Chart -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -721,85 +688,107 @@
             Size/Ukuran Chart
           </span>
         </div>
-        <!-- Modal: Size Chart Ukuran -->
+      </div>
+
+      <!-- Modal Deskripsi Produk -->
+      <div
+        id="modalDeskripsiProduk"
+        class="fixed inset-0 z-[999] bg-black bg-opacity-40 flex items-center justify-center px-4 hidden"
+      >
         <div
-          id="modalSizeChart"
-          class="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center px-4 hidden"
+          class="bg-white w-full max-w-md sm:rounded-xl shadow-xl p-6 relative animate-fade-in"
         >
-          <div
-            class="bg-white w-full max-w-md sm:rounded-xl shadow-xl p-6 relative animate-fade-in overflow-x-auto"
+          <button
+            onclick="document.getElementById('modalDeskripsiProduk').classList.add('hidden')"
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
           >
-            <!-- Tombol Close -->
-            <button
-              onclick="document.getElementById('modalSizeChart').classList.add('hidden')"
-              class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
-            >
-              ✕
-            </button>
+            ✕
+          </button>
+          <h3 class="text-lg font-bold text-[#0f2d25] font-quantify mb-4">
+            Deskripsi Produk
+          </h3>
+          <p class="text-sm text-gray-700 leading-relaxed text-justify">
+            Produk ini merupakan kaos berkualitas tinggi yang terbuat dari bahan
+            katun premium, nyaman dipakai sepanjang hari. Desain minimalis namun
+            elegan membuatnya cocok digunakan dalam berbagai suasana baik formal
+            maupun santai.
+          </p>
+        </div>
+      </div>
 
-            <!-- Judul -->
-            <h3 class="text-lg font-bold text-[#0f2d25] font-quantify mb-4">
-              Size Chart Ukuran (cm)
-            </h3>
-
-            <!-- Tabel Ukuran -->
-            <table class="w-full text-sm border border-[#0f2d25]">
-              <thead class="bg-[#0f2d25] text-white font-semibold">
-                <tr>
-                  <th class="px-3 py-2 border border-white">Size</th>
-                  <th class="px-3 py-2 border border-white">Lebar</th>
-                  <th class="px-3 py-2 border border-white">Panjang</th>
-                </tr>
-              </thead>
-              <tbody class="text-[#0f2d25] text-center">
-                <tr>
-                  <td class="border px-3 py-1">XS</td>
-                  <td class="border px-3 py-1">42</td>
-                  <td class="border px-3 py-1">61</td>
-                </tr>
-                <tr>
-                  <td class="border px-3 py-1">S</td>
-                  <td class="border px-3 py-1">45</td>
-                  <td class="border px-3 py-1">64</td>
-                </tr>
-                <tr>
-                  <td class="border px-3 py-1">M</td>
-                  <td class="border px-3 py-1">48</td>
-                  <td class="border px-3 py-1">67</td>
-                </tr>
-                <tr>
-                  <td class="border px-3 py-1">L</td>
-                  <td class="border px-3 py-1">50</td>
-                  <td class="border px-3 py-1">70</td>
-                </tr>
-                <tr>
-                  <td class="border px-3 py-1">XL</td>
-                  <td class="border px-3 py-1">53</td>
-                  <td class="border px-3 py-1">75</td>
-                </tr>
-                <tr>
-                  <td class="border px-3 py-1">2XL</td>
-                  <td class="border px-3 py-1">56</td>
-                  <td class="border px-3 py-1">75</td>
-                </tr>
-                <tr>
-                  <td class="border px-3 py-1">3XL</td>
-                  <td class="border px-3 py-1">59</td>
-                  <td class="border px-3 py-1">75</td>
-                </tr>
-                <tr>
-                  <td class="border px-3 py-1">4XL</td>
-                  <td class="border px-3 py-1">62</td>
-                  <td class="border px-3 py-1">75</td>
-                </tr>
-                <tr>
-                  <td class="border px-3 py-1">5XL</td>
-                  <td class="border px-3 py-1">65</td>
-                  <td class="border px-3 py-1">75</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <!-- Modal Size Chart -->
+      <div
+        id="modalSizeChart"
+        class="fixed inset-0 z-[999] bg-black bg-opacity-40 flex items-center justify-center px-4 hidden"
+      >
+        <div
+          class="bg-white w-full max-w-md sm:rounded-xl shadow-xl p-6 relative animate-fade-in overflow-x-auto"
+        >
+          <button
+            onclick="document.getElementById('modalSizeChart').classList.add('hidden')"
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
+          >
+            ✕
+          </button>
+          <h3 class="text-lg font-bold text-[#0f2d25] font-quantify mb-4">
+            Size Chart Ukuran (cm)
+          </h3>
+          <table class="w-full text-sm border border-[#0f2d25]">
+            <thead class="bg-[#0f2d25] text-white font-semibold">
+              <tr>
+                <th class="px-3 py-2 border border-white">Size</th>
+                <th class="px-3 py-2 border border-white">Lebar</th>
+                <th class="px-3 py-2 border border-white">Panjang</th>
+              </tr>
+            </thead>
+            <tbody class="text-[#0f2d25] text-center">
+              <tr>
+                <td class="border px-3 py-1">XS</td>
+                <td class="border px-3 py-1">42</td>
+                <td class="border px-3 py-1">61</td>
+              </tr>
+              <tr>
+                <td class="border px-3 py-1">S</td>
+                <td class="border px-3 py-1">45</td>
+                <td class="border px-3 py-1">64</td>
+              </tr>
+              <tr>
+                <td class="border px-3 py-1">M</td>
+                <td class="border px-3 py-1">48</td>
+                <td class="border px-3 py-1">67</td>
+              </tr>
+              <tr>
+                <td class="border px-3 py-1">L</td>
+                <td class="border px-3 py-1">50</td>
+                <td class="border px-3 py-1">70</td>
+              </tr>
+              <tr>
+                <td class="border px-3 py-1">XL</td>
+                <td class="border px-3 py-1">53</td>
+                <td class="border px-3 py-1">75</td>
+              </tr>
+              <tr>
+                <td class="border px-3 py-1">2XL</td>
+                <td class="border px-3 py-1">56</td>
+                <td class="border px-3 py-1">75</td>
+              </tr>
+              <tr>
+                <td class="border px-3 py-1">3XL</td>
+                <td class="border px-3 py-1">59</td>
+                <td class="border px-3 py-1">75</td>
+              </tr>
+              <tr>
+                <td class="border px-3 py-1">4XL</td>
+                <td class="border px-3 py-1">62</td>
+                <td class="border px-3 py-1">75</td>
+              </tr>
+              <tr>
+                <td class="border px-3 py-1">5XL</td>
+                <td class="border px-3 py-1">65</td>
+                <td class="border px-3 py-1">75</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
