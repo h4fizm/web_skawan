@@ -382,6 +382,7 @@
             >Tambahkan Teks pada Desainmu</label
           >
           <button
+            onclick="document.getElementById('fontModal').classList.remove('hidden')"
             class="w-full bg-[#d1a86f] text-[#0f2d25] border border-[#d1a86f] rounded px-4 py-2 text-sm font-semibold hover:bg-[#c1985e] transition"
           >
             Tambah Teks
@@ -578,9 +579,6 @@
 
         <!-- Komponen Aktif & Aksi -->
         <div class="mt-4">
-          <h6 class="text-sm font-semibold mb-2 text-[#0f2d25]">
-            Komponen Aktif
-          </h6>
           <ul
             id="designList"
             class="list-disc pl-4 text-xs text-[#0f2d25] mb-2 max-h-32 overflow-y-auto"
@@ -599,6 +597,43 @@
           >
             Simpan & Preview
           </button>
+        </div>
+      </div>
+
+      <!-- Modal Font Picker -->
+      <div
+        id="fontModal"
+        class="fixed inset-0 z-[1000] bg-black bg-opacity-40 hidden flex items-start justify-center px-4 pt-[20vh]"
+      >
+        <div
+          class="relative bg-white w-full max-w-2xl sm:rounded-xl shadow-xl p-6 max-h-[90vh] overflow-y-auto"
+        >
+          <!-- Tombol Close -->
+          <button
+            onclick="document.getElementById('fontModal').classList.add('hidden')"
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
+          >
+            ✕
+          </button>
+
+          <!-- Judul Modal -->
+          <h3 class="text-lg font-bold text-[#0f2d25] mb-4">Pilih Font</h3>
+
+          <!-- Input Pencarian -->
+          <input
+            type="text"
+            id="fontSearch"
+            placeholder="Cari font..."
+            class="w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg text-sm text-black focus:ring-[#d1a86f] focus:border-[#d1a86f] outline-none"
+          />
+
+          <!-- Daftar Font -->
+          <div
+            id="fontList"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-[55vh] overflow-y-auto text-black"
+          >
+            <!-- Font items dari JS -->
+          </div>
         </div>
       </div>
 
@@ -897,8 +932,7 @@
 
     <!-- === Tombol Aksi Mobile (Hanya muncul di mobile) === -->
     <div class="sm:hidden mt-4 px-4 w-full">
-      <div class="flex flex-col gap-3 w-full max-w-xs mx-auto">
-        <!-- Download -->
+      <div class="flex flex-col gap-3 w-full">
         <a
           href="#"
           class="w-full flex items-center justify-center gap-2 text-sm font-quantify px-4 py-3 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-xl hover:bg-[#c1985e] transition"
@@ -963,20 +997,18 @@
               Jl. Puri Airlangga No.20 blok P, Kapasan, Sidokare, Sidoarjo,
               Sidoarjo Regency, East Java 61214
             </p>
+            <!-- Wrapper Peta -->
             <div
-              class="w-full h-[280px] md:h-[320px] rounded-lg overflow-hidden"
+              class="relative w-full h-0 md:h-[320px] rounded-lg overflow-hidden transition-all duration-300"
             >
               <iframe
                 src="https://www.google.com/maps?q=-7.446144,112.707078&hl=es;z=14&output=embed"
-                width="100%"
-                height="100%"
-                style="border: 0"
-                allowfullscreen=""
+                class="w-full h-full filter grayscale contrast-110 pointer-events-none hidden md:block"
+                allowfullscreen
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
-                class="w-full h-full filter grayscale contrast-110"
-              >
-              </iframe>
+                style="border: 0"
+              ></iframe>
             </div>
           </div>
 
@@ -1169,8 +1201,115 @@
     </script>
     <!-- tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- fabric js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
     <!-- custom js -->
     <script src="js/script.js"></script>
     <script src="js/designCanvas.js"></script>
+    <!-- font picker js -->
+    <script>
+      // === INISIALISASI FONT SIZE ===
+      const fontSizeSelect = document.getElementById("fontSize");
+      for (let i = 10; i <= 64; i += 2) {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = `${i}px`;
+        fontSizeSelect.appendChild(option);
+      }
+
+      let currentFont = "Arial";
+      let fontsList = [];
+      const apiKey = "AIzaSyBbHsIzkkLsTKLNRcomvRlw-qZqWeC91OU";
+
+      // Ambil daftar font dari Google Fonts API
+      fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}`)
+        .then((r) => r.json())
+        .then((d) => {
+          console.log("✅ Berhasil ambil font:", d); // Tambahkan ini
+          fontsList = d.items.map((i) => i.family);
+          renderFonts(fontsList);
+        })
+        .catch((err) => console.error("❌ Gagal ambil font:", err));
+
+      function renderFonts(arr) {
+        const container = document.getElementById("fontList");
+        container.innerHTML = "";
+
+        if (!arr.length) {
+          container.innerHTML =
+            "<p class='text-sm text-red-500'>Tidak ada font ditemukan.</p>";
+          return;
+        }
+
+        // Batasi ke 30 font pertama agar tidak lambat
+        arr.slice(0, 30).forEach((fontName) => {
+          // Load font dari Google Fonts
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(
+            / /g,
+            "+"
+          )}&display=swap`;
+          document.head.appendChild(link);
+
+          // Buat tampilan tiap font
+          const div = document.createElement("div");
+          div.className =
+            "border p-3 rounded hover:bg-gray-100 cursor-pointer text-center text-sm";
+          div.textContent = fontName;
+          div.style.fontFamily = fontName;
+
+          div.onclick = () => {
+            currentFont = fontName;
+            loadFont(fontName);
+
+            // Pastikan elemen seperti canvas & input tersedia
+            const fontSize = parseInt(
+              document.getElementById("fontSize")?.value || 24
+            );
+            const fill =
+              document.getElementById("textColor")?.value || "#000000";
+            const bgColor = document.getElementById("bgTransparent")?.checked
+              ? ""
+              : document.getElementById("textBgColor")?.value || "";
+
+            // Tambah teks ke canvas
+            const txt = new fabric.Textbox("Teks Baru", {
+              left: 100,
+              top: 100,
+              fontFamily: fontName,
+              fontSize: fontSize,
+              fill: fill,
+              backgroundColor: bgColor,
+            });
+
+            canvas.add(txt).setActiveObject(txt);
+            updateList();
+
+            document.getElementById("bgTransparent").checked = false;
+            document.getElementById("fontModal").classList.add("hidden");
+          };
+
+          container.appendChild(div);
+        });
+      }
+
+      // Fungsi pencarian font
+      document.getElementById("fontSearch").oninput = (e) => {
+        const keyword = e.target.value.toLowerCase();
+        renderFonts(fontsList.filter((f) => f.toLowerCase().includes(keyword)));
+      };
+
+      // Fungsi memuat link font (opsional duplikat untuk font dinamis)
+      function loadFont(f) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = `https://fonts.googleapis.com/css2?family=${f.replace(
+          / /g,
+          "+"
+        )}&display=swap`;
+        document.head.appendChild(link);
+      }
+    </script>
   </body>
 </html>
