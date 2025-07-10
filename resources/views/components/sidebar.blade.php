@@ -2,7 +2,7 @@
     <div class="sidebar-header position-relative">
         <div class="d-flex justify-content-between align-items-center">
             <div class="logo">
-                <a href="{{ route('counseling.index') }}">
+                <a href="{{ route('products.index') }}">
                     <img src="{{ asset('images/logo-bk-unimed.png') }}" alt="Logo">
                 </a>
             </div>
@@ -19,30 +19,30 @@
             <li class="sidebar-title">Menu</li>
 
             {{-- @can('lihat-beranda')
-                <li class="sidebar-item {{ request()->routeIs('counseling.index') ? 'active' : '' }}">
-                    <a href="{{ route('counseling.index') }}" class="sidebar-link">
+                <li class="sidebar-item {{ request()->routeIs('products.index') ? 'active' : '' }}">
+                    <a href="{{ route('products.index') }}" class="sidebar-link">
                         <i class="bi bi-house-door-fill"></i>
                         <span>Beranda</span>
                     </a>
                 </li>
             @endcan --}}
 
-            @can('lihat-konseling')
+            @can('kelola-product')
                 <li
-                    class="sidebar-item {{ request()->routeIs('counseling.index') ? 'active' : '' }}">
-                    <a href="{{ route('counseling.index') }}" class="sidebar-link">
+                    class="sidebar-item {{ request()->routeIs('products.index') ? 'active' : '' }}">
+                    <a href="{{ route('products.index') }}" class="sidebar-link">
                         <i class="bi bi-chat-left-dots-fill"></i>
-                        <span>Konseling</span>
+                        <span>Products</span>
                     </a>
                 </li>
             @endcan
 
-            @can('lihat-dokumentasi-konseling')
+            @can('kelola-kategori-product')
                 <li
-                    class="sidebar-item {{ request()->routeIs('counseling.approved') ? 'active' : '' }}">
-                    <a href="{{ route('counseling.approved') }}" class="sidebar-link">
+                    class="sidebar-item {{ request()->routeIs('products-categories.index') ? 'active' : '' }}">
+                    <a href="{{ route('products-categories.index') }}" class="sidebar-link">
                         <i class="bi bi-file-earmark-medical-fill"></i>
-                        <span>Dokumentasi Konseling</span>
+                        <span>Kategori Produk</span>
                     </a>
                 </li>
             @endcan

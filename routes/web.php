@@ -2,9 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductCategoriesController;
+use App\Http\Controllers\ProductImagesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
+use App\Models\ProductCategories;
 
 Route::get('/', function () {
     return view('landing.index');
@@ -56,6 +59,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('manage-users', UserController::class);
 
     Route::resource('products', ProductsController::class);
+    Route::resource('products-categories', ProductCategoriesController::class);
+    Route::resource('products-images', ProductImagesController::class);
 });
 
 require __DIR__ . '/auth.php';

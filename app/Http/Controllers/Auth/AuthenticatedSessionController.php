@@ -16,12 +16,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        if(!Auth::attempt($request->only('username', 'password'))){
-            return back()->with('error', 'Username atau kata sandi salah');
+        if(!Auth::attempt($request->only('email', 'password'))){
+            return back()->with('error', 'Email atau kata sandi salah');
         }
         $request->session()->regenerate();
 
-        return redirect()->route('counseling.index');
+        return redirect()->route('products.index');
         // return response()->noContent();
     }
 
@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-        return redirect()->route('counseling.index');
+        return redirect()->route('products.index');
         // return response()->noContent();
     }
 }

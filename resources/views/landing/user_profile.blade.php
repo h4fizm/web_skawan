@@ -267,10 +267,10 @@
 
         <!-- RIGHT: Edit Form -->
         <form class="space-y-4 w-full">
-          <!-- Username -->
+          <!-- Email -->
           <div>
             <label class="block text-sm font-medium text-gray-700 font-quantify"
-              >Username</label
+              >Email</label
             >
             <input
               type="text"

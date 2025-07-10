@@ -33,13 +33,12 @@ class RolePermissionSeeder extends Seeder
         // Create permissions based on the menu
         $permissions = [
             'lihat-beranda',
-            'buat-konseling',
-            'lihat-konseling',
-            'lihat-dokumentasi-konseling',
-            'manage-artikel',
+            'kelola-product',
+            'kelola-kategori-product',
+            'kelola-product-image',
             'lihat-peran',
             'lihat-perizinan',
-            'manage-konselor'
+            'manage-users'
         ];
 
         foreach ($permissions as $permission) {
@@ -48,14 +47,9 @@ class RolePermissionSeeder extends Seeder
         $superAdminRole->givePermissionTo(Permission::all()); // Full access
 
         $adminRole->givePermissionTo([
-            'lihat-beranda',
-            'lihat-konseling',
-            'lihat-dokumentasi-konseling',
-        ]);
-
-        $userRole->givePermissionTo([
-            'buat-konseling',
-            'lihat-konseling',
+            'kelola-product',
+            'kelola-kategori-product',
+            'kelola-product-image',
         ]);
     }
 }

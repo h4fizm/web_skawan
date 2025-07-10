@@ -6,7 +6,7 @@
         <div>
             @if(auth()->check())
                 <h5 class="card-title mb-1">Halo, {{ auth()->user()->name }}!</h5>
-                <p class="card-text text-muted">Username: <strong>{{ auth()->user()->username }}</strong></p>
+                <p class="card-text text-muted">Email: <strong>{{ auth()->user()->email }}</strong></p>
             @else
                 <h5 class="card-title mb-1">Hello, Guest!</h5>
             @endif

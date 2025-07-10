@@ -210,7 +210,7 @@ class UserController extends Controller
             Session::forget('admin-data');
             return redirect()->route('view-participant');
         } else {
-            return redirect()->route('counseling.index')->with('error', 'Tidak ditemukan data sesi admin.');
+            return redirect()->route('products.index')->with('error', 'Tidak ditemukan data sesi admin.');
         }
     }
 

@@ -26,7 +26,7 @@
                         @csrf
                         <label class="fw-bold mb-3">Masukkan username Anda yang Terdaftar</label>
                         <div class="form-group position-relative has-icon-left mb-2">
-                            <input type="username" name="username" class="form-control" placeholder="Username (NIM/NIP)">
+                            <input type="username" name="email" class="form-control" placeholder="Email">
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
@@ -58,7 +58,7 @@
             <form action="{{ route('login') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group position-relative has-icon-left mb-2">
-                    <input type="username" name="username" class="form-control" placeholder="Username (NIM/NIP)">
+                    <input type="username" name="email" class="form-control" placeholder="Email">
                     <div class="form-control-icon">
                         <i class="bi bi-person"></i>
                     </div>

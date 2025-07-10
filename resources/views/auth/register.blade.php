@@ -38,8 +38,8 @@
             <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group position-relative has-icon-left mb-2">
-                    <input type="text" name="username" class="form-control" placeholder="Username (NIM/NIP)"
-                        value="{{ old('username') }}">
+                    <input type="text" name="email" class="form-control" placeholder="Email"
+                        value="{{ old('email') }}">
                     <div class="form-control-icon">
                         <i class="bi bi-envelope"></i>
                     </div>

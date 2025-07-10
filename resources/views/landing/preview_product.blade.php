@@ -54,7 +54,7 @@
 
       <!-- Right: User Info with Dropdown -->
       <div class="flex items-center space-x-2 sm:space-x-3 relative z-[1000]">
-        <!-- Username -->
+        <!-- Email -->
         <span
           class="text-sm sm:text-md font-quantify font-extrabold tracking-wide text-white truncate max-w-[100px] sm:max-w-none"
         >
