@@ -10,8 +10,8 @@
     <link rel="shortcut icon" href="{{ asset('image/icon.JPG') }}" type="image/x-icon">
     <link rel="icon" href="{{ asset('image/icon.JPG') }}" />
 
-    <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}?v={{ filemtime(public_path('css/custom.css')) }}">
-    <link rel="stylesheet" href="{{ asset('admin/css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}?v={{ filemtime(public_path('admin/css/custom.css')) }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/app.css') }}?v={{ filemtime(public_path('admin/css/app.css')) }}">
     <link rel="stylesheet" href="{{ asset('admin/css/app-dark.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/iconly.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -141,7 +141,7 @@
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.3.1/js/dataTables.fixedHeader.min.js"></script>
-    <script src="{{ asset('admin/js/simple-datatables.js') }}?v={{ filemtime(public_path('js/simple-datatables.js')) }}">
+    <script src="{{ asset('admin/js/simple-datatables.js') }}?v={{ filemtime(public_path('admin/js/simple-datatables.js')) }}">
     </script>
 
     <script src="{{ asset('admin/js/sweetalert2.min.js') }}"></script>

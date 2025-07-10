@@ -12,7 +12,15 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        //
+        if (request()->ajax()) {
+            try {
+                $products = Products::with('productCategories', 'productImages')->get();
+                return formatResponse('success', 'Data berhasil diambil!', $products, null, 200);
+            } catch (\Exception $e) {
+                return formatResponse('error', 'Gagal mengambil data produk!', null, $e->getMessage(), 500);
+            }
+        }
+        return view('manage-users.products');
     }
 
     /**

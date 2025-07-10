@@ -12,7 +12,7 @@
         <div class="page-title">
             <h3>Kelola Produk</h3>
         </div>
-        @can('buat-Produk')
+        @can('kelola-product')
             <div class="d-flex justify-content-end mb-3">
                 <a href="{{ route('products.create') }}" class="btn btn-primary">Tambah Produk</a>
             </div>
@@ -210,25 +210,6 @@
                 $('#detail_image').html(`<img src="${c.image}" class="img-fluid" />`);
 
                 $('#detailModal').modal('show');
-            });
-
-            $(document).on('click', '.update_status_product', function() {
-                var id = $(this).data('id');
-                var action = $(this).data('action');
-
-                var data = new FormData();
-                data.append('id', id);
-                data.append('status', action);
-
-                ajaxSaveDatas({
-                    url: '{{ route('products.updateStatus') }}',
-                    method: 'POST',
-                    input: data,
-                    processData: false,
-                    contentType: false,
-                    load_msg: 'Updating product status...',
-                    reload: false
-                });
             });
         });
     </script>

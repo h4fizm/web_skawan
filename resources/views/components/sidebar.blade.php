@@ -3,7 +3,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <div class="logo">
                 <a href="{{ route('products.index') }}">
-                    <img src="{{ asset('images/logo-bk-unimed.png') }}" alt="Logo">
+                    <img src="{{ asset('image/icon.JPG') }}" alt="Logo">
                 </a>
             </div>
             <div class="sidebar-toggler x">
@@ -31,7 +31,7 @@
                 <li
                     class="sidebar-item {{ request()->routeIs('products.index') ? 'active' : '' }}">
                     <a href="{{ route('products.index') }}" class="sidebar-link">
-                        <i class="bi bi-chat-left-dots-fill"></i>
+                        <i class="bi bi-stack"></i>
                         <span>Products</span>
                     </a>
                 </li>
