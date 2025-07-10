@@ -1,0 +1,87 @@
+.bg-grey {
+    background-color: #ebeaea !important;
+}
+
+.ql-container {
+    height: 50% !important;
+}
+
+.title-border {
+    border-bottom: 2px solid #ebeaea;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.floating-cup {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.floating-cup img {
+    height: 75%;
+}
+
+/* Default footer styles */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-left: 0;
+    padding: 1rem;
+    background-color: #f5f7f7;
+    text-align: center;
+    z-index: 10;
+}
+
+/* Adjust footer when sidebar is active in desktop mode */
+@media screen and (min-width: 1200px) {
+    #sidebar.active ~ .footer {
+        width: calc(100% - 300px);  /* Sidebar width subtraction */
+        margin-left: 300px;         /* Moves footer to the right */
+    }
+
+    #sidebar.inactive ~ .footer {
+        width: 100%;                /* Full width when sidebar is hidden */
+        margin-left: 0;             /* Aligns footer to the left when sidebar is hidden */
+    }
+}
+
+.left {
+    position: sticky;
+    top: 0;
+    overflow: auto !important;
+    max-height: 70vh;
+}
+
+.right {
+    position: absolute;
+    max-height: 70vh;
+    overflow: auto;
+}
+
+@media screen and (max-width: 768px) {
+    .left {
+        position: relative !important;
+        overflow: auto !important;
+        max-height: none;
+    }
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    width: calc(100% - 300px);
+    margin-left: 300px;
+    background-color: #f5f7f7;
+    text-align: center;
+    z-index: 100;
+}

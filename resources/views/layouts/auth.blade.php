@@ -7,22 +7,22 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') | {{ env('APP_NAME') }}</title>
 
-    <link rel="shortcut icon" href="{{ asset('images/logo-upt-bk.png') }}" type="image/x-icon">
-    <link rel="icon" href="{{ asset('images/logo-upt-bk.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('image/icon.JPG') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('image/icon.JPG') }}" />
 
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('css/app-dark.css') }}"> --}}
-    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/app.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('admin/css/app-dark.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('admin/css/auth.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/iconly.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="{{ asset('css/datatable-style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/table-datatable.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/datatable-style.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/table-datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/sweetalert2.min.css') }}">
     @yield('style')
     <style>
         html,
@@ -92,15 +92,15 @@
         </a>
     </div>
 
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/initTheme.js') }}"></script>
-    <script src="{{ asset('js/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('admin/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('admin/js/initTheme.js') }}"></script>
+    <script src="{{ asset('admin/js/perfect-scrollbar.min.js') }}"></script>
 
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('admin/js/app.js') }}"></script>
 
-    <script src="{{ asset('js/simple-datatables.js') }}"></script>
+    <script src="{{ asset('admin/js/simple-datatables.js') }}"></script>
 
-    <script src="{{ asset('js/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('admin/js/sweetalert2.min.js') }}"></script>
 
     <script>
         function togglePasswordVisibility(passwordFieldId, iconId) {

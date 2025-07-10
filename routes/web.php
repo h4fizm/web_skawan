@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('landing.index');
@@ -42,3 +46,16 @@ Route::get('/profile', function () {
     return view('landing.user_profile');
 })->name('landing.profile');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/manage-users/{id}/verif', [UserController::class, 'verif'])->name('verif.user')->middleware('can:kelola-pengguna');
+    // Roles and Permissions - Restricted to 'manage-account' permission
+    Route::resource('roles', RolesController::class);
+    Route::resource('permissions', PermissionController::class);
+
+    // Manage Users - Restricted to 'manage-account' permission
+    Route::resource('manage-users', UserController::class);
+
+    Route::resource('products', ProductsController::class);
+});
+
+require __DIR__ . '/auth.php';

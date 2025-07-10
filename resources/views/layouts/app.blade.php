@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>UPT Bimbingan Konseling - Universitas Negeri Medan - @yield('title') </title>
+    <title>Admin - @yield('title') </title>
 
-    <link rel="shortcut icon" href="{{ asset('images/logo-upt-bk.png') }}" type="image/x-icon">
-    <link rel="icon" href="{{ asset('images/logo-upt-bk.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('image/icon.JPG') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('image/icon.JPG') }}" />
 
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}?v={{ filemtime(public_path('css/custom.css')) }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
-    <link rel="stylesheet" href="{{ asset('css/app-dark.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}?v={{ filemtime(public_path('css/custom.css')) }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/app-dark.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/iconly.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.3.1/css/fixedHeader.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
 
-    <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <style>
@@ -125,12 +125,12 @@
         </div>
         @include('components.footer')
     </div>
-    <script src="{{ asset('js/initTheme.js') }}"></script>
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    {{-- <script src="{{ asset('js/dark.js') }}"></script> --}}
-    <script src="{{ asset('js/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('admin/js/initTheme.js') }}"></script>
+    <script src="{{ asset('admin/js/jquery.min.js') }}"></script>
+    {{-- <script src="{{ asset('admin/js/dark.js') }}"></script> --}}
+    <script src="{{ asset('admin/js/perfect-scrollbar.min.js') }}"></script>
 
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('admin/js/app.js') }}"></script>
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.1.4/js/dataTables.bootstrap5.js"></script>
@@ -141,11 +141,11 @@
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.3.1/js/dataTables.fixedHeader.min.js"></script>
-    <script src="{{ asset('js/simple-datatables.js') }}?v={{ filemtime(public_path('js/simple-datatables.js')) }}">
+    <script src="{{ asset('admin/js/simple-datatables.js') }}?v={{ filemtime(public_path('js/simple-datatables.js')) }}">
     </script>
 
-    <script src="{{ asset('js/sweetalert2.min.js') }}"></script>
-    <script src="{{ asset('js/toast.js') }}"></script>
+    <script src="{{ asset('admin/js/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('admin/js/toast.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
