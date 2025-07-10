@@ -4,40 +4,41 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('landing.index');
-});
+})->name('landing.index');
 
 Route::get('/checkout', function () {
     return view('landing.checkout_product');
-});
+})->name('landing.checkout');
 
 Route::get('/dashboard', function () {
     return view('landing.dashboard_user');
-});
+})->name('landing.dashboard');
 
 Route::get('/design', function () {
     return view('landing.design_product');
-});
+})->name('landing.design');
 
-Route::get('/design/{id}', function ($id) {
-    return view('landing.design', ['id' => $id]);
-});
+Route::get('/design/{id}', function () {
+    return view('landing.design');
+})->name('landing.design.single');
 
-Route::get('/detail/{id}', function ($id) {
-    return view('landing.detail_product', ['id' => $id]);
-});
+Route::get('/detail', function () {
+    return view('landing.detail_product');
+})->name('landing.detail');
 
-Route::get('/category/{category}', function ($category) {
-    return view('landing.list_category', ['category' => $category]);
-});
+Route::get('/category', function () {
+    return view('landing.list_category');
+})->name('landing.category');
 
-Route::get('/product/{product}', function ($product) {
-    return view('landing.list_product', ['product' => $product]);
-});
+Route::get('/product', function () {
+    return view('landing.list_product');
+})->name('landing.product');
 
-Route::get('/preview/{product}', function ($product) {
-    return view('landing.preview_product', ['product' => $product]);
-});
+Route::get('/preview', function () {
+    return view('landing.preview_product');
+})->name('landing.preview');
 
 Route::get('/profile', function () {
     return view('landing.user_profile');
-});
+})->name('landing.profile');
+
