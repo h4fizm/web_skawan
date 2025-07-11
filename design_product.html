@@ -718,104 +718,96 @@
         </div>
       </div>
 
-      <!-- Wrapper Gambar + Panel -->
-      <div class="flex-1 relative h-[700px] overflow-visible z-0">
+      <!-- Area Canvas di dalam div Tailwind -->
+      <div
+        class="w-full h-full border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center bg-white px-6 py-6 relative"
+      >
         <!-- 3 button -->
-      <div class="absolute top-6 left-6 z-50 flex flex-col gap-4">
-        <!-- Icon 1 - Panduan Spot Logo -->
-        <div class="group relative">
-          <button
-            class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
+        <div class="absolute top-6 left-6 z-50 flex flex-col gap-4">
+          <!-- Icon 1 - Panduan Spot Logo -->
+          <div class="group relative">
+            <button
+              class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
-              />
-            </svg>
-          </button>
-          <span
-            class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
-          >
-            Panduan Spot Logo
-          </span>
-        </div>
-
-        <!-- Icon 2 - Deskripsi Produk -->
-        <div class="group relative">
-          <button
-            onclick="document.getElementById('modalDeskripsiProduk').classList.remove('hidden')"
-            class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+                />
+              </svg>
+            </button>
+            <span
+              class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 12h6m-6 4h6M9 8h6M4 6a2 2 0 012-2h8l4 4v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"
-              />
-            </svg>
-          </button>
-          <span
-            class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
-          >
-            Deskripsi Produk
-          </span>
-        </div>
+              Panduan Spot Logo
+            </span>
+          </div>
 
-        <!-- Icon 3 - Size Chart -->
-        <div class="group relative">
-          <button
-            onclick="document.getElementById('modalSizeChart').classList.remove('hidden')"
-            class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
+          <!-- Icon 2 - Deskripsi Produk -->
+          <div class="group relative">
+            <button
+              onclick="document.getElementById('modalDeskripsiProduk').classList.remove('hidden')"
+              class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
-              />
-            </svg>
-          </button>
-          <span
-            class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
-          >
-            Size/Ukuran Chart
-          </span>
-        </div>
-      </div>
-        <!-- Gambar Produk -->
-        <div
-          class="w-full h-full border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center bg-white px-6 py-6"
-        >
-          <img
-            src="image/product4.jpeg"
-            alt="Produk Kaos"
-            class="max-h-full max-w-full object-contain"
-          />
-        </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12h6m-6 4h6M9 8h6M4 6a2 2 0 012-2h8l4 4v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"
+                />
+              </svg>
+            </button>
+            <span
+              class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
+            >
+              Deskripsi Produk
+            </span>
+          </div>
 
+          <!-- Icon 3 - Size Chart -->
+          <div class="group relative">
+            <button
+              onclick="document.getElementById('modalSizeChart').classList.remove('hidden')"
+              class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
+                />
+              </svg>
+            </button>
+            <span
+              class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
+            >
+              Size/Ukuran Chart
+            </span>
+          </div>
+        </div>
+        <canvas id="tshirtCanvas" width="600" height="600" class="z-0"></canvas>
         <!-- Panel Kontrol Interaktif -->
         <div
           class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-xl shadow-xl px-2.5 sm:px-4 py-2 sm:py-3 flex flex-nowrap justify-center items-center gap-1.5 sm:gap-2 w-full max-w-[320px] sm:max-w-[560px] z-30 overflow-x-auto"
@@ -1181,111 +1173,244 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
     <!-- custom js -->
     <script src="js/script.js"></script>
-    <script src="js/designCanvas.js"></script>
-    <!-- font picker js -->
     <script>
-      // === INISIALISASI FONT SIZE ===
+      // ============================
+      // === FONT SIZE & FONT API ===
+      // ============================
       const fontSizeSelect = document.getElementById("fontSize");
       for (let i = 10; i <= 64; i += 2) {
-        const option = document.createElement("option");
-        option.value = i;
-        option.textContent = `${i}px`;
-        fontSizeSelect.appendChild(option);
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = `${i}px`;
+        fontSizeSelect.appendChild(opt);
       }
 
       let currentFont = "Arial";
       let fontsList = [];
       const apiKey = "AIzaSyBbHsIzkkLsTKLNRcomvRlw-qZqWeC91OU";
 
-      // Ambil daftar font dari Google Fonts API
       fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}`)
         .then((r) => r.json())
         .then((d) => {
-          console.log("✅ Berhasil ambil font:", d); // Tambahkan ini
           fontsList = d.items.map((i) => i.family);
           renderFonts(fontsList);
-        })
-        .catch((err) => console.error("❌ Gagal ambil font:", err));
+        });
 
       function renderFonts(arr) {
         const container = document.getElementById("fontList");
         container.innerHTML = "";
 
-        if (!arr.length) {
-          container.innerHTML =
-            "<p class='text-sm text-red-500'>Tidak ada font ditemukan.</p>";
-          return;
-        }
-
-        // Batasi ke 30 font pertama agar tidak lambat
-        arr.slice(0, 30).forEach((fontName) => {
-          // Load font dari Google Fonts
+        arr.slice(0, 30).forEach((font) => {
           const link = document.createElement("link");
           link.rel = "stylesheet";
-          link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(
+          link.href = `https://fonts.googleapis.com/css2?family=${font.replace(
             / /g,
             "+"
           )}&display=swap`;
           document.head.appendChild(link);
 
-          // Buat tampilan tiap font
           const div = document.createElement("div");
           div.className =
-            "border p-3 rounded hover:bg-gray-100 cursor-pointer text-center text-sm";
-          div.textContent = fontName;
-          div.style.fontFamily = fontName;
-
+            "border p-2 rounded text-center text-sm cursor-pointer hover:bg-gray-100";
+          div.textContent = font;
+          div.style.fontFamily = font;
           div.onclick = () => {
-            currentFont = fontName;
-            loadFont(fontName);
-
-            // Pastikan elemen seperti canvas & input tersedia
-            const fontSize = parseInt(
-              document.getElementById("fontSize")?.value || 24
-            );
-            const fill =
-              document.getElementById("textColor")?.value || "#000000";
-            const bgColor = document.getElementById("bgTransparent")?.checked
-              ? ""
-              : document.getElementById("textBgColor")?.value || "";
-
-            // Tambah teks ke canvas
-            const txt = new fabric.Textbox("Teks Baru", {
-              left: 100,
-              top: 100,
-              fontFamily: fontName,
-              fontSize: fontSize,
-              fill: fill,
-              backgroundColor: bgColor,
-            });
-
-            canvas.add(txt).setActiveObject(txt);
-            updateList();
-
-            document.getElementById("bgTransparent").checked = false;
+            currentFont = font;
+            addTextToCanvas(currentFont);
             document.getElementById("fontModal").classList.add("hidden");
           };
-
           container.appendChild(div);
         });
       }
 
-      // Fungsi pencarian font
       document.getElementById("fontSearch").oninput = (e) => {
-        const keyword = e.target.value.toLowerCase();
-        renderFonts(fontsList.filter((f) => f.toLowerCase().includes(keyword)));
+        const q = e.target.value.toLowerCase();
+        renderFonts(fontsList.filter((f) => f.toLowerCase().includes(q)));
       };
 
-      // Fungsi memuat link font (opsional duplikat untuk font dinamis)
-      function loadFont(f) {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = `https://fonts.googleapis.com/css2?family=${f.replace(
-          / /g,
-          "+"
-        )}&display=swap`;
-        document.head.appendChild(link);
+      // =======================
+      // === INIT FABRIC JS ===
+      // =======================
+      const canvas = new fabric.Canvas("tshirtCanvas", {
+        preserveObjectStacking: true,
+      });
+
+      function addTextToCanvas(font = "Arial") {
+        const text = new fabric.Textbox("Teks Baru", {
+          left: 100,
+          top: 100,
+          fontFamily: font,
+          fontSize: parseInt(document.getElementById("fontSize").value),
+          fill: document.getElementById("textColor").value,
+          backgroundColor: document.getElementById("bgTransparent").checked
+            ? ""
+            : document.getElementById("textBgColor").value,
+          fontWeight: "normal",
+          fontStyle: "normal",
+          textAlign: "left",
+        });
+        canvas.add(text).setActiveObject(text);
+        updateDesignList();
+        updateUIFromActiveObject();
       }
+
+      // ===============================
+      // === UPDATE UI DARI OBJEK ===
+      // ===============================
+      function updateUIFromActiveObject() {
+        const o = canvas.getActiveObject();
+        if (o && o.type === "textbox") {
+          document.getElementById("textColor").value = o.fill || "#000000";
+          document.getElementById("fontSize").value = o.fontSize || 16;
+          document.getElementById("textBgColor").value =
+            o.backgroundColor || "#ffffff";
+          document.getElementById("bgTransparent").checked = !o.backgroundColor;
+
+          ["boldBtn", "italicBtn"].forEach((id) => {
+            document.getElementById(id).classList.remove("active");
+          });
+          if (o.fontWeight === "bold")
+            document.getElementById("boldBtn").classList.add("active");
+          if (o.fontStyle === "italic")
+            document.getElementById("italicBtn").classList.add("active");
+
+          ["alignLeft", "alignCenter", "alignRight"].forEach((id) =>
+            document.getElementById(id).classList.remove("active")
+          );
+          const alignId =
+            "align" +
+            o.textAlign.charAt(0).toUpperCase() +
+            o.textAlign.slice(1);
+          if (document.getElementById(alignId))
+            document.getElementById(alignId).classList.add("active");
+        }
+      }
+
+      canvas.on("selection:created", updateUIFromActiveObject);
+      canvas.on("selection:updated", updateUIFromActiveObject);
+      canvas.on("object:modified", updateUIFromActiveObject);
+
+      // ======================
+      // === TEXT CONTROL ====
+      // ======================
+      function updateActiveText(prop, val) {
+        const o = canvas.getActiveObject();
+        if (o && o.type === "textbox") {
+          o.set(prop, val);
+          canvas.renderAll();
+        }
+      }
+
+      document.getElementById("textColor").onchange = (e) =>
+        updateActiveText("fill", e.target.value);
+      document.getElementById("textBgColor").onchange = (e) => {
+        const v = document.getElementById("bgTransparent").checked
+          ? ""
+          : e.target.value;
+        updateActiveText("backgroundColor", v);
+      };
+      document.getElementById("bgTransparent").onchange = () => {
+        const val = document.getElementById("bgTransparent").checked
+          ? ""
+          : document.getElementById("textBgColor").value;
+        updateActiveText("backgroundColor", val);
+      };
+      document.getElementById("fontSize").onchange = (e) =>
+        updateActiveText("fontSize", parseInt(e.target.value));
+
+      document.getElementById("boldBtn").onclick = () => {
+        const o = canvas.getActiveObject();
+        if (o && o.type === "textbox") {
+          const isBold = o.fontWeight === "bold";
+          o.set("fontWeight", isBold ? "normal" : "bold");
+          document
+            .getElementById("boldBtn")
+            .classList.toggle("active", !isBold);
+          canvas.renderAll();
+        }
+      };
+      document.getElementById("italicBtn").onclick = () => {
+        const o = canvas.getActiveObject();
+        if (o && o.type === "textbox") {
+          const isItalic = o.fontStyle === "italic";
+          o.set("fontStyle", isItalic ? "normal" : "italic");
+          document
+            .getElementById("italicBtn")
+            .classList.toggle("active", !isItalic);
+          canvas.renderAll();
+        }
+      };
+      ["alignLeft", "alignCenter", "alignRight"].forEach((id) => {
+        document.getElementById(id).onclick = () => {
+          const o = canvas.getActiveObject();
+          if (o && o.type === "textbox") {
+            o.set("textAlign", id.replace("align", "").toLowerCase());
+            updateUIFromActiveObject();
+            canvas.renderAll();
+          }
+        };
+      });
+
+      // =====================
+      // === GAMBAR UPLOAD ===
+      // =====================
+      document.getElementById("upload-photo").onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (f) => {
+          fabric.Image.fromURL(f.target.result, (img) => {
+            img.scaleToWidth(50);
+            img.scaleToHeight(50);
+            img.set({ left: 50, top: 50 });
+            canvas.add(img).setActiveObject(img);
+            updateDesignList();
+          });
+        };
+        reader.readAsDataURL(file);
+      };
+
+      // ============================
+      // === DESIGN LIST & SAVE ====
+      // ============================
+      function updateDesignList() {
+        const ul = document.getElementById("designList");
+        ul.innerHTML = "";
+        canvas.getObjects().forEach((o, i) => {
+          const li = document.createElement("li");
+          li.textContent =
+            o.type === "textbox" ? `Teks: ${o.text}` : `Gambar ${i + 1}`;
+          ul.appendChild(li);
+        });
+      }
+
+      document.getElementById("saveDesign").onclick = () => {
+        const dataURL = canvas.toDataURL({ format: "png", quality: 1 });
+        const win = window.open();
+        win.document.write(`<img src="${dataURL}" alt="Preview">`);
+      };
+
+      document.getElementById("clearCanvas").onclick = () => {
+        canvas.clear();
+        canvas.setBackgroundImage(
+          "image/product4.jpeg",
+          canvas.renderAll.bind(canvas),
+          {
+            scaleX: 600 / 800,
+            scaleY: 600 / 800,
+          }
+        );
+        updateDesignList();
+      };
+
+      window.addEventListener("resize", () => {
+        canvas.setWidth(document.getElementById("canvas-wrapper").clientWidth);
+        canvas.setHeight(
+          document.getElementById("canvas-wrapper").clientHeight
+        );
+        canvas.renderAll();
+      });
+      window.dispatchEvent(new Event("resize"));
     </script>
   </body>
 </html>

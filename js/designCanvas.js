@@ -79,8 +79,6 @@ canvas.add(centerLineY);
 canvas.sendToBack(centerLineX);
 canvas.sendToBack(centerLineY);
 
-
-
 function updateActiveText(prop, value) {
   const o = canvas.getActiveObject();
   if (o && o.type === "textbox") {
