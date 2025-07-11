@@ -722,40 +722,15 @@
       <div
         class="w-full h-full border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center bg-white px-6 py-6 relative"
       >
-        <!-- 3 button -->
-        <div class="absolute top-6 left-6 z-50 flex flex-col gap-4">
-          <!-- Icon 1 - Panduan Spot Logo -->
-          <div class="group relative">
-            <button
-              class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
-                />
-              </svg>
-            </button>
-            <span
-              class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
-            >
-              Panduan Spot Logo
-            </span>
-          </div>
-
-          <!-- Icon 2 - Deskripsi Produk -->
+        <!-- 2 button -->
+        <div
+          class="absolute top-8 left-8 sm:top-6 sm:left-6 z-50 flex flex-col gap-2 sm:gap-4"
+        >
+          <!-- Icon 1 - Deskripsi Produk -->
           <div class="group relative">
             <button
               onclick="document.getElementById('modalDeskripsiProduk').classList.remove('hidden')"
-              class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
+              class="w-8 h-8 sm:w-12 sm:h-12 rounded-md sm:rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -763,7 +738,7 @@
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="size-6"
+                class="w-4 h-4 sm:w-6 sm:h-6"
               >
                 <path
                   stroke-linecap="round"
@@ -773,17 +748,17 @@
               </svg>
             </button>
             <span
-              class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
+              class="hidden sm:block absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
             >
               Deskripsi Produk
             </span>
           </div>
 
-          <!-- Icon 3 - Size Chart -->
+          <!-- Icon 2 - Size Chart -->
           <div class="group relative">
             <button
               onclick="document.getElementById('modalSizeChart').classList.remove('hidden')"
-              class="w-12 h-12 rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
+              class="w-8 h-8 sm:w-12 sm:h-12 rounded-md sm:rounded-lg bg-[#d1a86f] text-[#0f2d25] flex items-center justify-center shadow hover:bg-[#c1985e] transition"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -791,7 +766,7 @@
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="size-6"
+                class="w-4 h-4 sm:w-6 sm:h-6"
               >
                 <path
                   stroke-linecap="round"
@@ -801,13 +776,19 @@
               </svg>
             </button>
             <span
-              class="absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 left-1/2 top-full mt-2 -translate-x-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
+              class="hidden sm:block absolute sm:left-14 sm:top-1/2 sm:-translate-y-1/2 bg-[#0f2d25] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap z-50"
             >
               Size/Ukuran Chart
             </span>
           </div>
         </div>
-        <canvas id="tshirtCanvas" width="600" height="600" class="z-0"></canvas>
+
+        <canvas
+          id="tshirtCanvas"
+          width="600"
+          height="600"
+          class="z-0 w-full max-w-full aspect-square sm:aspect-[1/1] h-[280px] sm:h-auto object-contain"
+        ></canvas>
         <!-- Panel Kontrol Interaktif -->
         <div
           class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-xl shadow-xl px-2.5 sm:px-4 py-2 sm:py-3 flex flex-nowrap justify-center items-center gap-1.5 sm:gap-2 w-full max-w-[320px] sm:max-w-[560px] z-30 overflow-x-auto"
@@ -815,7 +796,7 @@
           <!-- Zoom -->
           <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
             <span class="text-[10px] sm:text-sm text-gray-700 font-medium"
-              >Zoom:</span
+              >Zoom :</span
             >
             <select
               class="appearance-none bg-white border border-gray-300 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded focus:outline-none cursor-pointer h-6 sm:h-8"
@@ -1237,9 +1218,18 @@
       });
 
       fabric.Image.fromURL("image/product4.jpeg", (img) => {
+        const scale = 500 / img.width; // karena width & height sama, cukup satu scale
+        img.scale(scale);
+
+        // Hitung posisi supaya center di canvas
+        const centerX = (canvas.getWidth() - img.width * scale) / 2;
+        const centerY = (canvas.getHeight() - img.height * scale) / 2;
+
         canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-          scaleX: 600 / img.width,
-          scaleY: 600 / img.height,
+          left: centerX,
+          top: centerY,
+          originX: "left",
+          originY: "top",
         });
       });
 
@@ -1261,6 +1251,130 @@
         updateDesignList();
         updateUIFromActiveObject();
       }
+
+      // === Garis bantu center fix ===
+      const guideLineX = new fabric.Line(
+        [0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2],
+        {
+          stroke: "#dc2626", // merah
+          strokeWidth: 1,
+          selectable: false,
+          evented: false,
+          visible: false,
+          originX: "left",
+          originY: "top",
+        }
+      );
+
+      const guideLineY = new fabric.Line(
+        [canvas.getWidth() / 2, 0, canvas.getWidth() / 2, canvas.getHeight()],
+        {
+          stroke: "#dc2626", // merah
+          strokeWidth: 1,
+          selectable: false,
+          evented: false,
+          visible: false,
+          originX: "left",
+          originY: "top",
+        }
+      );
+
+      canvas.add(guideLineX);
+      canvas.add(guideLineY);
+
+      // === Label koordinat X dan Y ===
+      const labelX = new fabric.Text("", {
+        fontSize: 12,
+        fill: "#dc2626",
+        backgroundColor: "rgba(255,255,255,0.8)",
+        originX: "left",
+        originY: "top",
+        selectable: false,
+        evented: false,
+        visible: false,
+      });
+
+      const labelY = new fabric.Text("", {
+        fontSize: 12,
+        fill: "#dc2626",
+        backgroundColor: "rgba(255,255,255,0.8)",
+        originX: "left",
+        originY: "top",
+        selectable: false,
+        evented: false,
+        visible: false,
+      });
+
+      canvas.add(labelX);
+      canvas.add(labelY);
+
+      // === Event drag (moving) ===
+      canvas.on("object:moving", function (e) {
+        const obj = e.target;
+        const centerX = canvas.getWidth() / 2;
+        const centerY = canvas.getHeight() / 2;
+        const objCenter = obj.getCenterPoint();
+        const tolerance = 5;
+
+        const isCenterX = Math.abs(objCenter.x - centerX) < tolerance;
+        const isCenterY = Math.abs(objCenter.y - centerY) < tolerance;
+
+        // Update garis bantu horizontal (X)
+        guideLineX.set({
+          visible: true,
+          strokeWidth: isCenterY ? 2.5 : 1,
+          x1: 0,
+          y1: centerY,
+          x2: canvas.getWidth(),
+          y2: centerY,
+        });
+
+        // Update garis bantu vertikal (Y)
+        guideLineY.set({
+          visible: true,
+          strokeWidth: isCenterX ? 2.5 : 1,
+          x1: centerX,
+          y1: 0,
+          x2: centerX,
+          y2: canvas.getHeight(),
+        });
+
+        // Auto snap ke tengah
+        if (isCenterX) obj.left = centerX - obj.getScaledWidth() / 2;
+        if (isCenterY) obj.top = centerY - obj.getScaledHeight() / 2;
+
+        // Tampilkan label X dan Y
+        const x = Math.round(obj.left ?? 0);
+        const y = Math.round(obj.top ?? 0);
+
+        labelX.set({
+          text: `X: ${x}`,
+          left: obj.left,
+          top: obj.top - 20,
+          visible: true,
+        });
+
+        labelY.set({
+          text: `Y: ${y}`,
+          left: obj.left,
+          top: obj.top - 35,
+          visible: true,
+        });
+
+        canvas.bringToFront(labelX);
+        canvas.bringToFront(labelY);
+
+        canvas.renderAll();
+      });
+
+      // === Event mouse lepas ===
+      canvas.on("mouse:up", () => {
+        guideLineX.set("visible", false);
+        guideLineY.set("visible", false);
+        labelX.set("visible", false);
+        labelY.set("visible", false);
+        canvas.renderAll();
+      });
 
       // ===============================
       // === UPDATE UI DARI OBJEK ===
