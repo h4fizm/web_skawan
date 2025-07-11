@@ -161,7 +161,7 @@
       <!-- Kiri: Tombol Back -->
       <div class="flex-shrink-0 mt-1 sm:mt-0">
         <a
-          href="dashboard_user.html"
+          href="design_product.html"
           class="font-quantify inline-flex items-center text-sm sm:text-sm text-gray-600 hover:text-black font-medium transition"
         >
           <svg
@@ -218,28 +218,6 @@
             />
           </svg>
           Download
-        </a>
-
-        <!-- Selesai -->
-        <a
-          href="#"
-          class="flex items-center justify-center gap-2 text-xs sm:text-sm font-quantify px-3 py-1.5 sm:px-4 sm:py-2 border border-[#0f2d25] text-white bg-[#0f2d25] rounded-full hover:bg-[#143c31] transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 sm:h-5 sm:w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-          Selesai
         </a>
       </div>
     </div>
@@ -508,10 +486,10 @@
           </div>
         </div>
 
-        <!-- Tombol Cetak Bukti -->
+        <!-- Tombol Checkout Produk -->
         <div class="mt-10 text-center">
           <button
-            class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#d1a86f] text-[#0f2d25] font-medium hover:bg-[#c1985e] transition text-[15px]"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition text-[15px]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -527,9 +505,35 @@
                 d="M6 9V2h12v7M6 18h12v2a1 1 0 01-1 1H7a1 1 0 01-1-1v-2zm12 0H6v-4h12v4z"
               />
             </svg>
-            Preview Invoice PDF
+            Checkout Produk
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- === Tombol Aksi Mobile (Hanya muncul di mobile) === -->
+    <div class="sm:hidden mt-4 px-4 w-full">
+      <div class="flex flex-col gap-3 w-full">
+        <a
+          href="#"
+          class="w-full flex items-center justify-center gap-2 text-sm font-quantify px-4 py-3 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-xl hover:bg-[#c1985e] transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
+            />
+          </svg>
+          Download
+        </a>
       </div>
     </div>
 
