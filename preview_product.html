@@ -226,96 +226,104 @@
     <div
       class="relative overflow-visible z-0 flex flex-col lg:flex-row gap-6 mt-40 px-4 mb-5"
     >
-      <!-- Wrapper Gambar + Panel -->
-      <div class="flex-1 relative overflow-visible z-0">
-        <!-- Gambar Produk -->
-        <div
-          class="w-full border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center bg-white px-6 py-6"
-        >
-          <img
-            src="image/product4.jpeg"
-            alt="Produk Kaos"
-            class="max-h-full max-w-full object-contain"
-          />
-        </div>
-
-        <!-- Panel Kontrol Interaktif -->
-        <div
-          class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-xl shadow-xl px-2.5 sm:px-4 py-2 sm:py-3 flex flex-nowrap justify-center items-center gap-1.5 sm:gap-2 w-full max-w-[320px] sm:max-w-[560px] z-30 overflow-x-auto"
-        >
-          <!-- Zoom -->
-          <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-            <span class="text-[10px] sm:text-sm text-gray-700 font-medium"
-              >Zoom:</span
-            >
-            <select
-              class="appearance-none bg-white border border-gray-300 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded focus:outline-none cursor-pointer h-6 sm:h-8"
-            >
-              <option>50%</option>
-              <option>75%</option>
-              <option selected>100%</option>
-              <option>125%</option>
-              <option>150%</option>
-            </select>
+      <!-- Wrapper Section Kiri dengan Border Luar -->
+      <div
+        class="flex-1 relative z-0 flex justify-center items-center px-4 sm:px-0 border border-black rounded-2xl shadow-xl p-4 sm:p-6 bg-white"
+      >
+        <div class="w-full max-w-[500px] space-y-4 flex flex-col items-center">
+          <!-- Border dalam canvas -->
+          <div
+            id="canvas-wrapper"
+            class="bg-white p-2 sm:p-4"
+            style="width: 600px; height: 650px"
+          >
+            <!-- canvas section  -->
+            <canvas
+              id="previewCanvas"
+              width="600"
+              height="600"
+              class="z-0 w-full max-w-full aspect-square sm:aspect-[1/1] h-[280px] sm:h-auto object-contain"
+            ></canvas>
           </div>
-          <!-- Depan -->
-          <button
-            class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
+
+          <!-- Panel Kontrol Interaktif -->
+          <div
+            class="bg-white border border-gray-300 rounded-xl shadow-md px-2.5 sm:px-4 py-2 sm:py-3 flex flex-wrap justify-center items-center gap-1.5 sm:gap-2 w-full max-w-[320px] sm:max-w-[560px] z-30"
           >
-            <svg
-              class="w-3.5 h-3.5 sm:w-5 sm:h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <!-- Zoom -->
+            <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+              <span class="text-[10px] sm:text-sm text-gray-700 font-medium"
+                >Zoom :</span
+              >
+              <select
+                class="appearance-none bg-white border border-gray-300 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded focus:outline-none cursor-pointer h-6 sm:h-8"
+              >
+                <option>50%</option>
+                <option>75%</option>
+                <option selected>100%</option>
+                <option>125%</option>
+                <option>150%</option>
+              </select>
+            </div>
+            <!-- Tombol Depan -->
+            <button
+              class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Depan
-          </button>
-          <!-- Belakang -->
-          <button
-            class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
-          >
-            <svg
-              class="w-3.5 h-3.5 sm:w-5 sm:h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+              <svg
+                class="w-3.5 h-3.5 sm:w-5 sm:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Depan
+            </button>
+            <!-- Tombol Belakang -->
+            <button
+              class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-            Belakang
-          </button>
-          <!-- Edit -->
-          <a
-            href="design_product.html"
-            class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
-          >
-            <svg
-              class="w-3.5 h-3.5 sm:w-5 sm:h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+              <svg
+                class="w-3.5 h-3.5 sm:w-5 sm:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+              Belakang
+            </button>
+            <!-- Tombol Edit -->
+            <a
+              href="design_product.html"
+              class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"
-              />
-            </svg>
-            Edit
-          </a>
+              <svg
+                class="w-3.5 h-3.5 sm:w-5 sm:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"
+                />
+              </svg>
+              Edit
+            </a>
+          </div>
         </div>
       </div>
 
@@ -786,5 +794,53 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- custom js -->
     <script src="js/script.js"></script>
+    <!-- fabric js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script>
+      const canvas = new fabric.Canvas("previewCanvas", {
+        selection: false,
+        interactive: false,
+      });
+
+      function resizeAndLoadCanvas() {
+        const width = 600;
+        const height = 600;
+
+        canvas.setWidth(width);
+        canvas.setHeight(height);
+
+        const saved = localStorage.getItem("kaosDesign");
+
+        if (saved) {
+          fabric.Image.fromURL("image/product4.jpeg", function (img) {
+            const scale = width / img.width;
+            img.scale(scale);
+
+            // Geser gambar ke kiri (misalnya 20px dari sisi kiri)
+            const left = 90;
+            const top = (height - img.getScaledHeight()) / 2;
+
+            canvas.setBackgroundImage(
+              img,
+              () => {
+                canvas.loadFromJSON(saved, () => {
+                  canvas.renderAll();
+                });
+              },
+              {
+                left: left,
+                top: top,
+                originX: "left",
+                originY: "top",
+              }
+            );
+          });
+        } else {
+          alert("Tidak ada desain ditemukan.");
+        }
+      }
+
+      resizeAndLoadCanvas();
+    </script>
   </body>
 </html>

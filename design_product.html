@@ -783,12 +783,14 @@
           </div>
         </div>
 
+        <!-- canvas section  -->
         <canvas
           id="tshirtCanvas"
           width="600"
           height="600"
           class="z-0 w-full max-w-full aspect-square sm:aspect-[1/1] h-[280px] sm:h-auto object-contain"
         ></canvas>
+
         <!-- Panel Kontrol Interaktif -->
         <div
           class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-xl shadow-xl px-2.5 sm:px-4 py-2 sm:py-3 flex flex-nowrap justify-center items-center gap-1.5 sm:gap-2 w-full max-w-[320px] sm:max-w-[560px] z-30 overflow-x-auto"
@@ -1233,6 +1235,15 @@
         });
       });
 
+      // Load desain dari localStorage jika ada (berfungsi ketika dari laman preview ke design masih menyimpan komponen yang ada)
+      const savedDesign = localStorage.getItem("kaosDesign");
+      if (savedDesign) {
+        canvas.loadFromJSON(savedDesign, () => {
+          canvas.renderAll();
+          updateDesignList(); // agar daftar teks/gambar juga muncul
+        });
+      }
+
       function addTextToCanvas(font = "Arial") {
         const text = new fabric.Textbox("Teks Baru", {
           left: 100,
@@ -1515,9 +1526,12 @@
       }
 
       document.getElementById("saveDesign").onclick = () => {
-        const dataURL = canvas.toDataURL({ format: "png", quality: 1 });
-        const win = window.open();
-        win.document.write(`<img src="${dataURL}" alt="Preview">`);
+        // Simpan desain ke localStorage
+        const json = JSON.stringify(canvas.toJSON());
+        localStorage.setItem("kaosDesign", json);
+
+        // Redirect ke halaman preview
+        window.location.href = "preview_product.html";
       };
 
       document.getElementById("clearCanvas").onclick = () => {
