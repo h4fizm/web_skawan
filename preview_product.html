@@ -794,53 +794,221 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- custom js -->
     <script src="js/script.js"></script>
-    <!-- fabric js -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
     <script>
-      const canvas = new fabric.Canvas("previewCanvas", {
-        selection: false,
-        interactive: false,
+      let canvas; // Deklarasikan canvas di scope global
+
+      document.addEventListener("DOMContentLoaded", function () {
+        canvas = new fabric.Canvas("previewCanvas", {
+          selection: false,
+          interactive: false,
+        });
+        console.log("Preview: Canvas Fabric.js berhasil diinisialisasi.");
+
+        loadDesignWithFonts(); // Panggil fungsi pemuatan desain utama
       });
 
-      function resizeAndLoadCanvas() {
+      async function loadDesignWithFonts() {
         const width = 600;
-        const height = 600;
+        const height = 600; // Asumsi tinggi kanvas Anda adalah 600px
 
         canvas.setWidth(width);
         canvas.setHeight(height);
+        console.log(
+          `Preview: Canvas diatur ke lebar: ${width}px, tinggi: ${height}px`
+        );
 
         const saved = localStorage.getItem("kaosDesign");
 
-        if (saved) {
-          fabric.Image.fromURL("image/product4.jpeg", function (img) {
-            const scale = width / img.width;
-            img.scale(scale);
+        if (
+          saved &&
+          saved !== "null" &&
+          saved !== "undefined" &&
+          saved !== ""
+        ) {
+          try {
+            const designData = JSON.parse(saved);
+            const fontFamiliesToLoad = new Set();
 
-            // Geser gambar ke kiri (misalnya 20px dari sisi kiri)
-            const left = 90;
-            const top = (height - img.getScaledHeight()) / 2;
+            if (designData && designData.objects) {
+              designData.objects.forEach((obj) => {
+                if (obj.type === "textbox" && obj.fontFamily) {
+                  fontFamiliesToLoad.add(obj.fontFamily);
+                }
+              });
+            }
 
-            canvas.setBackgroundImage(
-              img,
-              () => {
-                canvas.loadFromJSON(saved, () => {
-                  canvas.renderAll();
-                });
+            // --- Langkah 1: Muat Font Kustom Secara Dinamis ---
+            const fontLoadPromises = [];
+            fontFamiliesToLoad.forEach((fontFamily) => {
+              const fontUrl = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(
+                / /g,
+                "+"
+              )}&display=swap`;
+
+              // Tambahkan link stylesheet ke head
+              const link = document.createElement("link");
+              link.rel = "stylesheet";
+              link.href = fontUrl;
+              document.head.appendChild(link);
+
+              // Gunakan Font Loading API untuk menunggu font dimuat
+              // Penting: hanya tunggu jika font tidak default/system font
+              // Note: Ini mungkin masih memiliki masalah jika font tidak Google Font
+              fontLoadPromises.push(
+                document.fonts.load(`16px "${fontFamily}"`)
+              );
+              console.log(
+                `Preview: Menambahkan stylesheet dan menunggu font: ${fontFamily}`
+              );
+            });
+
+            // Tunggu semua font selesai dimuat
+            await Promise.all(fontLoadPromises);
+            console.log(
+              "Preview: Semua font kustom (atau sebagian besar) seharusnya sudah dimuat."
+            );
+
+            // --- Langkah 2: Muat Background Image ---
+            const backgroundImageURL = "image/product4.jpeg"; // VERIFIKASI PATH INI!
+            console.log(
+              "Preview: Mencoba memuat background image:",
+              backgroundImageURL
+            );
+
+            fabric.Image.fromURL(
+              backgroundImageURL,
+              function (img) {
+                if (img) {
+                  // Sesuaikan skala dan posisi background agar di tengah
+                  const imgAspectRatio = img.width / img.height;
+                  const canvasAspectRatio = canvas.width / canvas.height;
+
+                  let scale;
+                  if (imgAspectRatio > canvasAspectRatio) {
+                    scale = canvas.height / img.height; // Sesuaikan tinggi agar menutupi
+                  } else {
+                    scale = canvas.width / img.width; // Sesuaikan lebar agar menutupi
+                  }
+
+                  img.scale(scale);
+
+                  const scaledWidth = img.width * img.scaleX;
+                  const scaledHeight = img.height * img.scaleY;
+
+                  const left = (canvas.width - scaledWidth) / 2;
+                  const top = (canvas.height - scaledHeight) / 2;
+
+                  canvas.setBackgroundImage(
+                    img,
+                    () => {
+                      console.log("Preview: Background image berhasil dimuat.");
+                      // --- Langkah 3: Muat Objek Desain dari JSON ---
+                      canvas.loadFromJSON(designData, () => {
+                        console.log(
+                          "Preview: Objek desain dari JSON berhasil dimuat."
+                        );
+                        canvas.renderAll();
+                        canvas.forEachObject(function (obj) {
+                          obj.setCoords();
+                        });
+                        canvas.renderAll();
+                      });
+                    },
+                    {
+                      left: left,
+                      top: top,
+                      originX: "left",
+                      originY: "top",
+                      selectable: false,
+                      evented: false,
+                    }
+                  );
+                } else {
+                  console.error(
+                    "Preview: Gagal memuat gambar background: " +
+                      backgroundImageURL +
+                      ". Pastikan path benar dan file ada."
+                  );
+                  canvas.loadFromJSON(designData, () => {
+                    console.log(
+                      "Preview: Objek desain dimuat tanpa background image."
+                    );
+                    canvas.renderAll();
+                  });
+                }
               },
-              {
+              { crossOrigin: "anonymous" }
+            );
+          } catch (e) {
+            console.error(
+              "Preview: Error parsing saved design from localStorage:",
+              e
+            );
+            alert(
+              "Terjadi kesalahan saat memuat desain yang disimpan. Silakan coba kembali."
+            );
+            loadDefaultBackground(width, height);
+          }
+        } else {
+          console.log(
+            "Preview: Tidak ada desain ditemukan di localStorage atau kosong."
+          );
+          alert("Tidak ada desain yang tersimpan untuk ditampilkan.");
+          loadDefaultBackground(width, height);
+        }
+      }
+
+      function loadDefaultBackground(width, height) {
+        const backgroundImageURL = "image/product4.jpeg"; // VERIFIKASI PATH INI JUGA!
+        fabric.Image.fromURL(
+          backgroundImageURL,
+          function (img) {
+            if (img) {
+              const imgAspectRatio = img.width / img.height;
+              const canvasAspectRatio = canvas.width / canvas.height;
+
+              let scale;
+              if (imgAspectRatio > canvasAspectRatio) {
+                scale = canvas.height / img.height;
+              } else {
+                scale = canvas.width / img.width;
+              }
+
+              img.scale(scale);
+
+              const scaledWidth = img.width * img.scaleX;
+              const scaledHeight = img.height * img.scaleY;
+
+              const left = (canvas.width - scaledWidth) / 2;
+              const top = (canvas.height - scaledHeight) / 2;
+
+              canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
                 left: left,
                 top: top,
                 originX: "left",
                 originY: "top",
-              }
-            );
-          });
-        } else {
-          alert("Tidak ada desain ditemukan.");
-        }
+                selectable: false,
+                evented: false,
+              });
+              console.log("Preview: Background default berhasil dimuat.");
+            } else {
+              console.error(
+                "Preview: Gagal memuat gambar background default: " +
+                  backgroundImageURL +
+                  ". Cek path atau keberadaan file."
+              );
+            }
+          },
+          { crossOrigin: "anonymous" }
+        );
       }
 
-      resizeAndLoadCanvas();
+      // Event listener untuk resize window (jika dibutuhkan, pertimbangkan debounce)
+      // window.addEventListener("resize", () => {
+      //   loadDesignWithFonts();
+      // });
     </script>
   </body>
 </html>
