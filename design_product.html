@@ -556,6 +556,7 @@
           </label>
         </div>
 
+        <!-- Komponen Aktif & Aksi -->
         <div class="mt-4">
           <label class="block text-xs text-[#0f2d25] mb-2 font-quantify">
             Komponen Desain Aktif
@@ -1191,103 +1192,201 @@
       // === FONT SIZE & FONT API ===
       // ============================
       const fontSizeSelect = document.getElementById("fontSize");
-      for (let i = 10; i <= 64; i += 2) {
-        const opt = document.createElement("option");
-        opt.value = i;
-        opt.textContent = `${i}px`;
-        fontSizeSelect.appendChild(opt);
+      if (fontSizeSelect) {
+        for (let i = 10; i <= 64; i += 2) {
+          const opt = document.createElement("option");
+          opt.value = i;
+          opt.textContent = `${i}px`;
+          fontSizeSelect.appendChild(opt);
+        }
       }
 
       let currentFont = "Arial";
       let fontsList = [];
-      const apiKey = "AIzaSyBbHsIzkkLsTKLNRcomvRlw-qZqWeC91OU";
+      const apiKey = "AIzaSyBbHsIzkkLsTKLNRcomvRlw-qZqWeC91OU"; // Ganti dengan API Key Google Fonts Anda yang valid
 
       fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}`)
         .then((r) => r.json())
         .then((d) => {
           fontsList = d.items.map((i) => i.family);
           renderFonts(fontsList);
-        });
+        })
+        .catch((error) => console.error("Error fetching fonts:", error));
 
       function renderFonts(arr) {
         const container = document.getElementById("fontList");
+        if (!container) return;
+
         container.innerHTML = "";
 
-        arr.slice(0, 30).forEach((font) => {
-          const link = document.createElement("link");
-          link.rel = "stylesheet";
-          link.href = `https://fonts.googleapis.com/css2?family=${font.replace(
-            / /g,
-            "+"
-          )}&display=swap`;
-          document.head.appendChild(link);
+        arr.slice(0, 50).forEach((font) => {
+          const fontId = `font-link-${font.replace(/[^a-zA-Z0-9]/g, "")}`;
+          if (!document.getElementById(fontId)) {
+            const link = document.createElement("link");
+            link.id = fontId;
+            link.rel = "stylesheet";
+            link.href = `https://fonts.googleapis.com/css2?family=${font.replace(
+              / /g,
+              "+"
+            )}&display=swap`;
+            document.head.appendChild(link);
+          }
 
           const div = document.createElement("div");
           div.className =
-            "border p-2 rounded text-center text-sm cursor-pointer hover:bg-gray-100";
+            "border p-2 rounded text-center text-sm cursor-pointer hover:bg-gray-100 mb-1";
           div.textContent = font;
           div.style.fontFamily = font;
           div.onclick = () => {
             currentFont = font;
-            addTextToCanvas(currentFont);
-            document.getElementById("fontModal").classList.add("hidden");
+            const fontModal = document.getElementById("fontModal");
+
+            const activeObject = canvas.getActiveObject();
+            if (activeObject && activeObject.type === "textbox") {
+              activeObject.set({ fontFamily: currentFont });
+              canvas.renderAll();
+              updateUIFromActiveObject();
+            } else {
+              addTextToCanvas(currentFont);
+            }
+
+            if (fontModal) {
+              fontModal.classList.add("hidden");
+            }
           };
           container.appendChild(div);
         });
       }
 
-      document.getElementById("fontSearch").oninput = (e) => {
-        const q = e.target.value.toLowerCase();
-        renderFonts(fontsList.filter((f) => f.toLowerCase().includes(q)));
-      };
+      const fontSearchInput = document.getElementById("fontSearch");
+      if (fontSearchInput) {
+        fontSearchInput.oninput = (e) => {
+          const q = e.target.value.toLowerCase();
+          renderFonts(fontsList.filter((f) => f.toLowerCase().includes(q)));
+        };
+      }
 
       // =======================
       // === INIT FABRIC JS ===
       // =======================
       const canvas = new fabric.Canvas("tshirtCanvas", {
         preserveObjectStacking: true,
+        selection: true,
+        controlsAboveOverlay: true,
       });
 
-      fabric.Image.fromURL("image/product4.jpeg", (img) => {
-        const scale = 500 / img.width; // karena width & height sama, cukup satu scale
-        img.scale(scale);
+      let bgImageObject = null;
 
-        // Hitung posisi supaya center di canvas
-        const centerX = (canvas.getWidth() - img.width * scale) / 2;
-        const centerY = (canvas.getHeight() - img.height * scale) / 2;
+      const setBackgroundImage = (imgUrl) => {
+        fabric.Image.fromURL(imgUrl, (img) => {
+          bgImageObject = img;
+          const scale = 500 / img.width;
+          img.scale(scale);
 
-        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-          left: centerX,
-          top: centerY,
-          originX: "left",
-          originY: "top",
+          const centerX = (canvas.getWidth() - img.width * scale) / 2;
+          const centerY = (canvas.getHeight() - img.height * scale) / 2;
+
+          canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+            left: centerX,
+            top: centerY,
+            originX: "left",
+            originY: "top",
+            selectable: false,
+            evented: false,
+          });
+
+          canvas.off("after:render", updateBgImagePositionOnRender);
+          canvas.on("after:render", updateBgImagePositionOnRender);
         });
-      });
+      };
 
-      // Load desain dari localStorage jika ada (berfungsi ketika dari laman preview ke design masih menyimpan komponen yang ada)
+      const updateBgImagePositionOnRender = () => {
+        if (bgImageObject) {
+          const currentScale = Math.min(
+            canvas.getWidth() / bgImageObject.width,
+            canvas.getHeight() / bgImageObject.height
+          );
+          const scaledWidth = bgImageObject.width * currentScale;
+          const scaledHeight = bgImageObject.height * currentScale;
+
+          const currentCenterX = (canvas.getWidth() - scaledWidth) / 2;
+          const currentCenterY = (canvas.getHeight() - scaledHeight) / 2;
+
+          bgImageObject.set({
+            left: currentCenterX,
+            top: currentCenterY,
+            scaleX: currentScale,
+            scaleY: currentScale,
+          });
+        }
+      };
+
+      setBackgroundImage("image/product4.jpeg");
+
+      const loadCustomFontsFromDesign = (json) => {
+        const designData = JSON.parse(json);
+        if (designData && designData.objects) {
+          designData.objects.forEach((obj) => {
+            if (obj.type === "textbox" && obj.fontFamily) {
+              const font = obj.fontFamily;
+              const fontId = `font-link-${font.replace(/[^a-zA-Z0-9]/g, "")}`;
+              if (!document.getElementById(fontId)) {
+                const link = document.createElement("link");
+                link.id = fontId;
+                link.rel = "stylesheet";
+                link.href = `https://fonts.googleapis.com/css2?family=${font.replace(
+                  / /g,
+                  "+"
+                )}&display=swap`;
+                document.head.appendChild(link);
+              }
+            }
+          });
+        }
+      };
+
       const savedDesign = localStorage.getItem("kaosDesign");
       if (savedDesign) {
+        loadCustomFontsFromDesign(savedDesign);
         canvas.loadFromJSON(savedDesign, () => {
           canvas.renderAll();
-          updateDesignList(); // agar daftar teks/gambar juga muncul
+          updateDesignList();
+          updateUIFromActiveObject();
         });
       }
 
       function addTextToCanvas(font = "Arial") {
+        const textColorInput = document.getElementById("textColor");
+        const fontSizeInput = document.getElementById("fontSize");
+        const bgTransparentCheckbox = document.getElementById("bgTransparent");
+        const textBgColorInput = document.getElementById("textBgColor");
+
         const text = new fabric.Textbox("Teks Baru", {
           left: 100,
           top: 100,
           fontFamily: font,
-          fontSize: parseInt(document.getElementById("fontSize").value),
-          fill: document.getElementById("textColor").value,
-          backgroundColor: document.getElementById("bgTransparent").checked
-            ? ""
-            : document.getElementById("textBgColor").value,
+          fontSize: parseInt(fontSizeInput ? fontSizeInput.value : 16),
+          fill: textColorInput ? textColorInput.value : "#000000",
+          backgroundColor:
+            bgTransparentCheckbox && bgTransparentCheckbox.checked
+              ? ""
+              : textBgColorInput
+              ? textBgColorInput.value
+              : "#ffffff",
           fontWeight: "normal",
           fontStyle: "normal",
           textAlign: "left",
+          selectable: true,
+          evented: true,
+          hasControls: true,
+          hasBorders: true,
+          cornerColor: "#d1a86f",
+          cornerSize: 10,
+          transparentCorners: false,
+          padding: 5,
         });
         canvas.add(text).setActiveObject(text);
+        canvas.renderAll();
         updateDesignList();
         updateUIFromActiveObject();
       }
@@ -1351,6 +1450,22 @@
       // === Event drag (moving) ===
       canvas.on("object:moving", function (e) {
         const obj = e.target;
+        if (
+          !obj ||
+          obj === bgImageObject ||
+          obj === guideLineX ||
+          obj === guideLineY ||
+          obj === labelX ||
+          obj === labelY
+        ) {
+          guideLineX.set("visible", false);
+          guideLineY.set("visible", false);
+          labelX.set("visible", false);
+          labelY.set("visible", false);
+          canvas.renderAll();
+          return;
+        }
+
         const centerX = canvas.getWidth() / 2;
         const centerY = canvas.getHeight() / 2;
         const objCenter = obj.getCenterPoint();
@@ -1359,7 +1474,6 @@
         const isCenterX = Math.abs(objCenter.x - centerX) < tolerance;
         const isCenterY = Math.abs(objCenter.y - centerY) < tolerance;
 
-        // Update garis bantu horizontal (X)
         guideLineX.set({
           visible: true,
           strokeWidth: isCenterY ? 2.5 : 1,
@@ -1369,7 +1483,6 @@
           y2: centerY,
         });
 
-        // Update garis bantu vertikal (Y)
         guideLineY.set({
           visible: true,
           strokeWidth: isCenterX ? 2.5 : 1,
@@ -1379,11 +1492,9 @@
           y2: canvas.getHeight(),
         });
 
-        // Auto snap ke tengah
         if (isCenterX) obj.left = centerX - obj.getScaledWidth() / 2;
         if (isCenterY) obj.top = centerY - obj.getScaledHeight() / 2;
 
-        // Tampilkan label X dan Y
         const x = Math.round(obj.left ?? 0);
         const y = Math.round(obj.top ?? 0);
 
@@ -1407,7 +1518,6 @@
         canvas.renderAll();
       });
 
-      // === Event mouse lepas ===
       canvas.on("mouse:up", () => {
         guideLineX.set("visible", false);
         guideLineY.set("visible", false);
@@ -1421,36 +1531,56 @@
       // ===============================
       function updateUIFromActiveObject() {
         const o = canvas.getActiveObject();
-        if (o && o.type === "textbox") {
-          document.getElementById("textColor").value = o.fill || "#000000";
-          document.getElementById("fontSize").value = o.fontSize || 16;
-          document.getElementById("textBgColor").value =
-            o.backgroundColor || "#ffffff";
-          document.getElementById("bgTransparent").checked = !o.backgroundColor;
+        const textColor = document.getElementById("textColor");
+        const fontSize = document.getElementById("fontSize");
+        const textBgColor = document.getElementById("textBgColor");
+        const bgTransparent = document.getElementById("bgTransparent");
+        const boldBtn = document.getElementById("boldBtn");
+        const italicBtn = document.getElementById("italicBtn");
+        const alignLeft = document.getElementById("alignLeft");
+        const alignCenter = document.getElementById("alignCenter");
+        const alignRight = document.getElementById("alignRight");
 
-          ["boldBtn", "italicBtn"].forEach((id) => {
-            document.getElementById(id).classList.remove("bg-gray-300");
-          });
-          if (o.fontWeight === "bold")
-            document.getElementById("boldBtn").classList.add("bg-gray-300");
-          if (o.fontStyle === "italic")
-            document.getElementById("italicBtn").classList.add("bg-gray-300");
+        if (!o || o.type !== "textbox") {
+          if (textColor) textColor.value = "#000000";
+          if (fontSize) fontSize.value = "16";
+          if (textBgColor) textBgColor.value = "#ffffff";
+          if (bgTransparent) bgTransparent.checked = false;
 
-          ["alignLeft", "alignCenter", "alignRight"].forEach((id) =>
-            document.getElementById(id).classList.remove("bg-gray-300")
+          [boldBtn, italicBtn, alignLeft, alignCenter, alignRight].forEach(
+            (btn) => {
+              if (btn) btn.classList.remove("bg-gray-300");
+            }
           );
-          const alignId =
-            "align" +
-            o.textAlign.charAt(0).toUpperCase() +
-            o.textAlign.slice(1);
-          if (document.getElementById(alignId))
-            document.getElementById(alignId).classList.add("bg-gray-300");
+          return;
         }
+
+        if (textColor) textColor.value = o.fill || "#000000";
+        if (fontSize) fontSize.value = o.fontSize || 16;
+        if (textBgColor) textBgColor.value = o.backgroundColor || "#ffffff";
+        if (bgTransparent) bgTransparent.checked = !o.backgroundColor;
+
+        [boldBtn, italicBtn].forEach((btn) => {
+          if (btn) btn.classList.remove("bg-gray-300");
+        });
+        if (boldBtn && o.fontWeight === "bold")
+          boldBtn.classList.add("bg-gray-300");
+        if (italicBtn && o.fontStyle === "italic")
+          italicBtn.classList.add("bg-gray-300");
+
+        [alignLeft, alignCenter, alignRight].forEach((btn) => {
+          if (btn) btn.classList.remove("bg-gray-300");
+        });
+        const alignId =
+          "align" + o.textAlign.charAt(0).toUpperCase() + o.textAlign.slice(1);
+        const activeAlignBtn = document.getElementById(alignId);
+        if (activeAlignBtn) activeAlignBtn.classList.add("bg-gray-300");
       }
 
       canvas.on("selection:created", updateUIFromActiveObject);
       canvas.on("selection:updated", updateUIFromActiveObject);
       canvas.on("object:modified", updateUIFromActiveObject);
+      canvas.on("selection:cleared", updateUIFromActiveObject);
 
       // ======================
       // === TEXT CONTROL ====
@@ -1464,70 +1594,119 @@
         }
       }
 
-      document.getElementById("textColor").onchange = (e) =>
-        updateActiveText("fill", e.target.value);
-      document.getElementById("textBgColor").onchange = (e) => {
-        const v = document.getElementById("bgTransparent").checked
-          ? ""
-          : e.target.value;
-        updateActiveText("backgroundColor", v);
-      };
-      document.getElementById("bgTransparent").onchange = () => {
-        const val = document.getElementById("bgTransparent").checked
-          ? ""
-          : document.getElementById("textBgColor").value;
-        updateActiveText("backgroundColor", val);
-      };
-      document.getElementById("fontSize").onchange = (e) =>
-        updateActiveText("fontSize", parseInt(e.target.value));
+      const textColorInput = document.getElementById("textColor");
+      if (textColorInput) {
+        textColorInput.onchange = (e) =>
+          updateActiveText("fill", e.target.value);
+      }
 
-      document.getElementById("boldBtn").onclick = () => {
-        const o = canvas.getActiveObject();
-        if (o && o.type === "textbox") {
-          const isBold = o.fontWeight === "bold";
-          o.set("fontWeight", isBold ? "normal" : "bold");
-          canvas.renderAll();
-          updateUIFromActiveObject();
-        }
-      };
-      document.getElementById("italicBtn").onclick = () => {
-        const o = canvas.getActiveObject();
-        if (o && o.type === "textbox") {
-          const isItalic = o.fontStyle === "italic";
-          o.set("fontStyle", isItalic ? "normal" : "italic");
-          canvas.renderAll();
-          updateUIFromActiveObject();
-        }
-      };
-      ["alignLeft", "alignCenter", "alignRight"].forEach((id) => {
-        document.getElementById(id).onclick = () => {
+      const textBgColorInput = document.getElementById("textBgColor");
+      const bgTransparentCheckbox = document.getElementById("bgTransparent");
+
+      if (textBgColorInput) {
+        textBgColorInput.onchange = (e) => {
+          const v =
+            bgTransparentCheckbox && bgTransparentCheckbox.checked
+              ? ""
+              : e.target.value;
+          updateActiveText("backgroundColor", v);
+        };
+      }
+
+      if (bgTransparentCheckbox) {
+        bgTransparentCheckbox.onchange = () => {
+          const val = bgTransparentCheckbox.checked
+            ? ""
+            : textBgColorInput
+            ? textBgColorInput.value
+            : "#ffffff";
+          updateActiveText("backgroundColor", val);
+        };
+      }
+
+      const fontSizeInput = document.getElementById("fontSize");
+      if (fontSizeInput) {
+        fontSizeInput.onchange = (e) =>
+          updateActiveText("fontSize", parseInt(e.target.value));
+      }
+
+      const boldBtn = document.getElementById("boldBtn");
+      if (boldBtn) {
+        boldBtn.onclick = () => {
           const o = canvas.getActiveObject();
           if (o && o.type === "textbox") {
-            o.set("textAlign", id.replace("align", "").toLowerCase());
+            const isBold = o.fontWeight === "bold";
+            o.set("fontWeight", isBold ? "normal" : "bold");
             canvas.renderAll();
             updateUIFromActiveObject();
           }
         };
+      }
+
+      const italicBtn = document.getElementById("italicBtn");
+      if (italicBtn) {
+        italicBtn.onclick = () => {
+          const o = canvas.getActiveObject();
+          if (o && o.type === "textbox") {
+            const isItalic = o.fontStyle === "italic";
+            o.set("fontStyle", isItalic ? "normal" : "italic");
+            canvas.renderAll();
+            updateUIFromActiveObject();
+          }
+        };
+      }
+
+      ["alignLeft", "alignCenter", "alignRight"].forEach((id) => {
+        const alignButton = document.getElementById(id);
+        if (alignButton) {
+          alignButton.onclick = () => {
+            const o = canvas.getActiveObject();
+            if (o && o.type === "textbox") {
+              o.set("textAlign", id.replace("align", "").toLowerCase());
+              canvas.renderAll();
+              updateUIFromActiveObject();
+            }
+          };
+        }
       });
 
       // =====================
       // === GAMBAR UPLOAD ===
       // =====================
-      document.getElementById("upload-photo").onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (f) => {
-          fabric.Image.fromURL(f.target.result, (img) => {
-            img.scaleToWidth(50);
-            img.scaleToHeight(50);
-            img.set({ left: 50, top: 50 });
-            canvas.add(img).setActiveObject(img);
-            updateDesignList();
-          });
+      const uploadPhotoInput = document.getElementById("upload-photo");
+      if (uploadPhotoInput) {
+        uploadPhotoInput.onchange = (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (f) => {
+            fabric.Image.fromURL(f.target.result, (img) => {
+              img.set({
+                left: 50,
+                top: 50,
+                selectable: true,
+                evented: true,
+                hasControls: true,
+                hasBorders: true,
+                cornerColor: "#d1a86f",
+                cornerSize: 10,
+                transparentCorners: false,
+                padding: 5,
+              });
+
+              const maxDim = Math.max(img.width, img.height);
+              const scaleFactor = 150 / maxDim;
+              img.scale(scaleFactor);
+
+              canvas.add(img).setActiveObject(img);
+              canvas.renderAll();
+              updateDesignList();
+            });
+          };
+          reader.readAsDataURL(file);
+          e.target.value = "";
         };
-        reader.readAsDataURL(file);
-      };
+      }
 
       // ============================
       // === DESIGN LIST & SAVE ====
@@ -1537,83 +1716,135 @@
         const noComponentsMessage = document.getElementById(
           "noComponentsMessage"
         );
-        designListContainer.innerHTML = ""; // Clear previous content
+        if (!designListContainer || !noComponentsMessage) return;
+
+        // Bersihkan semua elemen anak dari designListContainer KECUALI noComponentsMessage
+        // Kita harus iterasi dan hapus karena innerHTML = "" mungkin bermasalah dengan referensi.
+        while (designListContainer.children.length > 0) {
+          // Hapus elemen anak terakhir sampai hanya noComponentsMessage yang tersisa (jika ada)
+          const lastChild = designListContainer.lastChild;
+          if (lastChild && lastChild.id !== "noComponentsMessage") {
+            designListContainer.removeChild(lastChild);
+          } else if (lastChild && lastChild.id === "noComponentsMessage") {
+            // Jika lastChild adalah noComponentsMessage, berhenti, jangan hapus.
+            break;
+          } else {
+            // Jika ada anak lain yang tidak memiliki ID atau bukan yang diharapkan,
+            // tetap hapus untuk memastikan bersih.
+            designListContainer.removeChild(lastChild);
+          }
+        }
 
         let hasComponents = false;
 
-        canvas.getObjects().forEach((o, i) => {
-          if (o === canvas.backgroundImage) return;
+        const drawableObjects = canvas.getObjects().filter((o) => {
+          const isInternalFabricObject =
+            o === bgImageObject ||
+            o === guideLineX ||
+            o === guideLineY ||
+            o === labelX ||
+            o === labelY;
+          return (
+            !isInternalFabricObject &&
+            (o.type === "textbox" || o.type === "image")
+          );
+        });
 
-          if (o.type === "textbox" || o.type === "image") {
-            hasComponents = true;
-
+        if (drawableObjects.length > 0) {
+          hasComponents = true;
+          // Kita akan menyisipkan card komponen BARU setelah noComponentsMessage
+          // Ini memastikan noComponentsMessage selalu di awal jika disembunyikan.
+          const fragment = document.createDocumentFragment(); // Untuk performa yang lebih baik
+          drawableObjects.forEach((o, i) => {
             const componentCard = document.createElement("div");
-            // Kelas Tailwind untuk card komponen
             componentCard.className =
-              "flex items-center justify-between bg-white border border-gray-200 rounded-lg p-3 shadow-sm";
+              "flex items-center justify-between bg-white border border-gray-200 rounded-lg p-3 shadow-sm mb-2";
 
             const componentName = document.createElement("span");
-            // Kelas Tailwind untuk nama komponen
             componentName.className =
               "text-sm font-medium text-[#0f2d25] truncate";
             componentName.textContent =
               o.type === "textbox" ? `Teks: "${o.text}"` : `Gambar ${i + 1}`;
 
             const delBtn = document.createElement("button");
-            // Kelas Tailwind untuk tombol hapus
             delBtn.className =
               "p-1 rounded-full text-red-500 hover:bg-red-100 hover:text-red-700 transition flex items-center justify-center";
 
-            // Icon SVG
             delBtn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            `;
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                `;
 
             delBtn.onclick = () => {
               canvas.remove(o);
-              updateDesignList();
+              canvas.discardActiveObject(); // Hapus seleksi objek yang dihapus
+              canvas.renderAll();
+              updateDesignList(); // Panggil lagi untuk me-refresh daftar
+              updateUIFromActiveObject();
             };
 
             componentCard.appendChild(componentName);
             componentCard.appendChild(delBtn);
-            designListContainer.appendChild(componentCard);
-          }
-        });
+            fragment.appendChild(componentCard); // Tambahkan ke fragment
+          });
+          designListContainer.appendChild(fragment); // Sisipkan fragment ke DOM
+        }
 
-        if (hasComponents) {
-          noComponentsMessage.classList.add("hidden"); // Menyembunyikan dengan kelas Tailwind
+        // Tangani visibilitas pesan "Belum ada komponen"
+        if (!hasComponents) {
+          noComponentsMessage.classList.remove("hidden");
         } else {
-          noComponentsMessage.classList.remove("hidden"); // Menampilkan dengan menghapus kelas Tailwind
-          designListContainer.appendChild(noComponentsMessage);
+          noComponentsMessage.classList.add("hidden");
         }
       }
-      document.getElementById("saveDesign").onclick = () => {
-        // Simpan desain ke localStorage
-        const json = JSON.stringify(canvas.toJSON());
-        localStorage.setItem("kaosDesign", json);
 
-        // Redirect ke halaman preview
-        window.location.href = "preview_product.html";
-      };
+      const saveDesignButton = document.getElementById("saveDesign");
+      if (saveDesignButton) {
+        saveDesignButton.onclick = () => {
+          const json = JSON.stringify(canvas.toJSON());
+          localStorage.setItem("kaosDesign", json);
+          window.location.href = "preview_product.html";
+        };
+      }
 
-      document.getElementById("clearCanvas").onclick = () => {
-        const bg = canvas.backgroundImage;
-        canvas.getObjects().forEach((obj) => {
-          if (obj !== bg) canvas.remove(obj);
-        });
-        updateDesignList();
-      };
+      const clearCanvasButton = document.getElementById("clearCanvas");
+      if (clearCanvasButton) {
+        clearCanvasButton.onclick = () => {
+          canvas.getObjects().forEach((obj) => {
+            if (
+              obj !== bgImageObject &&
+              obj !== guideLineX &&
+              obj !== guideLineY &&
+              obj !== labelX &&
+              obj !== labelY
+            ) {
+              canvas.remove(obj);
+            }
+          });
+          canvas.discardActiveObject();
+          canvas.renderAll();
+          updateDesignList();
+          updateUIFromActiveObject();
+        };
+      }
 
       window.addEventListener("resize", () => {
-        canvas.setWidth(document.getElementById("canvas-wrapper").clientWidth);
-        canvas.setHeight(
-          document.getElementById("canvas-wrapper").clientHeight
-        );
-        canvas.renderAll();
+        const canvasWrapper = document.getElementById("canvas-wrapper");
+        if (canvasWrapper) {
+          canvas.setWidth(canvasWrapper.clientWidth);
+          canvas.setHeight(canvasWrapper.clientHeight);
+          canvas.renderAll();
+        }
       });
-      window.dispatchEvent(new Event("resize"));
+
+      document.addEventListener("DOMContentLoaded", () => {
+        if (!savedDesign) {
+          updateDesignList();
+        }
+        window.dispatchEvent(new Event("resize"));
+        updateUIFromActiveObject();
+      });
     </script>
   </body>
 </html>
