@@ -1173,6 +1173,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
     <!-- custom js -->
     <script src="js/script.js"></script>
+    <!-- design features js -->
     <script>
       // ============================
       // === FONT SIZE & FONT API ===
@@ -1235,6 +1236,13 @@
         preserveObjectStacking: true,
       });
 
+      fabric.Image.fromURL("image/product4.jpeg", (img) => {
+        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+          scaleX: 600 / img.width,
+          scaleY: 600 / img.height,
+        });
+      });
+
       function addTextToCanvas(font = "Arial") {
         const text = new fabric.Textbox("Teks Baru", {
           left: 100,
@@ -1267,22 +1275,22 @@
           document.getElementById("bgTransparent").checked = !o.backgroundColor;
 
           ["boldBtn", "italicBtn"].forEach((id) => {
-            document.getElementById(id).classList.remove("active");
+            document.getElementById(id).classList.remove("bg-gray-300");
           });
           if (o.fontWeight === "bold")
-            document.getElementById("boldBtn").classList.add("active");
+            document.getElementById("boldBtn").classList.add("bg-gray-300");
           if (o.fontStyle === "italic")
-            document.getElementById("italicBtn").classList.add("active");
+            document.getElementById("italicBtn").classList.add("bg-gray-300");
 
           ["alignLeft", "alignCenter", "alignRight"].forEach((id) =>
-            document.getElementById(id).classList.remove("active")
+            document.getElementById(id).classList.remove("bg-gray-300")
           );
           const alignId =
             "align" +
             o.textAlign.charAt(0).toUpperCase() +
             o.textAlign.slice(1);
           if (document.getElementById(alignId))
-            document.getElementById(alignId).classList.add("active");
+            document.getElementById(alignId).classList.add("bg-gray-300");
         }
       }
 
@@ -1298,6 +1306,7 @@
         if (o && o.type === "textbox") {
           o.set(prop, val);
           canvas.renderAll();
+          updateUIFromActiveObject();
         }
       }
 
@@ -1323,10 +1332,8 @@
         if (o && o.type === "textbox") {
           const isBold = o.fontWeight === "bold";
           o.set("fontWeight", isBold ? "normal" : "bold");
-          document
-            .getElementById("boldBtn")
-            .classList.toggle("active", !isBold);
           canvas.renderAll();
+          updateUIFromActiveObject();
         }
       };
       document.getElementById("italicBtn").onclick = () => {
@@ -1334,10 +1341,8 @@
         if (o && o.type === "textbox") {
           const isItalic = o.fontStyle === "italic";
           o.set("fontStyle", isItalic ? "normal" : "italic");
-          document
-            .getElementById("italicBtn")
-            .classList.toggle("active", !isItalic);
           canvas.renderAll();
+          updateUIFromActiveObject();
         }
       };
       ["alignLeft", "alignCenter", "alignRight"].forEach((id) => {
@@ -1345,8 +1350,8 @@
           const o = canvas.getActiveObject();
           if (o && o.type === "textbox") {
             o.set("textAlign", id.replace("align", "").toLowerCase());
-            updateUIFromActiveObject();
             canvas.renderAll();
+            updateUIFromActiveObject();
           }
         };
       });
@@ -1377,9 +1382,20 @@
         const ul = document.getElementById("designList");
         ul.innerHTML = "";
         canvas.getObjects().forEach((o, i) => {
+          if (o === canvas.backgroundImage) return;
           const li = document.createElement("li");
           li.textContent =
             o.type === "textbox" ? `Teks: ${o.text}` : `Gambar ${i + 1}`;
+          li.className = "flex justify-between items-center";
+
+          const delBtn = document.createElement("button");
+          delBtn.textContent = "🗑️";
+          delBtn.className = "text-red-500 hover:text-red-700 text-sm";
+          delBtn.onclick = () => {
+            canvas.remove(o);
+            updateDesignList();
+          };
+          li.appendChild(delBtn);
           ul.appendChild(li);
         });
       }
@@ -1391,15 +1407,10 @@
       };
 
       document.getElementById("clearCanvas").onclick = () => {
-        canvas.clear();
-        canvas.setBackgroundImage(
-          "image/product4.jpeg",
-          canvas.renderAll.bind(canvas),
-          {
-            scaleX: 600 / 800,
-            scaleY: 600 / 800,
-          }
-        );
+        const bg = canvas.backgroundImage;
+        canvas.getObjects().forEach((obj) => {
+          if (obj !== bg) canvas.remove(obj);
+        });
         updateDesignList();
       };
 
