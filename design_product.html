@@ -556,27 +556,56 @@
           </label>
         </div>
 
-        <!-- Komponen Aktif & Aksi -->
         <div class="mt-4">
-          <ul
+          <label class="block text-xs text-[#0f2d25] mb-2 font-quantify">
+            Komponen Desain Aktif
+          </label>
+          <div
             id="designList"
-            class="list-disc pl-4 text-xs text-[#0f2d25] mb-2 max-h-32 overflow-y-auto"
-          ></ul>
+            class="space-y-2 mb-4 max-h-48 overflow-y-auto pr-2 custom-scrollbar"
+          >
+            <p
+              id="noComponentsMessage"
+              class="text-xs text-gray-500 text-center py-4"
+            >
+              Belum ada komponen ditambahkan.
+            </p>
+          </div>
 
           <button
             id="clearCanvas"
             class="w-full bg-red-600 text-white rounded py-2 text-sm font-semibold hover:bg-red-700 transition"
           >
-            Hapus Semua
+            Hapus Semua Desain
           </button>
 
           <button
             id="saveDesign"
             class="w-full bg-green-600 text-white mt-2 rounded py-2 text-sm font-semibold hover:bg-green-700 transition"
           >
-            Simpan & Preview
+            Simpan & Preview Desain
           </button>
         </div>
+
+        <style>
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+          }
+
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+          }
+
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+          }
+
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+          }
+        </style>
       </div>
 
       <!-- Modal Font Picker -->
@@ -1504,27 +1533,62 @@
       // === DESIGN LIST & SAVE ====
       // ============================
       function updateDesignList() {
-        const ul = document.getElementById("designList");
-        ul.innerHTML = "";
+        const designListContainer = document.getElementById("designList");
+        const noComponentsMessage = document.getElementById(
+          "noComponentsMessage"
+        );
+        designListContainer.innerHTML = ""; // Clear previous content
+
+        let hasComponents = false;
+
         canvas.getObjects().forEach((o, i) => {
           if (o === canvas.backgroundImage) return;
-          const li = document.createElement("li");
-          li.textContent =
-            o.type === "textbox" ? `Teks: ${o.text}` : `Gambar ${i + 1}`;
-          li.className = "flex justify-between items-center";
 
-          const delBtn = document.createElement("button");
-          delBtn.textContent = "🗑️";
-          delBtn.className = "text-red-500 hover:text-red-700 text-sm";
-          delBtn.onclick = () => {
-            canvas.remove(o);
-            updateDesignList();
-          };
-          li.appendChild(delBtn);
-          ul.appendChild(li);
+          if (o.type === "textbox" || o.type === "image") {
+            hasComponents = true;
+
+            const componentCard = document.createElement("div");
+            // Kelas Tailwind untuk card komponen
+            componentCard.className =
+              "flex items-center justify-between bg-white border border-gray-200 rounded-lg p-3 shadow-sm";
+
+            const componentName = document.createElement("span");
+            // Kelas Tailwind untuk nama komponen
+            componentName.className =
+              "text-sm font-medium text-[#0f2d25] truncate";
+            componentName.textContent =
+              o.type === "textbox" ? `Teks: "${o.text}"` : `Gambar ${i + 1}`;
+
+            const delBtn = document.createElement("button");
+            // Kelas Tailwind untuk tombol hapus
+            delBtn.className =
+              "p-1 rounded-full text-red-500 hover:bg-red-100 hover:text-red-700 transition flex items-center justify-center";
+
+            // Icon SVG
+            delBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            `;
+
+            delBtn.onclick = () => {
+              canvas.remove(o);
+              updateDesignList();
+            };
+
+            componentCard.appendChild(componentName);
+            componentCard.appendChild(delBtn);
+            designListContainer.appendChild(componentCard);
+          }
         });
-      }
 
+        if (hasComponents) {
+          noComponentsMessage.classList.add("hidden"); // Menyembunyikan dengan kelas Tailwind
+        } else {
+          noComponentsMessage.classList.remove("hidden"); // Menampilkan dengan menghapus kelas Tailwind
+          designListContainer.appendChild(noComponentsMessage);
+        }
+      }
       document.getElementById("saveDesign").onclick = () => {
         // Simpan desain ke localStorage
         const json = JSON.stringify(canvas.toJSON());
