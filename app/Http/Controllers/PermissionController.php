@@ -30,7 +30,7 @@ class PermissionController extends Controller
                 return formatResponse('error', 'Gagal mengambil', null, $e->getMessage(), 500);
             }
         }
-        return view('rbac.permission');
+        return view('admin.rbac.permission');
     }
 
     /**
