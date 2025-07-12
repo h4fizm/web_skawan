@@ -2165,5 +2165,113 @@
         });
       });
     </script>
+    <!-- panel function js -->
+    <script>
+      // ============================
+      // === PANEL KONTROL JS (ZOOM & PAN) ===
+      // ============================
+
+      const zoomSelect = document.querySelector(
+        ".flex.items-center.gap-1.sm\\:gap-2.flex-shrink-0 > select"
+      );
+
+      // Variabel untuk fungsionalitas Pan (geser)
+      let isDragging = false;
+      let lastPosX;
+      let lastPosY;
+
+      // Event listener untuk fungsi zoom
+      if (zoomSelect) {
+        zoomSelect.addEventListener("change", (e) => {
+          const selectedPercentage = parseInt(e.target.value.replace("%", ""));
+          const zoomLevel = selectedPercentage / 100;
+
+          // Dapatkan titik tengah kanvas saat ini (sebelum zoom) dalam koordinat viewPort
+          const viewportCenterX = canvas.width / 2;
+          const viewportCenterY = canvas.height / 2;
+
+          // Hitung ulang viewport transform untuk menjaga pusat tetap di tengah
+          const newVpt = [
+            zoomLevel,
+            0,
+            0,
+            zoomLevel,
+            viewportCenterX - viewportCenterX * zoomLevel,
+            viewportCenterY - viewportCenterY * zoomLevel,
+          ];
+
+          canvas.setViewportTransform(newVpt);
+          canvas.setZoom(zoomLevel);
+
+          // Kita juga perlu mengatur ulang posisi background image jika ada
+          updateBgImagePositionOnRender();
+
+          // Sesuaikan juga posisi garis bantu tengah
+          centerGuideLineX.set({
+            x1: 0,
+            y1: canvas.height / 2,
+            x2: canvas.width,
+            y2: canvas.height / 2,
+          });
+          centerGuideLineY.set({
+            x1: canvas.width / 2,
+            y1: 0,
+            x2: canvas.width / 2,
+            y2: canvas.height,
+          });
+
+          canvas.renderAll();
+        });
+      }
+
+      // === Fungsionalitas Pan (geser) Canvas ===
+      canvas.on("mouse:down", function (opt) {
+        const evt = opt.e;
+        // Aktifkan pan hanya jika tidak ada objek yang aktif (tidak sedang menggeser objek)
+        // dan zoom level lebih besar dari 1 (sudah di-zoom in)
+        if (
+          !canvas.getActiveObject() &&
+          opt.target === null &&
+          canvas.getZoom() > 1.0
+        ) {
+          isDragging = true;
+          canvas.selection = false; // Nonaktifkan pemilihan objek saat pan aktif
+          lastPosX = evt.clientX;
+          lastPosY = evt.clientY;
+          canvas.setCursor("grab"); // Ubah kursor menjadi 'grab'
+        }
+      });
+
+      canvas.on("mouse:move", function (opt) {
+        if (isDragging) {
+          const evt = opt.e;
+          const vpt = this.viewportTransform;
+          vpt[4] += evt.clientX - lastPosX; // Geser X
+          vpt[5] += evt.clientY - lastPosY; // Geser Y
+          this.requestRenderAll(); // Minta Fabric.js untuk merender ulang
+          lastPosX = evt.clientX;
+          lastPosY = evt.clientY;
+          canvas.setCursor("grabbing"); // Ubah kursor menjadi 'grabbing'
+        }
+      });
+
+      canvas.on("mouse:up", function (opt) {
+        isDragging = false;
+        canvas.selection = true; // Aktifkan kembali pemilihan objek setelah pan selesai
+        canvas.setCursor("default"); // Kembalikan kursor ke default (atau 'move' jika ada objek aktif)
+      });
+
+      // Opsional: Untuk smooth pan dengan scroll roda mouse (jika Anda ingin)
+      // canvas.on('mouse:wheel', function(opt) {
+      //   const delta = opt.e.deltaY;
+      //   let zoom = canvas.getZoom();
+      //   zoom *= 0.999 ** delta;
+      //   if (zoom > 20) zoom = 20;
+      //   if (zoom < 0.01) zoom = 0.01;
+      //   canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+      //   opt.e.preventDefault();
+      //   opt.e.stopPropagation();
+      // });
+    </script>
   </body>
 </html>
