@@ -47,7 +47,7 @@ class UserController extends Controller
         }
 
         $roles = Role::whereNotIn('name', $roleNames)->get();
-        return view('manage-users.index', compact('roles'));
+        return view('admin.users.index', compact('roles'));
     }
 
     /**

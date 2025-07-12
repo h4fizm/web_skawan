@@ -20,7 +20,7 @@ class ProductsController extends Controller
                 return formatResponse('error', 'Gagal mengambil data produk!', null, $e->getMessage(), 500);
             }
         }
-        return view('manage-users.products');
+        return view('admin.products.index');
     }
 
     /**

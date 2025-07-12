@@ -27,7 +27,7 @@ class RolesController extends Controller
             }
         }
         $permissions = Permission::all();
-        return view('rbac.roles', compact('permissions'));
+        return view('admin.rbac.roles', compact('permissions'));
     }
 
     /**
