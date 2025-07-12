@@ -142,10 +142,7 @@
                     render: function(data, type, full, meta) {
                         if (userRoles.includes('admin')) {
                             let actions = `
-                <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton${data}" data-bs-toggle="dropdown" aria-expanded="false">
-                    Ubah Status
-                  </button>
+                <div class="btn-group">
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton${data}">
                     <li><a class="dropdown-item update_status_product" href="#" data-id="${data}" data-action="available">Available</a></li>
                     <li><a class="dropdown-item update_status_product" href="#" data-id="${data}" data-action="out_of_stock">Out of Stock</a></li>
