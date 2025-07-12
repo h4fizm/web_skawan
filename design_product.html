@@ -908,10 +908,11 @@
         <!-- preview modal pop up -->
         <div
           id="previewModal"
-          class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 hidden"
+          class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 hidden pt-28"
         >
           <div
-            class="bg-white rounded-lg shadow-xl p-4 sm:p-6 relative max-w-full mx-4 sm:mx-0 w-full md:w-[600px] lg:w-[500px] xl:w-[400px] mt-20 mb-4"
+            id="previewModalContent"
+            class="bg-white rounded-lg shadow-xl p-4 sm:p-6 relative max-w-full mx-4 sm:mx-0 w-full md:w-[600px] lg:w-[500px] xl:w-[400px] mb-4 opacity-0 transform -translate-y-10 transition-all duration-300 ease-in-out"
           >
             <h1
               class="text-xl sm:text-2xl font-extrabold text-center mb-6 text-[#0f2d25]"
@@ -1502,57 +1503,83 @@
         );
       }
 
-      // === Garis bantu center fix ===
-      const guideLineX = new fabric.Line(
+      // === Garis bantu center fix (SELALU TERLIHAT dan TIDAK BISA DIINTERAKSI) ===
+      const centerGuideLineX = new fabric.Line(
         [0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2],
         {
           stroke: "#dc2626", // merah
           strokeWidth: 1,
-          selectable: false,
-          evented: false,
-          visible: false,
+          selectable: false, // PENTING: Tidak bisa dipilih
+          evented: false, // PENTING: Tidak merespons event mouse
+          hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
+          visible: true, // SELALU TERLIHAT di canvas desain
           originX: "left",
           originY: "top",
         }
       );
 
-      const guideLineY = new fabric.Line(
+      const centerGuideLineY = new fabric.Line(
         [canvas.getWidth() / 2, 0, canvas.getWidth() / 2, canvas.getHeight()],
         {
           stroke: "#dc2626", // merah
           strokeWidth: 1,
-          selectable: false,
-          evented: false,
-          visible: false,
+          selectable: false, // PENTING: Tidak bisa dipilih
+          evented: false, // PENTING: Tidak merespons event mouse
+          hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
+          visible: true, // SELALU TERLIHAT di canvas desain
           originX: "left",
           originY: "top",
         }
       );
 
-      canvas.add(guideLineX);
-      canvas.add(guideLineY);
+      canvas.add(centerGuideLineX);
+      canvas.add(centerGuideLineY);
 
-      // === Label koordinat X dan Y ===
+      // === Garis bantu saat drag (HANYA MUNCUL SAAT DRAGGING dan TIDAK BISA DIINTERAKSI) ===
+      const dragGuideLineX = new fabric.Line([0, 0, 0, 0], {
+        stroke: "#10B981", // Hijau untuk garis bantu drag
+        strokeWidth: 1,
+        selectable: false, // PENTING: Tidak bisa dipilih
+        evented: false, // PENTING: Tidak merespons event mouse
+        hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
+        visible: false, // Default: Sembunyi
+      });
+
+      const dragGuideLineY = new fabric.Line([0, 0, 0, 0], {
+        stroke: "#10B981", // Hijau untuk garis bantu drag
+        strokeWidth: 1,
+        selectable: false, // PENTING: Tidak bisa dipilih
+        evented: false, // PENTING: Tidak merespons event mouse
+        hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
+        visible: false, // Default: Sembunyi
+      });
+
+      canvas.add(dragGuideLineX);
+      canvas.add(dragGuideLineY);
+
+      // === Label koordinat X dan Y (HANYA MUNCUL SAAT DRAGGING dan TIDAK BISA DIINTERAKSI) ===
       const labelX = new fabric.Text("", {
         fontSize: 12,
-        fill: "#dc2626",
+        fill: "#10B981",
         backgroundColor: "rgba(255,255,255,0.8)",
         originX: "left",
         originY: "top",
-        selectable: false,
-        evented: false,
-        visible: false,
+        selectable: false, // PENTING: Tidak bisa dipilih
+        evented: false, // PENTING: Tidak merespons event mouse
+        hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
+        visible: false, // Default: Sembunyi
       });
 
       const labelY = new fabric.Text("", {
         fontSize: 12,
-        fill: "#dc2626",
+        fill: "#10B981",
         backgroundColor: "rgba(255,255,255,0.8)",
         originX: "left",
         originY: "top",
-        selectable: false,
-        evented: false,
-        visible: false,
+        selectable: false, // PENTING: Tidak bisa dipilih
+        evented: false, // PENTING: Tidak merespons event mouse
+        hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
+        visible: false, // Default: Sembunyi
       });
 
       canvas.add(labelX);
@@ -1561,16 +1588,21 @@
       // === Event drag (moving) ===
       canvas.on("object:moving", function (e) {
         const obj = e.target;
+        // Pastikan objek yang digeser adalah objek yang boleh diatur garis bantunya
         if (
           !obj ||
           obj === bgImageObject ||
-          obj === guideLineX ||
-          obj === guideLineY ||
+          obj === centerGuideLineX ||
+          obj === centerGuideLineY ||
+          obj === dragGuideLineX ||
+          obj === dragGuideLineY ||
           obj === labelX ||
           obj === labelY
         ) {
-          guideLineX.set("visible", false);
-          guideLineY.set("visible", false);
+          // Jika objek yang digeser adalah objek internal, jangan tampilkan garis bantu drag
+          // dan pastikan mereka tersembunyi jika mungkin sebelumnya aktif
+          dragGuideLineX.set("visible", false);
+          dragGuideLineY.set("visible", false);
           labelX.set("visible", false);
           labelY.set("visible", false);
           canvas.renderAll();
@@ -1585,24 +1617,28 @@
         const isCenterX = Math.abs(objCenter.x - centerX) < tolerance;
         const isCenterY = Math.abs(objCenter.y - centerY) < tolerance;
 
-        guideLineX.set({
-          visible: true,
-          strokeWidth: isCenterY ? 2.5 : 1,
+        // Atur posisi dan visibilitas garis bantu drag
+        dragGuideLineX.set({
           x1: 0,
-          y1: centerY,
+          y1: objCenter.y,
           x2: canvas.getWidth(),
-          y2: centerY,
+          y2: objCenter.y,
+          visible: true, // Tampilkan saat dragging
+          strokeWidth: isCenterY ? 2.5 : 1, // Jika dekat dengan tengah kanvas, tebalkan
+          stroke: isCenterY ? "#dc2626" : "#10B981", // Merah jika snap ke tengah, hijau jika mengikuti objek
         });
 
-        guideLineY.set({
-          visible: true,
-          strokeWidth: isCenterX ? 2.5 : 1,
-          x1: centerX,
+        dragGuideLineY.set({
+          x1: objCenter.x,
           y1: 0,
-          x2: centerX,
+          x2: objCenter.x,
           y2: canvas.getHeight(),
+          visible: true, // Tampilkan saat dragging
+          strokeWidth: isCenterX ? 2.5 : 1, // Jika dekat dengan tengah kanvas, tebalkan
+          stroke: isCenterX ? "#dc2626" : "#10B981", // Merah jika snap ke tengah, hijau jika mengikuti objek
         });
 
+        // Snapping ke tengah kanvas
         if (isCenterX) obj.left = centerX - obj.getScaledWidth() / 2;
         if (isCenterY) obj.top = centerY - obj.getScaledHeight() / 2;
 
@@ -1613,25 +1649,29 @@
           text: `X: ${x}`,
           left: obj.left,
           top: obj.top - 20,
-          visible: true,
+          visible: true, // Tampilkan saat dragging
         });
 
         labelY.set({
           text: `Y: ${y}`,
           left: obj.left,
           top: obj.top - 35,
-          visible: true,
+          visible: true, // Tampilkan saat dragging
         });
 
+        canvas.bringToFront(dragGuideLineX); // Pastikan garis bantu drag di atas objek
+        canvas.bringToFront(dragGuideLineY);
         canvas.bringToFront(labelX);
         canvas.bringToFront(labelY);
 
         canvas.renderAll();
       });
 
+      // === Event drop (mouse:up) ===
       canvas.on("mouse:up", () => {
-        guideLineX.set("visible", false);
-        guideLineY.set("visible", false);
+        // Sembunyikan garis bantu drag dan label setelah mouse dilepas
+        dragGuideLineX.set("visible", false);
+        dragGuideLineY.set("visible", false);
         labelX.set("visible", false);
         labelY.set("visible", false);
         canvas.renderAll();
@@ -1846,8 +1886,10 @@
         const drawableObjects = canvas.getObjects().filter((o) => {
           const isInternalFabricObject =
             o === bgImageObject ||
-            o === guideLineX ||
-            o === guideLineY ||
+            o === centerGuideLineX ||
+            o === centerGuideLineY ||
+            o === dragGuideLineX ||
+            o === dragGuideLineY ||
             o === labelX ||
             o === labelY;
           return (
@@ -1875,10 +1917,10 @@
               "p-1 rounded-full text-red-500 hover:bg-red-100 hover:text-red-700 transition flex items-center justify-center";
 
             delBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-        </svg>
-      `;
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            `;
 
             delBtn.onclick = () => {
               canvas.remove(o);
@@ -1905,9 +1947,15 @@
       const saveDesignButton = document.getElementById("saveDesign");
       if (saveDesignButton) {
         saveDesignButton.onclick = () => {
+          // Sembunyikan garis bantu drag dan label saat menyimpan desain
+          dragGuideLineX.set("visible", false);
+          dragGuideLineY.set("visible", false);
+          labelX.set("visible", false);
+          labelY.set("visible", false);
+          canvas.renderAll(); // Render ulang untuk memastikan mereka tidak terlihat di JSON
+
           const json = JSON.stringify(canvas.toJSON());
           localStorage.setItem("kaosDesign", json);
-          // Mengubah ini jika Anda ingin tetap menggunakan modal
           window.location.href = "preview_product.html";
         };
       }
@@ -1918,10 +1966,12 @@
           canvas.getObjects().forEach((obj) => {
             if (
               obj !== bgImageObject &&
-              obj !== guideLineX &&
-              obj !== guideLineY &&
+              obj !== centerGuideLineX &&
+              obj !== centerGuideLineY &&
+              obj !== dragGuideLineX &&
+              obj !== dragGuideLineY &&
               obj !== labelX &&
-              obj !== labelY
+              obj !== obj.labelY
             ) {
               canvas.remove(obj);
             }
@@ -1941,6 +1991,21 @@
           canvas.renderAll();
           // Memanggil ulang untuk menyesuaikan background saat resize
           updateBgImagePositionOnRender();
+
+          // Sesuaikan posisi garis tengah saat resize
+          centerGuideLineX.set({
+            x1: 0,
+            y1: canvas.getHeight() / 2,
+            x2: canvas.getWidth(),
+            y2: canvas.getHeight() / 2,
+          });
+          centerGuideLineY.set({
+            x1: canvas.getWidth() / 2,
+            y1: 0,
+            x2: canvas.getWidth() / 2,
+            y2: canvas.getHeight(),
+          });
+          canvas.renderAll();
         }
       });
 
@@ -1950,6 +2015,11 @@
         }
         window.dispatchEvent(new Event("resize"));
         updateUIFromActiveObject();
+
+        // Pastikan garis bantu center fix selalu terlihat saat DOMContentLoaded
+        centerGuideLineX.set("visible", true);
+        centerGuideLineY.set("visible", true);
+        canvas.renderAll();
       });
 
       // modal pop product design js
@@ -1959,46 +2029,110 @@
         const closeModalButton = document.getElementById("closeModalButton");
         const designPreviewImage =
           document.getElementById("designPreviewImage");
+        const previewModalContent = document.getElementById(
+          "previewModalContent"
+        ); // <<< Tambahan: Dapatkan referensi elemen konten modal
 
         // Fungsi untuk membuka modal
         previewButton.addEventListener("click", function () {
-          // Sembunyikan garis bantu sebelum mengambil gambar
-          guideLineX.set("visible", false);
-          guideLineY.set("visible", false);
-          labelX.set("visible", false);
-          labelY.set("visible", false);
-          canvas.renderAll(); // Pastikan canvas di-render ulang setelah menyembunyikan garis
+          // Kumpulkan semua objek garis bantu ke dalam array
+          const guideObjects = [
+            centerGuideLineX,
+            centerGuideLineY,
+            dragGuideLineX,
+            dragGuideLineY,
+            labelX,
+            labelY,
+          ];
+
+          // Simpan status visibilitas asli dari garis bantu center fix
+          const prevCenterGuideXVisible = centerGuideLineX.visible;
+          const prevCenterGuideYVisible = centerGuideLineY.visible;
+
+          // Hapus semua garis bantu dari canvas untuk sementara
+          guideObjects.forEach((obj) => {
+            if (canvas.contains(obj)) {
+              canvas.remove(obj);
+            }
+          });
+
+          // Render ulang canvas setelah menghapus objek agar benar-benar tidak terlihat
+          canvas.renderAll();
 
           // --- LOGIKA UNTUK MENGAMBIL DESAIN BAJU TERBARU DARI FABRIC.JS CANVAS ---
           const dataURL = canvas.toDataURL({
             format: "png",
-            multiplier: 2, // Opsional: tingkatkan resolusi untuk kualitas lebih baik di modal
-            // Jika Anda hanya ingin merender area baju yang spesifik (bukan seluruh canvas),
-            // Anda bisa menambahkan properti 'left', 'top', 'width', 'height' di sini
-            // berdasarkan posisi dan ukuran `bgImageObject`. Contoh:
-            // left: bgImageObject.left,
-            // top: bgImageObject.top,
-            // width: bgImageObject.scaledWidth,
-            // height: bgImageObject.scaledHeight,
+            multiplier: 2,
           });
 
           designPreviewImage.src = dataURL; // Set src gambar modal dengan data URL dari kanvas
 
-          previewModal.classList.remove("hidden"); // Tampilkan modal
+          // === LOGIKA TRANSISI UNTUK MEMBUKA MODAL ===
+          previewModal.classList.remove("hidden"); // Tampilkan overlay modal (segera)
           document.body.classList.add("overflow-hidden"); // Nonaktifkan scroll body
+
+          // Setelah overlay terlihat, beri sedikit waktu (misal 10ms) agar browser siap,
+          // lalu tambahkan/hapus kelas untuk memicu transisi
+          setTimeout(() => {
+            previewModalContent.classList.remove(
+              "opacity-0",
+              "-translate-y-10"
+            );
+            previewModalContent.classList.add("opacity-100", "translate-y-0");
+          }, 10); // Sedikit delay agar transisi terlihat dari keadaan 'hidden'
+
+          // Kembalikan status visibilitas garis bantu center fix di canvas utama
+          centerGuideLineX.set("visible", prevCenterGuideXVisible);
+          centerGuideLineY.set("visible", prevCenterGuideYVisible);
+          // dragGuideLine dan label tetap false, kecuali saat dragging
+          dragGuideLineX.set("visible", false);
+          dragGuideLineY.set("visible", false);
+          labelX.set("visible", false);
+          labelY.set("visible", false);
+
+          canvas.renderAll(); // Render ulang agar garis center fix muncul kembali di canvas desain
         });
 
         // Fungsi untuk menutup modal
         closeModalButton.addEventListener("click", function () {
-          previewModal.classList.add("hidden"); // Sembunyikan modal
-          document.body.classList.remove("overflow-hidden"); // Aktifkan kembali scroll body
+          // === LOGIKA TRANSISI UNTUK MENUTUP MODAL ===
+          previewModalContent.classList.remove("opacity-100", "translate-y-0");
+          previewModalContent.classList.add("opacity-0", "-translate-y-10");
+
+          // Setelah transisi selesai, baru sembunyikan overlay dan aktifkan scroll body
+          previewModalContent.addEventListener(
+            "transitionend",
+            function handler() {
+              previewModal.classList.add("hidden");
+              document.body.classList.remove("overflow-hidden");
+              previewModalContent.removeEventListener("transitionend", handler); // Hapus listener setelah selesai
+            }
+          );
+          canvas.renderAll(); // Render ulang canvas setelah modal ditutup (untuk berjaga-jaga)
         });
 
         // Menutup modal jika mengklik di luar konten modal (pada overlay)
         previewModal.addEventListener("click", function (event) {
           if (event.target === previewModal) {
-            previewModal.classList.add("hidden");
-            document.body.classList.remove("overflow-hidden");
+            // === LOGIKA TRANSISI UNTUP MENUTUP MODAL (saat klik overlay) ===
+            previewModalContent.classList.remove(
+              "opacity-100",
+              "translate-y-0"
+            );
+            previewModalContent.classList.add("opacity-0", "-translate-y-10");
+
+            previewModalContent.addEventListener(
+              "transitionend",
+              function handler() {
+                previewModal.classList.add("hidden");
+                document.body.classList.remove("overflow-hidden");
+                previewModalContent.removeEventListener(
+                  "transitionend",
+                  handler
+                );
+              }
+            );
+            canvas.renderAll();
           }
         });
 
@@ -2008,8 +2142,25 @@
             event.key === "Escape" &&
             !previewModal.classList.contains("hidden")
           ) {
-            previewModal.classList.add("hidden");
-            document.body.classList.remove("overflow-hidden");
+            // === LOGIKA TRANSISI UNTUP MENUTUP MODAL (saat ESC ditekan) ===
+            previewModalContent.classList.remove(
+              "opacity-100",
+              "translate-y-0"
+            );
+            previewModalContent.classList.add("opacity-0", "-translate-y-10");
+
+            previewModalContent.addEventListener(
+              "transitionend",
+              function handler() {
+                previewModal.classList.add("hidden");
+                document.body.classList.remove("overflow-hidden");
+                previewModalContent.removeEventListener(
+                  "transitionend",
+                  handler
+                );
+              }
+            );
+            canvas.renderAll();
           }
         });
       });
