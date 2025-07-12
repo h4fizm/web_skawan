@@ -297,43 +297,19 @@
         </div>
       </div>
 
-      <!-- === Tombol Aksi Mobile (Hanya muncul di mobile) === -->
-      <div class="sm:hidden mt-6 px-4 w-full">
-        <div class="flex flex-col gap-3 w-full">
-          <a
-            href="#"
-            class="w-full flex items-center justify-center gap-2 text-sm font-quantify px-4 py-3 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-xl hover:bg-[#c1985e] transition"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
-              />
-            </svg>
-            Download
-          </a>
-        </div>
-      </div>
-
       <!-- informasi produk section -->
       <div
-        class="w-full lg:w-80 flex-none bg-white border border-[#d1a86f] p-4 rounded-2xl shadow-xl mt-2 lg:mt-0"
+        class="w-full lg:w-80 flex-none bg-white border border-[#d1a86f] p-4 rounded-2xl shadow-xl mt-2 lg:mt-0 lg:h-[calc(140vh_-_120px)] lg:max-h-[calc(120vh_-_100px)] lg:overflow-hidden flex flex-col"
       >
         <h2
-          class="text-xl font-bold text-[#0f2d25] mb-6 font-quantify text-center"
+          class="text-xl font-bold text-[#0f2d25] mb-6 font-quantify text-center flex-shrink-0"
         >
           Informasi Desain Produk
         </h2>
 
-        <div class="space-y-5 text-[15px] text-gray-800">
+        <div
+          class="space-y-5 text-[15px] text-gray-800 flex-grow overflow-y-auto pr-2 custom-scrollbar"
+        >
           <div class="flex items-start gap-3 border-b border-gray-200 pb-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -453,6 +429,13 @@
                 <li>M - 2 pcs</li>
                 <li>L - 3 pcs</li>
                 <li>2XL - 1 pcs</li>
+                <li>S - 1 pcs</li>
+                <li>XL - 4 pcs</li>
+                <li>M - 2 pcs</li>
+                <li>L - 3 pcs</li>
+                <li>2XL - 1 pcs</li>
+                <li>S - 1 pcs</li>
+                <li>XL - 4 pcs</li>
               </ul>
             </div>
           </div>
@@ -483,9 +466,8 @@
           </div>
         </div>
 
-        <!-- button section -->
-        <div class="mt-20 text-center">
-          <div class="flex flex-col items-center justify-center space-y-4">
+        <div class="mt-auto text-center flex-shrink-0">
+          <div class="flex flex-col items-center justify-center space-y-4 pt-4">
             <button
               id="downloadImageButton"
               class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-yellow-400 text-black font-medium hover:bg-yellow-500 transition text-[15px] w-full max-w-xs"
@@ -528,6 +510,27 @@
           </div>
         </div>
       </div>
+
+      <style>
+        /* Custom Scrollbar for Webkit browsers (Chrome, Safari, Edge) */
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px; /* width of the scrollbar */
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1; /* color of the tracking area */
+          border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #d1a86f; /* color of the scroll thumb */
+          border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #b88d5e; /* color of the scroll thumb on hover */
+        }
+      </style>
     </div>
 
     <!-- Footer Section -->
