@@ -226,47 +226,40 @@
     <div
       class="relative overflow-visible z-0 flex flex-col lg:flex-row gap-6 mt-40 px-4 mb-5"
     >
-      <!-- Wrapper Section Kiri dengan Border Luar -->
       <div
         class="flex-1 relative z-0 flex justify-center items-center px-4 sm:px-0 border border-black rounded-2xl shadow-xl p-4 sm:p-6 bg-white"
       >
         <div class="w-full max-w-[500px] space-y-4 flex flex-col items-center">
-          <!-- Border dalam canvas -->
+          <!-- canvas section -->
           <div
             id="canvas-wrapper"
-            class="bg-white p-2 sm:p-4"
-            style="width: 600px; height: 650px"
+            class="bg-white p-2 sm:p-4 flex justify-center items-center"
+            style="width: 600px; height: 650px; overflow: hidden"
           >
-            <!-- canvas section  -->
-            <canvas
-              id="previewCanvas"
-              width="600"
-              height="600"
-              class="z-0 w-full max-w-full aspect-square sm:aspect-[1/1] h-[280px] sm:h-auto object-contain"
-            ></canvas>
+            <canvas id="previewCanvas" width="600" height="600"></canvas>
           </div>
 
-          <!-- Panel Kontrol Interaktif -->
+          <!-- panel button -->
           <div
             class="bg-white border border-gray-300 rounded-xl shadow-md px-2.5 sm:px-4 py-2 sm:py-3 flex flex-wrap justify-center items-center gap-1.5 sm:gap-2 w-full max-w-[320px] sm:max-w-[560px] z-30"
           >
-            <!-- Zoom -->
             <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
               <span class="text-[10px] sm:text-sm text-gray-700 font-medium"
                 >Zoom :</span
               >
               <select
+                id="zoomSelect"
                 class="appearance-none bg-white border border-gray-300 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded focus:outline-none cursor-pointer h-6 sm:h-8"
               >
-                <option>50%</option>
-                <option>75%</option>
-                <option selected>100%</option>
-                <option>125%</option>
-                <option>150%</option>
+                <option value="50">50%</option>
+                <option value="75">75%</option>
+                <option value="100" selected>100%</option>
+                <option value="125">125%</option>
+                <option value="150">150%</option>
               </select>
             </div>
-            <!-- Tombol Depan -->
             <button
+              id="depanButton"
               class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
             >
               <svg
@@ -284,8 +277,8 @@
               </svg>
               Depan
             </button>
-            <!-- Tombol Belakang -->
             <button
+              id="belakangButton"
               class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
             >
               <svg
@@ -303,7 +296,6 @@
               </svg>
               Belakang
             </button>
-            <!-- Tombol Edit -->
             <a
               href="design_product.html"
               class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-6 sm:h-8"
@@ -327,11 +319,10 @@
         </div>
       </div>
 
-      <!-- === KANAN: Informasi Produk (Desain Bar) === -->
+      <!-- informasi desain section -->
       <div
         class="w-full lg:w-80 flex-none bg-white border border-[#d1a86f] p-4 rounded-2xl shadow-xl mt-2 lg:mt-0 max-h-[680px] overflow-y-auto"
       >
-        <!-- Judul -->
         <h2
           class="text-xl font-bold text-[#0f2d25] mb-6 font-quantify text-center"
         >
@@ -339,7 +330,6 @@
         </h2>
 
         <div class="space-y-5 text-[15px] text-gray-800">
-          <!-- Nama Produk -->
           <div class="flex items-start gap-3 border-b border-gray-200 pb-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -363,7 +353,6 @@
             </div>
           </div>
 
-          <!-- Kategori Produk -->
           <div class="flex items-start gap-3 border-b border-gray-200 pb-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -387,7 +376,6 @@
             </div>
           </div>
 
-          <!-- Link Produk -->
           <div class="flex items-start gap-3 border-b border-gray-200 pb-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -415,7 +403,6 @@
             </div>
           </div>
 
-          <!-- Tanggal Pengajuan -->
           <div class="flex items-start gap-3 border-b border-gray-200 pb-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -439,7 +426,6 @@
             </div>
           </div>
 
-          <!-- Ukuran & Jumlah -->
           <div class="flex items-start gap-3 border-b border-gray-200 pb-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -467,7 +453,6 @@
             </div>
           </div>
 
-          <!-- Total Harga -->
           <div class="flex items-start gap-3 pt-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -494,7 +479,6 @@
           </div>
         </div>
 
-        <!-- Tombol Checkout Produk -->
         <div class="mt-10 text-center">
           <button
             class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition text-[15px]"
@@ -794,221 +778,327 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- custom js -->
     <script src="js/script.js"></script>
-
+    <!-- fabric js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <!-- preview js -->
     <script>
-      let canvas; // Deklarasikan canvas di scope global
+      let canvas;
+      let currentZoom = 1;
+      let currentSide = "front";
+      let backgroundAsObject = null; // Ini akan menjadi objek Fabric.js untuk background
+
+      const productImages = {
+        front: "image/product4.jpeg",
+        back: "image/product1.jpeg",
+      };
+
+      const savedDesigns = {
+        front: null,
+        back: null,
+        canvasWidth: 600, // Default width
+        canvasHeight: 600, // Default height
+      };
+
+      const localStorageKey = "kaosDesign";
 
       document.addEventListener("DOMContentLoaded", function () {
-        canvas = new fabric.Canvas("previewCanvas", {
-          selection: false,
-          interactive: false,
-        });
-        console.log("Preview: Canvas Fabric.js berhasil diinisialisasi.");
+        const canvasElement = document.getElementById("previewCanvas");
+        const canvasWrapper = document.getElementById("canvas-wrapper");
 
-        loadDesignWithFonts(); // Panggil fungsi pemuatan desain utama
+        if (!canvasElement || !canvasWrapper) {
+          console.error("Elemen canvas atau wrapper tidak ditemukan.");
+          return;
+        }
+
+        // Ambil desain dari localStorage
+        const savedFullDesign = localStorage.getItem(localStorageKey);
+        if (savedFullDesign) {
+          try {
+            const parsedDesign = JSON.parse(savedFullDesign);
+            if (parsedDesign.front) savedDesigns.front = parsedDesign.front;
+            if (parsedDesign.back) savedDesigns.back = parsedDesign.back;
+            if (parsedDesign.canvasWidth && parsedDesign.canvasHeight) {
+              savedDesigns.canvasWidth = parsedDesign.canvasWidth;
+              savedDesigns.canvasHeight = parsedDesign.canvasHeight;
+            }
+          } catch (e) {
+            console.error("Error parsing design dari localStorage:", e);
+          }
+        }
+
+        // Atur ukuran kanvas preview sesuai dengan yang disimpan (atau default)
+        canvasElement.width = savedDesigns.canvasWidth;
+        canvasElement.height = savedDesigns.canvasHeight;
+
+        canvas = new fabric.Canvas("previewCanvas", {
+          selection: false, // Menonaktifkan box selection
+          interactive: false, // Menonaktifkan interaksi objek default Fabric.js
+          preserveObjectStacking: true,
+          renderOnAddRemove: false,
+          backgroundColor: "transparent",
+          width: savedDesigns.canvasWidth,
+          height: savedDesigns.canvasHeight,
+          // Tambahkan event mouse wheel untuk zoom (jika belum ada)
+          // Ini dari Fabric.js docs untuk pan/zoom
+        });
+
+        // Sesuaikan ukuran wrapper agar sesuai dengan canvas
+        canvasWrapper.style.width = `${savedDesigns.canvasWidth}px`;
+        canvasWrapper.style.height = `${savedDesigns.canvasHeight + 50}px`;
+
+        displayDesign("front");
+        setupPanelControls();
+
+        const zoomSelect = document.getElementById("zoomSelect");
+        if (zoomSelect) zoomSelect.value = "100";
+
+        // PENTING: Inisialisasi event pan di sini, setelah canvas dibuat.
+        // Variabel global untuk pan
+        let isDragging = false;
+        let lastPosX;
+        let lastPosY;
+
+        canvas.on("mouse:down", function (opt) {
+          // Hanya aktifkan pan jika zoom lebih dari 100%
+          // dan tidak ada objek yang secara eksplisit dapat dipilih/dragable.
+          // Karena `interactive: false` dan semua objek diset `evented: false`,
+          // kita tidak perlu memeriksa `opt.target === null` lagi.
+          // Setiap klik pada kanvas (bukan di luar elemen kanvas) akan dianggap sebagai upaya pan.
+          if (canvas.getZoom() > 1.0) {
+            isDragging = true;
+            canvas.selection = false; // Memastikan tidak ada box selection
+            lastPosX = opt.e.clientX;
+            lastPosY = opt.e.clientY;
+            canvas.setCursor("grab"); // Mengubah kursor
+          }
+        });
+
+        canvas.on("mouse:move", function (opt) {
+          if (isDragging) {
+            const evt = opt.e;
+            const vpt = this.viewportTransform;
+            vpt[4] += evt.clientX - lastPosX;
+            vpt[5] += evt.clientY - lastPosY;
+            this.requestRenderAll(); // Gunakan requestRenderAll untuk performa lebih baik
+            lastPosX = evt.clientX;
+            lastPosY = evt.clientY;
+            canvas.setCursor("grabbing"); // Mengubah kursor saat menggeser
+          }
+        });
+
+        canvas.on("mouse:up", function (opt) {
+          isDragging = false;
+          canvas.selection = true; // Mengembalikan properti selection ke nilai awalnya (false dari init)
+          canvas.setCursor("default"); // Mengembalikan kursor
+        });
       });
 
-      async function loadDesignWithFonts() {
-        const width = 600;
-        const height = 600; // Asumsi tinggi kanvas Anda adalah 600px
+      function setupPanelControls() {
+        const zoomSelect = document.getElementById("zoomSelect");
+        if (zoomSelect) {
+          zoomSelect.addEventListener("change", function () {
+            currentZoom = parseFloat(this.value) / 100;
+            updateCanvasZoom();
+          });
+        }
 
-        canvas.setWidth(width);
-        canvas.setHeight(height);
-        console.log(
-          `Preview: Canvas diatur ke lebar: ${width}px, tinggi: ${height}px`
-        );
+        const depanButton = document.getElementById("depanButton");
+        const belakangButton = document.getElementById("belakangButton");
 
-        const saved = localStorage.getItem("kaosDesign");
+        if (depanButton) {
+          depanButton.addEventListener("click", () => {
+            if (currentSide !== "front") displayDesign("front");
+          });
+        }
 
-        if (
-          saved &&
-          saved !== "null" &&
-          saved !== "undefined" &&
-          saved !== ""
-        ) {
-          try {
-            const designData = JSON.parse(saved);
-            const fontFamiliesToLoad = new Set();
-
-            if (designData && designData.objects) {
-              designData.objects.forEach((obj) => {
-                if (obj.type === "textbox" && obj.fontFamily) {
-                  fontFamiliesToLoad.add(obj.fontFamily);
-                }
-              });
-            }
-
-            // --- Langkah 1: Muat Font Kustom Secara Dinamis ---
-            const fontLoadPromises = [];
-            fontFamiliesToLoad.forEach((fontFamily) => {
-              const fontUrl = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(
-                / /g,
-                "+"
-              )}&display=swap`;
-
-              // Tambahkan link stylesheet ke head
-              const link = document.createElement("link");
-              link.rel = "stylesheet";
-              link.href = fontUrl;
-              document.head.appendChild(link);
-
-              // Gunakan Font Loading API untuk menunggu font dimuat
-              // Penting: hanya tunggu jika font tidak default/system font
-              // Note: Ini mungkin masih memiliki masalah jika font tidak Google Font
-              fontLoadPromises.push(
-                document.fonts.load(`16px "${fontFamily}"`)
-              );
-              console.log(
-                `Preview: Menambahkan stylesheet dan menunggu font: ${fontFamily}`
-              );
-            });
-
-            // Tunggu semua font selesai dimuat
-            await Promise.all(fontLoadPromises);
-            console.log(
-              "Preview: Semua font kustom (atau sebagian besar) seharusnya sudah dimuat."
-            );
-
-            // --- Langkah 2: Muat Background Image ---
-            const backgroundImageURL = "image/product4.jpeg"; // VERIFIKASI PATH INI!
-            console.log(
-              "Preview: Mencoba memuat background image:",
-              backgroundImageURL
-            );
-
-            fabric.Image.fromURL(
-              backgroundImageURL,
-              function (img) {
-                if (img) {
-                  // Sesuaikan skala dan posisi background agar di tengah
-                  const imgAspectRatio = img.width / img.height;
-                  const canvasAspectRatio = canvas.width / canvas.height;
-
-                  let scale;
-                  if (imgAspectRatio > canvasAspectRatio) {
-                    scale = canvas.height / img.height; // Sesuaikan tinggi agar menutupi
-                  } else {
-                    scale = canvas.width / img.width; // Sesuaikan lebar agar menutupi
-                  }
-
-                  img.scale(scale);
-
-                  const scaledWidth = img.width * img.scaleX;
-                  const scaledHeight = img.height * img.scaleY;
-
-                  const left = (canvas.width - scaledWidth) / 2;
-                  const top = (canvas.height - scaledHeight) / 2;
-
-                  canvas.setBackgroundImage(
-                    img,
-                    () => {
-                      console.log("Preview: Background image berhasil dimuat.");
-                      // --- Langkah 3: Muat Objek Desain dari JSON ---
-                      canvas.loadFromJSON(designData, () => {
-                        console.log(
-                          "Preview: Objek desain dari JSON berhasil dimuat."
-                        );
-                        canvas.renderAll();
-                        canvas.forEachObject(function (obj) {
-                          obj.setCoords();
-                        });
-                        canvas.renderAll();
-                      });
-                    },
-                    {
-                      left: left,
-                      top: top,
-                      originX: "left",
-                      originY: "top",
-                      selectable: false,
-                      evented: false,
-                    }
-                  );
-                } else {
-                  console.error(
-                    "Preview: Gagal memuat gambar background: " +
-                      backgroundImageURL +
-                      ". Pastikan path benar dan file ada."
-                  );
-                  canvas.loadFromJSON(designData, () => {
-                    console.log(
-                      "Preview: Objek desain dimuat tanpa background image."
-                    );
-                    canvas.renderAll();
-                  });
-                }
-              },
-              { crossOrigin: "anonymous" }
-            );
-          } catch (e) {
-            console.error(
-              "Preview: Error parsing saved design from localStorage:",
-              e
-            );
-            alert(
-              "Terjadi kesalahan saat memuat desain yang disimpan. Silakan coba kembali."
-            );
-            loadDefaultBackground(width, height);
-          }
-        } else {
-          console.log(
-            "Preview: Tidak ada desain ditemukan di localStorage atau kosong."
-          );
-          alert("Tidak ada desain yang tersimpan untuk ditampilkan.");
-          loadDefaultBackground(width, height);
+        if (belakangButton) {
+          belakangButton.addEventListener("click", () => {
+            if (currentSide !== "back") displayDesign("back");
+          });
         }
       }
 
-      function loadDefaultBackground(width, height) {
-        const backgroundImageURL = "image/product4.jpeg"; // VERIFIKASI PATH INI JUGA!
-        fabric.Image.fromURL(
-          backgroundImageURL,
-          function (img) {
-            if (img) {
+      function updateCanvasZoom() {
+        if (currentZoom !== 1) {
+          const centerPoint = new fabric.Point(
+            canvas.width / 2,
+            canvas.height / 2
+          );
+          // Menggunakan zoomToPoint untuk zoom yang terpusat
+          canvas.zoomToPoint(centerPoint, currentZoom);
+        } else {
+          canvas.setZoom(1);
+          canvas.setViewportTransform([1, 0, 0, 1, 0, 0]); // Reset pan to center
+        }
+        canvas.renderAll();
+      }
+
+      async function displayDesign(side) {
+        currentSide = side;
+        canvas.clear(); // Bersihkan semua objek dari canvas terlebih dahulu
+
+        const designObjectsData = savedDesigns?.[side] || [];
+        const backgroundImageURL = productImages?.[side];
+
+        // Tombol aktif/nonaktif
+        const depanButton = document.getElementById("depanButton");
+        const belakangButton = document.getElementById("belakangButton");
+        if (depanButton) {
+          depanButton.classList.toggle("bg-gray-200", side === "front");
+          depanButton.classList.toggle("bg-white", side !== "front");
+        }
+        if (belakangButton) {
+          belakangButton.classList.toggle("bg-gray-200", side === "back");
+          belakangButton.classList.toggle("bg-white", side !== "back");
+        }
+
+        // Load font jika perlu
+        if (designObjectsData && designObjectsData.length > 0) {
+          const fontFamiliesToLoad = new Set();
+          designObjectsData.forEach((obj) => {
+            if (obj.type === "textbox" && obj.fontFamily) {
+              fontFamiliesToLoad.add(obj.fontFamily);
+            }
+          });
+          const fontLoadPromises = [];
+          fontFamiliesToLoad.forEach((fontFamily) => {
+            const fontUrl = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(
+              / /g,
+              "+"
+            )}&display=swap`;
+            const linkId = `preview-font-link-${fontFamily.replace(
+              /[^a-zA-Z0-9]/g,
+              ""
+            )}`;
+            if (!document.getElementById(linkId)) {
+              const link = document.createElement("link");
+              link.id = linkId;
+              link.rel = "stylesheet";
+              link.href = fontUrl;
+              document.head.appendChild(link);
+            }
+            fontLoadPromises.push(document.fonts.load(`16px "${fontFamily}"`));
+          });
+          await Promise.all(fontLoadPromises).catch((e) =>
+            console.error("Error loading fonts:", e)
+          );
+        }
+
+        // Memuat gambar latar belakang sebagai objek Fabric.js
+        backgroundAsObject = await new Promise((resolve, reject) => {
+          fabric.Image.fromURL(
+            backgroundImageURL,
+            (img) => {
+              if (!img) {
+                console.warn(
+                  "Background image failed to load:",
+                  backgroundImageURL
+                );
+                return resolve(null);
+              }
+              const canvasWidth = canvas.getWidth();
+              const canvasHeight = canvas.getHeight();
               const imgAspectRatio = img.width / img.height;
-              const canvasAspectRatio = canvas.width / canvas.height;
+              const canvasAspectRatio = canvasWidth / canvasHeight;
 
               let scale;
               if (imgAspectRatio > canvasAspectRatio) {
-                scale = canvas.height / img.height;
+                scale = canvasHeight / img.height;
               } else {
-                scale = canvas.width / img.width;
+                scale = canvasWidth / img.width;
               }
-
               img.scale(scale);
 
-              const scaledWidth = img.width * img.scaleX;
-              const scaledHeight = img.height * img.scaleY;
+              const centerX = (canvasWidth - img.width * scale) / 2;
+              const centerY = (canvasHeight - img.height * scale) / 2;
 
-              const left = (canvas.width - scaledWidth) / 2;
-              const top = (canvas.height - scaledHeight) / 2;
-
-              canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-                left: left,
-                top: top,
+              img.set({
+                left: centerX,
+                top: centerY,
                 originX: "left",
                 originY: "top",
-                selectable: false,
-                evented: false,
+                selectable: false, // TIDAK dapat dipilih
+                evented: false, // TIDAK akan memblokir event mouse ke kanvas
+                hasControls: false,
+                hasBorders: false,
+                objectCaching: false,
               });
-              console.log("Preview: Background default berhasil dimuat.");
-            } else {
-              console.error(
-                "Preview: Gagal memuat gambar background default: " +
-                  backgroundImageURL +
-                  ". Cek path atau keberadaan file."
-              );
+              resolve(img);
+            },
+            {
+              crossOrigin: "anonymous",
+              onError: (err) => {
+                console.error(
+                  "Failed to load background image with Fabric.js:",
+                  backgroundImageURL,
+                  err
+                );
+                resolve(null);
+              },
             }
-          },
-          { crossOrigin: "anonymous" }
-        );
+          );
+        });
+
+        // Tambahkan background duluan
+        if (backgroundAsObject) {
+          canvas.add(backgroundAsObject);
+          canvas.sendToBack(backgroundAsObject);
+        }
+
+        // Load objek desain menggunakan loadFromJSON
+        if (designObjectsData && designObjectsData.length > 0) {
+          const fabricJSONFormat = {
+            objects: designObjectsData,
+          };
+          await new Promise((resolve) => {
+            canvas.loadFromJSON(
+              fabricJSONFormat,
+              () => {
+                console.log("Preview: Objek desain berhasil dimuat.");
+                if (backgroundAsObject) {
+                  canvas.sendToBack(backgroundAsObject);
+                }
+                canvas.renderAll();
+                resolve();
+              },
+              function (o, object) {
+                // Pastikan objek desain tidak dapat dipilih atau diinteraksi di preview
+                object.set({
+                  selectable: false,
+                  evented: false,
+                  hasControls: false,
+                  hasBorders: false,
+                });
+                object.setCoords();
+              }
+            );
+          });
+        } else {
+          canvas.renderAll();
+        }
+
+        updateCanvasZoom();
+        canvas.renderAll();
       }
 
-      // Event listener untuk resize window (jika dibutuhkan, pertimbangkan debounce)
-      // window.addEventListener("resize", () => {
-      //   loadDesignWithFonts();
-      // });
+      // Resize canvas jika jendela diubah ukurannya
+      window.addEventListener("resize", () => {
+        const canvasWrapper = document.getElementById("canvas-wrapper");
+        if (canvasWrapper) {
+          const targetWidth = savedDesigns.canvasWidth;
+          const targetHeight = savedDesigns.canvasHeight;
+
+          canvas.setDimensions({
+            width: targetWidth,
+            height: targetHeight,
+          });
+
+          canvasWrapper.style.width = `${targetWidth}px`;
+          canvasWrapper.style.height = `${targetHeight + 50}px`;
+
+          displayDesign(currentSide);
+        }
+      });
     </script>
   </body>
 </html>
