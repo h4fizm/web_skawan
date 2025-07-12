@@ -1429,8 +1429,6 @@
 
       // Fungsi untuk menyimpan objek desain saat ini ke penyimpanan data yang ditentukan
       function saveCurrentDesignToData(designStorage) {
-        // Filter objek-objek yang merupakan bagian dari desain pengguna (bukan objek internal Fabric.js)
-        // dan konversi setiap objek menjadi representasi JSON-nya
         designStorage.objects = canvas
           .getObjects()
           .filter(
@@ -1443,13 +1441,12 @@
               obj !== labelX &&
               obj !== labelY
           )
-          .map((obj) => obj.toJSON()); // PENTING: Konversi objek Fabric.js ke JSON serialisasi
+          .map((obj) => obj.toJSON());
         console.log(`Saved design for ${currentView}:`, designStorage);
       }
 
       // Fungsi untuk membersihkan objek desain dari canvas (kecuali background dan garis bantu)
       function clearCanvasObjects() {
-        // Kumpulkan objek yang akan dihapus ke dalam array terpisah
         const objectsToRemove = canvas.getObjects().filter((obj) => {
           return (
             obj !== bgImageObject &&
@@ -1465,18 +1462,15 @@
         objectsToRemove.forEach((obj) => {
           canvas.remove(obj);
         });
-        canvas.discardActiveObject(); // Hapus objek yang sedang aktif
+        canvas.discardActiveObject();
         canvas.renderAll();
       }
 
       // Fungsi untuk memuat objek desain dari penyimpanan data yang ditentukan
       function loadDesignFromData(designStorage) {
-        // PENTING: Gunakan fabric.util.enlivenObjects untuk menghidupkan kembali objek dari JSON
-        // Ini adalah metode yang tepat untuk memuat array objek Fabric.js.
         fabric.util.enlivenObjects(
           designStorage.objects,
           function (enlivenedObjects) {
-            // Sebelum menambahkan, pastikan font kustom dimuat jika ada
             enlivenedObjects.forEach((obj) => {
               if (obj.type === "textbox" && obj.fontFamily) {
                 const font = obj.fontFamily;
@@ -1492,20 +1486,17 @@
                   document.head.appendChild(link);
                 }
               }
-              canvas.add(obj); // Tambahkan objek yang sudah dihidupkan kembali ke canvas
+              canvas.add(obj);
             });
             canvas.renderAll();
-            updateDesignList(); // Perbarui daftar desain di UI
-            updateUIFromActiveObject(); // Perbarui panel properti
+            updateDesignList();
+            updateUIFromActiveObject();
           }
         );
       }
       // --- Akhir Fungsi Pembantu untuk Depan/Belakang ---
 
       const loadCustomFontsFromDesign = (json) => {
-        // Fungsi ini dulunya digunakan untuk memuat font dari savedDesign,
-        // tapi sekarang loadDesignFromData yang menanganinya saat objek di-enlive.
-        // Tetap ada untuk jaga-jaga atau untuk kompatibilitas.
         const designData = JSON.parse(json);
         if (designData && designData.objects) {
           designData.objects.forEach((obj) => {
@@ -1563,7 +1554,6 @@
         updateUIFromActiveObject();
       }
 
-      // Event listener untuk tombol "Tambah Teks"
       const addTextButton = document.getElementById("addTextButton");
       if (addTextButton) {
         addTextButton.addEventListener("click", () =>
@@ -1577,10 +1567,10 @@
         {
           stroke: "#dc2626", // merah
           strokeWidth: 1,
-          selectable: false, // PENTING: Tidak bisa dipilih
-          evented: false, // PENTING: Tidak merespons event mouse
-          hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
-          visible: true, // SELALU TERLIHAT di canvas desain
+          selectable: false,
+          evented: false,
+          hasControls: false,
+          visible: true,
           originX: "left",
           originY: "top",
         }
@@ -1591,10 +1581,10 @@
         {
           stroke: "#dc2626", // merah
           strokeWidth: 1,
-          selectable: false, // PENTING: Tidak bisa dipilih
-          evented: false, // PENTING: Tidak merespons event mouse
-          hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
-          visible: true, // SELALU TERLIHAT di canvas desain
+          selectable: false,
+          evented: false,
+          hasControls: false,
+          visible: true,
           originX: "left",
           originY: "top",
         }
@@ -1607,19 +1597,19 @@
       const dragGuideLineX = new fabric.Line([0, 0, 0, 0], {
         stroke: "#10B981", // Hijau untuk garis bantu drag
         strokeWidth: 1,
-        selectable: false, // PENTING: Tidak bisa dipilih
-        evented: false, // PENTING: Tidak merespons event mouse
-        hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
-        visible: false, // Default: Sembunyi
+        selectable: false,
+        evented: false,
+        hasControls: false,
+        visible: false,
       });
 
       const dragGuideLineY = new fabric.Line([0, 0, 0, 0], {
         stroke: "#10B981", // Hijau untuk garis bantu drag
         strokeWidth: 1,
-        selectable: false, // PENTING: Tidak bisa dipilih
-        evented: false, // PENTING: Tidak merespons event mouse
-        hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
-        visible: false, // Default: Sembunyi
+        selectable: false,
+        evented: false,
+        hasControls: false,
+        visible: false,
       });
 
       canvas.add(dragGuideLineX);
@@ -1632,10 +1622,10 @@
         backgroundColor: "rgba(255,255,255,0.8)",
         originX: "left",
         originY: "top",
-        selectable: false, // PENTING: Tidak bisa dipilih
-        evented: false, // PENTING: Tidak merespons event mouse
-        hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
-        visible: false, // Default: Sembunyi
+        selectable: false,
+        evented: false,
+        hasControls: false,
+        visible: false,
       });
 
       const labelY = new fabric.Text("", {
@@ -1644,10 +1634,10 @@
         backgroundColor: "rgba(255,255,255,0.8)",
         originX: "left",
         originY: "top",
-        selectable: false, // PENTING: Tidak bisa dipilih
-        evented: false, // PENTING: Tidak merespons event mouse
-        hasControls: false, // PENTING: Tidak memiliki kontrol resize/rotate
-        visible: false, // Default: Sembunyi
+        selectable: false,
+        evented: false,
+        hasControls: false,
+        visible: false,
       });
 
       canvas.add(labelX);
@@ -1976,49 +1966,33 @@
               </svg>
             `;
 
-            // Untuk fungsi delete, kita perlu menemukan objek Fabric.js yang sesuai di canvas
-            // Ini akan sedikit rumit karena kita bekerja dengan data JSON di designStorage
-            // Cara terbaik adalah mencari objek di canvas berdasarkan properti unik atau melacaknya
             delBtn.onclick = () => {
-              // Cari objek di canvas yang memiliki properti yang sama dengan objData
-              // Perlu hati-hati karena object.src bisa berubah (dataURL)
-              // Mungkin lebih baik menggunakan obj.id atau properti kustom jika memungkinkan
-              // Untuk saat ini, kita akan coba dengan properti dasar
-              const objectToDelete = canvas.getObjects().find(
-                (o) =>
-                  o.type === objData.type && // Tipe harus sama
-                  (o.type === "textbox"
-                    ? o.text === objData.text
-                    : o.src === objData.src) && // Teks atau src harus sama
-                  o.left === objData.left &&
-                  o.top === objData.top // Cek juga posisi untuk keunikan
+              const currentData =
+                currentView === "front" ? frontDesignData : backDesignData;
+              // Cari indeks objData di currentData.objects
+              const indexToRemove = currentData.objects.findIndex(
+                (item) =>
+                  item.type === objData.type &&
+                  (item.type === "textbox"
+                    ? item.text === objData.text
+                    : item.src === objData.src) &&
+                  item.left === objData.left &&
+                  item.top === objData.top
               );
 
-              if (objectToDelete) {
-                canvas.remove(objectToDelete);
-                canvas.discardActiveObject();
-                canvas.renderAll();
-                // Juga hapus dari data penyimpanan saat ini
-                const currentData =
-                  currentView === "front" ? frontDesignData : backDesignData;
-                currentData.objects = currentData.objects.filter(
-                  (item) => item !== objData
-                ); // Hapus dari array JSON
-                updateDesignList();
-                updateUIFromActiveObject();
+              if (indexToRemove > -1) {
+                // Hapus dari array penyimpanan
+                currentData.objects.splice(indexToRemove, 1);
+                // Muat ulang canvas untuk merefleksikan perubahan
+                clearCanvasObjects();
+                loadDesignFromData(currentData);
               } else {
-                // Jika objek tidak ditemukan di canvas, hapus saja dari data
-                const currentData =
-                  currentView === "front" ? frontDesignData : backDesignData;
-                currentData.objects = currentData.objects.filter(
-                  (item) => item !== objData
-                );
-                updateDesignList();
-                updateUIFromActiveObject();
                 console.warn(
-                  "Object not found on canvas, but removed from design list data."
+                  "Object not found in design list data for deletion."
                 );
               }
+              updateDesignList();
+              updateUIFromActiveObject();
             };
 
             componentCard.appendChild(componentName);
@@ -2047,7 +2021,6 @@
           const fullDesignData = {
             front: frontDesignData.objects,
             back: backDesignData.objects,
-            // Tambahkan informasi lain yang mungkin relevan, misalnya zoom level, view saat ini, dll.
           };
 
           dragGuideLineX.set("visible", false);
@@ -2056,7 +2029,7 @@
           labelY.set("visible", false);
           canvas.renderAll();
 
-          const json = JSON.stringify(fullDesignData); // Simpan kedua sisi
+          const json = JSON.stringify(fullDesignData);
           localStorage.setItem("kaosDesign", json);
           window.location.href = "preview_product.html";
         };
@@ -2066,9 +2039,8 @@
       if (clearCanvasButton) {
         clearCanvasButton.onclick = () => {
           // Bersihkan hanya objek desain dari tampilan saat ini
-          clearCanvasObjects(); // Akan menghapus objek non-internal
+          clearCanvasObjects();
 
-          // Kosongkan juga data penyimpanan untuk tampilan saat ini
           if (currentView === "front") {
             frontDesignData.objects = [];
           } else {
@@ -2108,9 +2080,8 @@
 
       document.addEventListener("DOMContentLoaded", () => {
         // Mengatur background produk awal (depan)
-        setBackgroundImage(frontImageUrl); // Pindahkan ini ke DOMContentLoaded agar background dimuat duluan
+        setBackgroundImage(frontImageUrl);
 
-        // Pada saat DOMContentLoaded, coba muat desain dari localStorage
         const savedFullDesign = localStorage.getItem("kaosDesign");
         if (savedFullDesign) {
           try {
@@ -2121,17 +2092,16 @@
             if (parsedDesign.back) {
               backDesignData.objects = parsedDesign.back;
             }
-            // Muat tampilan depan secara default
-            loadDesignFromData(frontDesignData); // Muat desain depan
+            loadDesignFromData(frontDesignData);
             currentView = "front";
           } catch (e) {
             console.error("Error parsing saved design from localStorage:", e);
-            frontDesignData.objects = []; // Kosongkan jika error
+            frontDesignData.objects = [];
             backDesignData.objects = [];
-            updateDesignList(); // Jika ada error, tampilkan daftar kosong
+            updateDesignList();
           }
         } else {
-          updateDesignList(); // Jika tidak ada desain tersimpan, tampilkan daftar kosong
+          updateDesignList();
         }
 
         window.dispatchEvent(new Event("resize"));
@@ -2142,7 +2112,74 @@
         canvas.renderAll();
       });
 
-      // modal pop product design js
+      // ============================================
+      // === MODAL PREVIEW & PANEL KONTROL JS ===
+      // ============================================
+
+      // Fungsi untuk menghasilkan gambar preview untuk modal (depan atau belakang)
+      function generatePreviewImageForModal(viewToPreview) {
+        return new Promise((resolve) => {
+          const tempCanvasElement = document.createElement("canvas");
+          const tempCanvas = new fabric.Canvas(tempCanvasElement, {
+            width: canvas.getWidth(),
+            height: canvas.getHeight(),
+            backgroundColor: "transparent", // Penting jika background baju transparan
+          });
+
+          let tempBgImageUrl =
+            viewToPreview === "front" ? frontImageUrl : backImageUrl;
+          let tempDataObjects =
+            viewToPreview === "front"
+              ? frontDesignData.objects
+              : backDesignData.objects;
+
+          // Load background image ke kanvas sementara
+          fabric.Image.fromURL(tempBgImageUrl, function (img) {
+            const canvasWidth = tempCanvas.getWidth();
+            const canvasHeight = tempCanvas.getHeight();
+            const imgAspectRatio = img.width / img.height;
+            const canvasAspectRatio = canvasWidth / canvasHeight;
+
+            let scale;
+            if (imgAspectRatio > canvasAspectRatio) {
+              scale = canvasHeight / img.height;
+            } else {
+              scale = canvasWidth / img.width;
+            }
+            img.scale(scale);
+            const centerX = (canvasWidth - img.width * scale) / 2;
+            const centerY = (canvasHeight - img.height * scale) / 2;
+            tempCanvas.setBackgroundImage(
+              img,
+              tempCanvas.renderAll.bind(tempCanvas),
+              {
+                left: centerX,
+                top: centerY,
+                originX: "left",
+                originY: "top",
+              }
+            );
+
+            // Setelah background dimuat, tambahkan objek desain
+            fabric.util.enlivenObjects(
+              tempDataObjects,
+              function (enlivenedObjects) {
+                enlivenedObjects.forEach((obj) => {
+                  tempCanvas.add(obj);
+                });
+                tempCanvas.renderAll();
+                const dataURL = tempCanvas.toDataURL({
+                  format: "png",
+                  multiplier: 2,
+                });
+                tempCanvas.dispose(); // Sangat penting untuk membersihkan kanvas sementara
+                resolve(dataURL);
+              }
+            );
+          });
+        });
+      }
+
       document.addEventListener("DOMContentLoaded", function () {
         const previewButton = document.getElementById("previewButton");
         const previewModal = document.getElementById("previewModal");
@@ -2153,7 +2190,18 @@
           "previewModalContent"
         );
 
-        previewButton.addEventListener("click", function () {
+        const modalFrontViewButton = document.getElementById("frontViewButton"); // Ambil tombol di dalam modal
+        const modalBackViewButton = document.getElementById("backViewButton"); // Ambil tombol di dalam modal
+
+        // Fungsi untuk membuka modal
+        previewButton.addEventListener("click", async function () {
+          // Gunakan async karena generatePreviewImageForModal adalah Promise
+          // Pastikan desain saat ini tersimpan sebelum membuka preview
+          saveCurrentDesignToData(
+            currentView === "front" ? frontDesignData : backDesignData
+          );
+
+          // Sembunyikan garis bantu di canvas utama (opsional, karena preview menggunakan canvas sementara)
           const guideObjects = [
             centerGuideLineX,
             centerGuideLineY,
@@ -2162,22 +2210,14 @@
             labelX,
             labelY,
           ];
+          guideObjects.forEach((obj) => obj.set("visible", false));
+          canvas.renderAll(); // Render ulang canvas utama setelah menyembunyikan
 
-          const prevCenterGuideXVisible = centerGuideLineX.visible;
-          const prevCenterGuideYVisible = centerGuideLineY.visible;
-
-          guideObjects.forEach((obj) => {
-            if (canvas.contains(obj)) {
-              canvas.remove(obj);
-            }
-          });
-          canvas.renderAll();
-
-          const dataURL = canvas.toDataURL({
-            format: "png",
-            multiplier: 2,
-          });
-
+          // Generate preview untuk tampilan yang sedang aktif di canvas desain saat preview dibuka
+          const initialViewForModal = currentView; // Simpan tampilan saat ini
+          const dataURL = await generatePreviewImageForModal(
+            initialViewForModal
+          );
           designPreviewImage.src = dataURL;
 
           previewModal.classList.remove("hidden");
@@ -2191,21 +2231,31 @@
             previewModalContent.classList.add("opacity-100", "translate-y-0");
           }, 10);
 
-          // Tambahkan kembali semua garis bantu ke canvas
-          guideObjects.forEach((obj) => {
-            if (!canvas.contains(obj)) {
-              canvas.add(obj);
-            }
-          });
-          centerGuideLineX.set("visible", prevCenterGuideXVisible);
-          centerGuideLineY.set("visible", prevCenterGuideYVisible);
+          // Kembalikan visibilitas garis bantu di canvas utama
+          centerGuideLineX.set("visible", true); // Asumsi garis tengah selalu terlihat
+          centerGuideLineY.set("visible", true);
           dragGuideLineX.set("visible", false);
           dragGuideLineY.set("visible", false);
           labelX.set("visible", false);
           labelY.set("visible", false);
-
           canvas.renderAll();
         });
+
+        // Event listener untuk tombol "Depan" di modal
+        if (modalFrontViewButton) {
+          modalFrontViewButton.addEventListener("click", async () => {
+            const dataURL = await generatePreviewImageForModal("front");
+            designPreviewImage.src = dataURL;
+          });
+        }
+
+        // Event listener untuk tombol "Belakang" di modal
+        if (modalBackViewButton) {
+          modalBackViewButton.addEventListener("click", async () => {
+            const dataURL = await generatePreviewImageForModal("back");
+            designPreviewImage.src = dataURL;
+          });
+        }
 
         closeModalButton.addEventListener("click", function () {
           previewModalContent.classList.remove("opacity-100", "translate-y-0");
@@ -2305,8 +2355,6 @@
           canvas.setViewportTransform(newVpt);
           canvas.setZoom(zoomLevel);
 
-          // updateBgImagePositionOnRender dan centerGuideLineX/Y
-          // sudah dideklarasikan di scope global dan harus bisa diakses di sini
           updateBgImagePositionOnRender();
 
           centerGuideLineX.set({
@@ -2361,60 +2409,42 @@
         canvas.setCursor("default");
       });
 
-      // --- Fungsionalitas Switch Depan/Belakang Baju ---
-      const frontViewButton = document.querySelector(
+      // --- Fungsionalitas Switch Depan/Belakang Baju (Panel Bawah) ---
+      const panelFrontViewButton = document.querySelector(
         ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(1)"
       ); // Dapatkan tombol "Depan"
-      const backViewButton = document.querySelector(
+      const panelBackViewButton = document.querySelector(
         ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(2)"
       ); // Dapatkan tombol "Belakang"
 
-      // Tambahkan event listener untuk tombol Depan
-      if (frontViewButton) {
-        frontViewButton.addEventListener("click", () => {
+      if (panelFrontViewButton) {
+        panelFrontViewButton.addEventListener("click", () => {
           if (currentView !== "front") {
-            // 1. Simpan desain saat ini (dari tampilan belakang, jika ada)
             saveCurrentDesignToData(backDesignData);
-
-            // 2. Bersihkan canvas dari objek desain lama
             clearCanvasObjects();
-
-            // 3. Muat background untuk tampilan depan
             setBackgroundImage(frontImageUrl);
-
-            // 4. Muat objek desain untuk tampilan depan
             loadDesignFromData(frontDesignData);
-
             currentView = "front";
-            canvas.renderAll(); // Pastikan canvas di-render ulang
-            updateDesignList(); // Perbarui daftar komponen setelah beralih
-            updateUIFromActiveObject(); // Perbarui UI kontrol
-            console.log("Switched to Front View");
+            canvas.renderAll();
+            updateDesignList();
+            updateUIFromActiveObject();
+            console.log("Switched to Front View (Panel)");
           }
         });
       }
 
-      // Tambahkan event listener untuk tombol Belakang
-      if (backViewButton) {
-        backViewButton.addEventListener("click", () => {
+      if (panelBackViewButton) {
+        panelBackViewButton.addEventListener("click", () => {
           if (currentView !== "back") {
-            // 1. Simpan desain saat ini (dari tampilan depan)
             saveCurrentDesignToData(frontDesignData);
-
-            // 2. Bersihkan canvas dari objek desain lama
             clearCanvasObjects();
-
-            // 3. Muat background untuk tampilan belakang
             setBackgroundImage(backImageUrl);
-
-            // 4. Muat objek desain untuk tampilan belakang
             loadDesignFromData(backDesignData);
-
             currentView = "back";
-            canvas.renderAll(); // Pastikan canvas di-render ulang
-            updateDesignList(); // Perbarui daftar komponen setelah beralih
-            updateUIFromActiveObject(); // Perbarui UI kontrol
-            console.log("Switched to Back View");
+            canvas.renderAll();
+            updateDesignList();
+            updateUIFromActiveObject();
+            console.log("Switched to Back View (Panel)");
           }
         });
       }
