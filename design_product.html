@@ -194,6 +194,33 @@
           Total Harga : Rp 125.000
         </span>
       </div>
+
+      <!-- Kanan: Tombol Aksi -->
+      <div
+        class="hidden sm:flex sm:static sm:bottom-auto right-4 bottom-6 gap-2 sm:gap-3 flex-shrink-0"
+      >
+        <!-- Download -->
+        <a
+          href="#"
+          class="flex items-center justify-center gap-2 text-xs sm:text-sm font-quantify px-3 py-1.5 sm:px-4 sm:py-2 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-full hover:bg-[#c1985e] transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 sm:h-5 sm:w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
+            />
+          </svg>
+          Download
+        </a>
+      </div>
     </div>
 
     <!-- SECTION DESAIN PRODUK -->
@@ -723,7 +750,8 @@
 
       <!-- Area Canvas di dalam div Tailwind -->
       <div
-        class="w-full h-full border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center bg-white px-6 py-6 relative"
+        id="canvas-wrapper"
+        class="relative w-full aspect-square /* Mobile: 1:1 ratio for more height */ md:aspect-[16/10] lg:aspect-[16/10] xl:aspect-[16/10] /* Desktop: Slightly taller than 16:9 */ md:max-w-[900px] lg:max-w-[950px] xl:max-w-[950px] /* Desktop: Specific widths */ mx-auto overflow-hidden rounded-lg shadow-lg"
       >
         <!-- 2 button -->
         <div
@@ -787,12 +815,7 @@
         </div>
 
         <!-- canvas section  -->
-        <canvas
-          id="tshirtCanvas"
-          width="600"
-          height="600"
-          class="w-[600px] h-[600px] object-contain"
-        ></canvas>
+        <canvas id="tshirtCanvas" class="w-full h-full object-contain"></canvas>
 
         <!-- Panel Kontrol Interaktif -->
         <div
@@ -806,8 +829,8 @@
               class="appearance-none bg-white border border-gray-300 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded focus:outline-none cursor-pointer h-6 sm:h-8"
             >
               <option>50%</option>
-              <option>75%</option>
-              <option selected>100%</option>
+              <option selected>75%</option>
+              <option>100%</option>
               <option>125%</option>
               <option>150%</option>
             </select>
@@ -881,77 +904,59 @@
         <!-- preview modal pop up -->
         <div
           id="previewModal"
-          class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 hidden pt-28"
+          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 hidden"
         >
           <div
             id="previewModalContent"
-            class="bg-white rounded-lg shadow-xl p-4 sm:p-6 relative max-w-full mx-4 sm:mx-0 w-full md:w-[600px] lg:w-[500px] xl:w-[400px] mb-4 opacity-0 transform -translate-y-10 transition-all duration-300 ease-in-out"
+            class="relative bg-white rounded-lg shadow-xl transform transition-all duration-300 opacity-0 scale-95 w-11/11 mx-auto p-0 max-w-xs /* Mobile: Smallest width */ md:max-w-sm lg:max-w-sm xl:max-w-sm /* Desktop: Small and consistent width */ mt-16 mb-8 sm:mt-20 sm:mb-12 md:mt-24 md:mb-16 /* Margins for spacing from navbar/bottom */ max-h-[75vh] md:max-h-[70vh] overflow-y-auto /* Mobile: Taller, Desktop: Shorter */"
           >
-            <h1
-              class="text-xl sm:text-2xl font-extrabold text-center mb-6 text-[#0f2d25]"
-            >
-              Hasil Product Anda
-            </h1>
+            <div class="flex justify-between items-center p-4">
+              <h3 class="text-lg font-semibold flex-grow text-center">
+                Preview Desain
+              </h3>
+              <button
+                id="closeModalButton"
+                class="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition-colors absolute top-2 right-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
 
-            <button
-              id="closeModalButton"
-              class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold"
-            >
-              &times;
-            </button>
-
-            <div
-              class="flex justify-center items-center bg-gray-100 p-2 rounded-md"
-            >
+            <div class="p-4 flex justify-center items-center">
               <img
                 id="designPreviewImage"
-                src="placeholder_baju.png"
-                alt="Desain Baju Preview"
                 class="max-w-full h-auto object-contain"
+                src=""
+                alt="Design Preview"
               />
             </div>
-            <p class="text-sm text-gray-600 mt-4 text-center">
-              Ini adalah tampilan pratinjau desain baju Anda.
-            </p>
 
-            <div class="flex justify-center gap-4 mt-6">
+            <div
+              class="flex justify-center gap-2 p-4 border-t bg-gray-50 rounded-b-lg"
+            >
               <button
                 id="frontViewButton"
-                class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-8"
+                class="flex-1 px-4 py-2 bg-[#d1a86f] text-white rounded-lg hover:bg-[#a6865c] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#d1a86f] focus:ring-opacity-50 font-medium shadow-md"
               >
-                <svg
-                  class="w-3.5 h-3.5 sm:w-5 sm:h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
                 Depan
               </button>
-
               <button
                 id="backViewButton"
-                class="flex-shrink-0 flex items-center gap-1 sm:gap-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 text-[10px] sm:text-sm px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded transition h-8"
+                class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50 font-medium shadow-md"
               >
-                <svg
-                  class="w-3.5 h-3.5 sm:w-5 sm:h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
                 Belakang
               </button>
             </div>
@@ -1235,92 +1240,156 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
     <!-- custom js -->
     <script src="js/script.js"></script>
-    <!-- fabric canvas init js -->
     <script>
       // fabric-canvas-init.js
       // This script initializes the Fabric.js canvas and defines global variables
       // for background images and design data for front and back views.
-
+    
       const canvas = new fabric.Canvas("tshirtCanvas", {
         preserveObjectStacking: true,
         selection: true,
         controlsAboveOverlay: true,
       });
-
+    
       let bgImageObject = null;
       let currentView = "front"; // State for the current view (front/back)
-      const frontDesignData = { objects: [] }; // Stores serialized JSON objects for front design
-      const backDesignData = { objects: [] }; // Stores serialized JSON objects for back design
-
+      const frontDesignData = { objects: [], canvasWidth: 0, canvasHeight: 0 }; // Stores serialized JSON objects for front design
+      const backDesignData = { objects: [], canvasWidth: 0, canvasHeight: 0 }; // Stores serialized JSON objects for back design
+    
       const frontImageUrl = "image/product4.jpeg";
       const backImageUrl = "image/product1.jpeg"; // Temporary back image
-
+    
+      // Store initial/current canvas dimensions for scaling
+      let lastCanvasWidth = 0;
+      let lastCanvasHeight = 0;
+    
       // Initialize background image for the canvas
-      fabric.Image.fromURL(frontImageUrl, (img) => {
-        bgImageObject = img;
-        const canvasWidth = canvas.getWidth();
-        const canvasHeight = canvas.getHeight();
-        const imgAspectRatio = img.width / img.height;
-        const canvasAspectRatio = canvasWidth / canvasHeight;
-
-        let scale;
-        if (imgAspectRatio > canvasAspectRatio) {
-          scale = canvasHeight / img.height;
-        } else {
-          scale = canvasWidth / img.width;
+      // This function will be called initially and on resize
+      const initializeCanvasAndBackground = () => {
+        const canvasWrapper = document.getElementById("canvas-wrapper");
+        if (!canvasWrapper) return;
+    
+        const currentWrapperWidth = canvasWrapper.clientWidth;
+        const currentWrapperHeight = canvasWrapper.clientHeight;
+    
+        // Calculate scaling factor if canvas size is changing
+        let scaleFactorX = 1;
+        let scaleFactorY = 1;
+    
+        if (lastCanvasWidth > 0 && lastCanvasHeight > 0) {
+          scaleFactorX = currentWrapperWidth / lastCanvasWidth;
+          scaleFactorY = currentWrapperHeight / lastCanvasHeight;
         }
-
-        img.scale(scale);
-
-        const centerX = (canvasWidth - img.width * scale) / 2;
-        const centerY = (canvasHeight - img.height * scale) / 2;
-
-        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-          left: centerX,
-          top: centerY,
-          originX: "left",
-          originY: "top",
-          selectable: false,
-          evented: false,
+    
+        // Set new canvas dimensions
+        canvas.setDimensions({
+          width: currentWrapperWidth,
+          height: currentWrapperHeight,
         });
-
-        canvas.off("after:render", updateBgImagePositionOnRender);
-        canvas.on("after:render", updateBgImagePositionOnRender);
-        canvas.renderAll(); // Initial render after background is set
+    
+        // Update last recorded dimensions
+        lastCanvasWidth = currentWrapperWidth;
+        lastCanvasHeight = currentWrapperHeight;
+    
+        // Scale existing objects on the canvas (excluding background and guide lines)
+        canvas.forEachObject((obj) => {
+          if (
+            obj === bgImageObject ||
+            obj === centerGuideLineX ||
+            obj === centerGuideLineY ||
+            obj === dragGuideLineX ||
+            obj === dragGuideLineY ||
+            obj === labelX ||
+            obj === labelY
+          ) {
+            return;
+          }
+    
+          obj.set({
+            left: obj.left * scaleFactorX,
+            top: obj.top * scaleFactorY,
+            scaleX: obj.scaleX * scaleFactorX,
+            scaleY: obj.scaleY * scaleFactorY,
+            fontSize:
+              obj.type === "textbox" ? obj.fontSize * scaleFactorY : obj.fontSize, // Scale font based on Y
+          });
+          obj.setCoords(); // Update object's bounding box after scaling
+        });
+    
+        fabric.Image.fromURL(
+          currentView === "front" ? frontImageUrl : backImageUrl,
+          (img) => {
+            bgImageObject = img;
+            const canvasWidth = canvas.getWidth();
+            const canvasHeight = canvas.getHeight();
+            const imgAspectRatio = img.width / img.height;
+            const canvasAspectRatio = canvasWidth / canvasHeight;
+    
+            let scale;
+            if (imgAspectRatio > canvasAspectRatio) {
+              scale = canvasHeight / img.height;
+            } else {
+              scale = canvasWidth / img.width;
+            }
+    
+            img.scale(scale);
+    
+            const centerX = (canvasWidth - img.width * scale) / 2;
+            const centerY = (canvasHeight - img.height * scale) / 2;
+    
+            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+              left: centerX,
+              top: centerY,
+              originX: "left",
+              originY: "top",
+              selectable: false,
+              evented: false,
+            });
+    
+            // Update guide lines positions after canvas resize
+            centerGuideLineX.set({
+              x1: 0,
+              y1: canvas.getHeight() / 2,
+              x2: canvas.getWidth(),
+              y2: canvas.getHeight() / 2,
+            });
+            centerGuideLineY.set({
+              x1: canvas.getWidth() / 2,
+              y1: 0,
+              x2: canvas.getWidth() / 2,
+              y2: canvas.getHeight(),
+            });
+            canvas.renderAll();
+          }
+        );
+      };
+    
+      // Guide lines (always visible and non-interactive) - initialize them after canvas is ready
+      const centerGuideLineX = new fabric.Line([0, 0, 0, 0], {
+        stroke: "#dc2626", // red
+        strokeWidth: 1,
+        selectable: false,
+        evented: false,
+        hasControls: false,
+        visible: true,
+        originX: "left",
+        originY: "top",
       });
-
-      // Guide lines (always visible and non-interactive)
-      const centerGuideLineX = new fabric.Line(
-        [0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2],
-        {
-          stroke: "#dc2626", // red
-          strokeWidth: 1,
-          selectable: false,
-          evented: false,
-          hasControls: false,
-          visible: true,
-          originX: "left",
-          originY: "top",
-        }
-      );
-
-      const centerGuideLineY = new fabric.Line(
-        [canvas.getWidth() / 2, 0, canvas.getWidth() / 2, canvas.getHeight()],
-        {
-          stroke: "#dc2626", // red
-          strokeWidth: 1,
-          selectable: false,
-          evented: false,
-          hasControls: false,
-          visible: true,
-          originX: "left",
-          originY: "top",
-        }
-      );
-
+    
+      const centerGuideLineY = new fabric.Line([0, 0, 0, 0], {
+        stroke: "#dc2626", // red
+        strokeWidth: 1,
+        selectable: false,
+        evented: false,
+        hasControls: false,
+        visible: true,
+        originX: "left",
+        originY: "top",
+      });
+    
       canvas.add(centerGuideLineX);
       canvas.add(centerGuideLineY);
-
+    
       // Drag guide lines (only appear during dragging and non-interactive)
       const dragGuideLineX = new fabric.Line([0, 0, 0, 0], {
         stroke: "#10B981", // Green for drag guide lines
@@ -1330,7 +1399,7 @@
         hasControls: false,
         visible: false,
       });
-
+    
       const dragGuideLineY = new fabric.Line([0, 0, 0, 0], {
         stroke: "#10B981", // Green for drag guide lines
         strokeWidth: 1,
@@ -1339,10 +1408,10 @@
         hasControls: false,
         visible: false,
       });
-
+    
       canvas.add(dragGuideLineX);
       canvas.add(dragGuideLineY);
-
+    
       // Coordinate labels (only appear during dragging and non-interactive)
       const labelX = new fabric.Text("", {
         fontSize: 12,
@@ -1355,7 +1424,7 @@
         hasControls: false,
         visible: false,
       });
-
+    
       const labelY = new fabric.Text("", {
         fontSize: 12,
         fill: "#10B981",
@@ -1367,16 +1436,22 @@
         hasControls: false,
         visible: false,
       });
-
+    
       canvas.add(labelX);
       canvas.add(labelY);
+    
+      // Initial call to set up canvas and background
+      document.addEventListener(
+        "DOMContentLoaded",
+        initializeCanvasAndBackground
+      );
+      window.addEventListener("resize", initializeCanvasAndBackground);
     </script>
-    <!-- canvas helpers js -->
     <script>
       // canvas-helpers.js
       // This script contains helper functions for managing the Fabric.js canvas,
       // including background image handling, design saving/loading, and UI updates.
-
+    
       // Function to set the background image of the canvas
       const setBackgroundImage = (imgUrl) => {
         fabric.Image.fromURL(imgUrl, (img) => {
@@ -1385,19 +1460,19 @@
           const canvasHeight = canvas.getHeight();
           const imgAspectRatio = img.width / img.height;
           const canvasAspectRatio = canvasWidth / canvasHeight;
-
+    
           let scale;
           if (imgAspectRatio > canvasAspectRatio) {
             scale = canvasHeight / img.height;
           } else {
             scale = canvasWidth / img.width;
           }
-
+    
           img.scale(scale);
-
+    
           const centerX = (canvasWidth - img.width * scale) / 2;
           const centerY = (canvasHeight - img.height * scale) / 2;
-
+    
           canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
             left: centerX,
             top: centerY,
@@ -1406,41 +1481,16 @@
             selectable: false,
             evented: false,
           });
+          canvas.renderAll(); // Ensure canvas renders after background is set
         });
       };
-
-      // Function to update background image position on render
-      const updateBgImagePositionOnRender = () => {
-        if (bgImageObject) {
-          const canvasWidth = canvas.getWidth();
-          const canvasHeight = canvas.getHeight();
-          const imgAspectRatio = bgImageObject.width / bgImageObject.height;
-          const canvasAspectRatio = canvasWidth / canvasHeight;
-
-          let currentScale;
-          if (imgAspectRatio > canvasAspectRatio) {
-            currentScale = canvasHeight / bgImageObject.height;
-          } else {
-            currentScale = canvasWidth / bgImageObject.width;
-          }
-
-          const scaledWidth = bgImageObject.width * currentScale;
-          const scaledHeight = bgImageObject.height * currentScale;
-
-          const currentCenterX = (canvasWidth - scaledWidth) / 2;
-          const currentCenterY = (canvasHeight - scaledHeight) / 2;
-
-          bgImageObject.set({
-            left: currentCenterX,
-            top: currentCenterY,
-            scaleX: currentScale,
-            scaleY: currentScale,
-          });
-        }
-      };
-
+    
       // Function to save current design objects to specified data storage
       function saveCurrentDesignToData(designStorage) {
+        // Store the current canvas dimensions along with the design objects
+        designStorage.canvasWidth = canvas.getWidth();
+        designStorage.canvasHeight = canvas.getHeight();
+    
         designStorage.objects = canvas
           .getObjects()
           .filter(
@@ -1456,7 +1506,7 @@
           .map((obj) => obj.toJSON());
         console.log(`Saved design for ${currentView}:`, designStorage);
       }
-
+    
       // Function to clear design objects from the canvas (excluding background and guide lines)
       function clearCanvasObjects() {
         const objectsToRemove = canvas.getObjects().filter((obj) => {
@@ -1470,19 +1520,34 @@
             obj !== labelY
           );
         });
-
+    
         objectsToRemove.forEach((obj) => {
           canvas.remove(obj);
         });
         canvas.discardActiveObject();
         canvas.renderAll();
       }
-
+    
       // Function to load design objects from specified data storage
       function loadDesignFromData(designStorage) {
+        clearCanvasObjects(); // Clear existing objects before loading new ones
+    
         fabric.util.enlivenObjects(
           designStorage.objects,
           function (enlivenedObjects) {
+            // Get the current canvas dimensions
+            const currentCanvasWidth = canvas.getWidth();
+            const currentCanvasHeight = canvas.getHeight();
+    
+            // Get the canvas dimensions from when the design was saved
+            // Fallback to current dimensions if not stored (e.g., initial load without saved data)
+            const savedCanvasWidth = designStorage.canvasWidth || currentCanvasWidth;
+            const savedCanvasHeight = designStorage.canvasHeight || currentCanvasHeight;
+    
+            // Calculate scaling factors
+            const scaleFactorX = currentCanvasWidth / savedCanvasWidth;
+            const scaleFactorY = currentCanvasHeight / savedCanvasHeight;
+    
             enlivenedObjects.forEach((obj) => {
               if (obj.type === "textbox" && obj.fontFamily) {
                 const font = obj.fontFamily;
@@ -1498,6 +1563,18 @@
                   document.head.appendChild(link);
                 }
               }
+    
+              // Apply scaling to the object properties
+              obj.set({
+                left: obj.left * scaleFactorX,
+                top: obj.top * scaleFactorY,
+                scaleX: obj.scaleX * scaleFactorX,
+                scaleY: obj.scaleY * scaleFactorY,
+                fontSize:
+                  obj.type === "textbox" ? obj.fontSize * scaleFactorY : obj.fontSize,
+              });
+              obj.setCoords(); // Update bounding box
+    
               canvas.add(obj);
             });
             canvas.renderAll();
@@ -1506,7 +1583,7 @@
           }
         );
       }
-
+    
       // Function to load custom fonts from a design JSON
       const loadCustomFontsFromDesign = (json) => {
         const designData = JSON.parse(json);
@@ -1530,11 +1607,10 @@
         }
       };
     </script>
-    <!-- font features js -->
     <script>
       // font-features.js
       // This script handles font selection, API fetching, and rendering.
-
+    
       const fontSizeSelect = document.getElementById("fontSize");
       if (fontSizeSelect) {
         for (let i = 10; i <= 64; i += 2) {
@@ -1544,11 +1620,11 @@
           fontSizeSelect.appendChild(opt);
         }
       }
-
+    
       let currentFont = "Arial";
       let fontsList = [];
       const apiKey = "AIzaSyBbHsIzkkLsTKLNRcomvRlw-qZqWeC91OU"; // Replace with your valid Google Fonts API Key
-
+    
       fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}`)
         .then((r) => r.json())
         .then((d) => {
@@ -1556,13 +1632,13 @@
           renderFonts(fontsList);
         })
         .catch((error) => console.error("Error fetching fonts:", error));
-
+    
       function renderFonts(arr) {
         const container = document.getElementById("fontList");
         if (!container) return;
-
+    
         container.innerHTML = "";
-
+    
         arr.slice(0, 50).forEach((font) => {
           const fontId = `font-link-${font.replace(/[^a-zA-Z0-9]/g, "")}`;
           if (!document.getElementById(fontId)) {
@@ -1575,7 +1651,7 @@
             )}&display=swap`;
             document.head.appendChild(link);
           }
-
+    
           const div = document.createElement("div");
           div.className =
             "border p-2 rounded text-center text-sm cursor-pointer hover:bg-gray-100 mb-1 font-list-item";
@@ -1584,7 +1660,7 @@
           div.onclick = () => {
             currentFont = font;
             const fontModal = document.getElementById("fontModal");
-
+    
             const activeObject = canvas.getActiveObject();
             if (activeObject && activeObject.type === "textbox") {
               activeObject.set({ fontFamily: currentFont });
@@ -1593,7 +1669,7 @@
             } else {
               addTextToCanvas(currentFont);
             }
-
+    
             if (fontModal) {
               fontModal.classList.add("hidden");
             }
@@ -1601,7 +1677,7 @@
           container.appendChild(div);
         });
       }
-
+    
       const fontSearchInput = document.getElementById("fontSearch");
       if (fontSearchInput) {
         fontSearchInput.oninput = (e) => {
@@ -1610,18 +1686,17 @@
         };
       }
     </script>
-    <!-- text image control js -->
     <script>
       // text-image-controls.js
       // This script handles adding text and images to the canvas
       // and updating the UI controls for selected objects.
-
+    
       function addTextToCanvas(font = "Arial") {
         const textColorInput = document.getElementById("textColor");
         const fontSizeInput = document.getElementById("fontSize");
         const bgTransparentCheckbox = document.getElementById("bgTransparent");
         const textBgColorInput = document.getElementById("textBgColor");
-
+    
         const text = new fabric.Textbox("Teks Baru", {
           left: 100,
           top: 100,
@@ -1651,14 +1726,14 @@
         updateDesignList();
         updateUIFromActiveObject();
       }
-
+    
       const addTextButton = document.getElementById("addTextButton");
       if (addTextButton) {
         addTextButton.addEventListener("click", () =>
           addTextToCanvas(currentFont)
         );
       }
-
+    
       const uploadPhotoInput = document.getElementById("upload-photo");
       if (uploadPhotoInput) {
         uploadPhotoInput.onchange = (e) => {
@@ -1679,11 +1754,11 @@
                 transparentCorners: false,
                 padding: 5,
               });
-
+    
               const maxDim = Math.max(img.width, img.height);
               const scaleFactor = 150 / maxDim;
               img.scale(scaleFactor);
-
+    
               canvas.add(img).setActiveObject(img);
               canvas.renderAll();
               updateDesignList();
@@ -1693,7 +1768,7 @@
           e.target.value = "";
         };
       }
-
+    
       // Function to update UI from active object
       function updateUIFromActiveObject() {
         const o = canvas.getActiveObject();
@@ -1706,13 +1781,13 @@
         const alignLeft = document.getElementById("alignLeft");
         const alignCenter = document.getElementById("alignCenter");
         const alignRight = document.getElementById("alignRight");
-
+    
         if (!o || o.type !== "textbox") {
           if (textColor) textColor.value = "#000000";
           if (fontSize) fontSize.value = "16";
           if (textBgColor) textBgColor.value = "#ffffff";
           if (bgTransparent) bgTransparent.checked = false;
-
+    
           [boldBtn, italicBtn, alignLeft, alignCenter, alignRight].forEach(
             (btn) => {
               if (btn) btn.classList.remove("bg-gray-300");
@@ -1720,12 +1795,12 @@
           );
           return;
         }
-
+    
         if (textColor) textColor.value = o.fill || "#000000";
         if (fontSize) fontSize.value = o.fontSize || 16;
         if (textBgColor) textBgColor.value = o.backgroundColor || "#ffffff";
         if (bgTransparent) bgTransparent.checked = !o.backgroundColor;
-
+    
         [boldBtn, italicBtn].forEach((btn) => {
           if (btn) btn.classList.remove("bg-gray-300");
         });
@@ -1733,7 +1808,7 @@
           boldBtn.classList.add("bg-gray-300");
         if (italicBtn && o.fontStyle === "italic")
           italicBtn.classList.add("bg-gray-300");
-
+    
         [alignLeft, alignCenter, alignRight].forEach((btn) => {
           if (btn) btn.classList.remove("bg-gray-300");
         });
@@ -1742,12 +1817,12 @@
         const activeAlignBtn = document.getElementById(alignId);
         if (activeAlignBtn) activeAlignBtn.classList.add("bg-gray-300");
       }
-
+    
       canvas.on("selection:created", updateUIFromActiveObject);
       canvas.on("selection:updated", updateUIFromActiveObject);
       canvas.on("object:modified", updateUIFromActiveObject);
       canvas.on("selection:cleared", updateUIFromActiveObject);
-
+    
       // Function to update active text properties
       function updateActiveText(prop, val) {
         const o = canvas.getActiveObject();
@@ -1757,16 +1832,16 @@
           updateUIFromActiveObject();
         }
       }
-
+    
       const textColorInput = document.getElementById("textColor");
       if (textColorInput) {
         textColorInput.onchange = (e) =>
           updateActiveText("fill", e.target.value);
       }
-
+    
       const textBgColorInput = document.getElementById("textBgColor");
       const bgTransparentCheckbox = document.getElementById("bgTransparent");
-
+    
       if (textBgColorInput) {
         textBgColorInput.onchange = (e) => {
           const v =
@@ -1776,7 +1851,7 @@
           updateActiveText("backgroundColor", v);
         };
       }
-
+    
       if (bgTransparentCheckbox) {
         bgTransparentCheckbox.onchange = () => {
           const val = bgTransparentCheckbox.checked
@@ -1787,13 +1862,13 @@
           updateActiveText("backgroundColor", val);
         };
       }
-
+    
       const fontSizeInput = document.getElementById("fontSize");
       if (fontSizeInput) {
         fontSizeInput.onchange = (e) =>
           updateActiveText("fontSize", parseInt(e.target.value));
       }
-
+    
       const boldBtn = document.getElementById("boldBtn");
       if (boldBtn) {
         boldBtn.onclick = () => {
@@ -1806,7 +1881,7 @@
           }
         };
       }
-
+    
       const italicBtn = document.getElementById("italicBtn");
       if (italicBtn) {
         italicBtn.onclick = () => {
@@ -1819,7 +1894,7 @@
           }
         };
       }
-
+    
       ["alignLeft", "alignCenter", "alignRight"].forEach((id) => {
         const alignButton = document.getElementById(id);
         if (alignButton) {
@@ -1834,18 +1909,17 @@
         }
       });
     </script>
-    <!-- design management js -->
     <script>
       // design-management.js
       // This script manages the design list, saving, and clearing operations.
-
+    
       function updateDesignList() {
         const designListContainer = document.getElementById("designList");
         const noComponentsMessage = document.getElementById(
           "noComponentsMessage"
         );
         if (!designListContainer || !noComponentsMessage) return;
-
+    
         // Clear all child elements from designListContainer EXCEPT noComponentsMessage
         while (designListContainer.children.length > 0) {
           const lastChild = designListContainer.lastChild;
@@ -1857,14 +1931,14 @@
             designListContainer.removeChild(lastChild);
           }
         }
-
+    
         let hasComponents = false;
-
+    
         // Filter drawable objects based on currentView
         const currentDesignObjects = (
           currentView === "front" ? frontDesignData : backDesignData
         ).objects;
-
+    
         if (currentDesignObjects.length > 0) {
           hasComponents = true;
           const fragment = document.createDocumentFragment();
@@ -1873,7 +1947,7 @@
             const componentCard = document.createElement("div");
             componentCard.className =
               "flex items-center justify-between bg-white border border-gray-200 rounded-lg p-3 shadow-sm mb-2";
-
+    
             const componentName = document.createElement("span");
             componentName.className =
               "text-sm font-medium text-[#0f2d25] truncate";
@@ -1881,17 +1955,17 @@
               objData.type === "textbox"
                 ? `Teks: "${objData.text}"`
                 : `Gambar ${i + 1}`;
-
+    
             const delBtn = document.createElement("button");
             delBtn.className =
               "p-1 rounded-full text-red-500 hover:bg-red-100 hover:text-red-700 transition flex items-center justify-center";
-
+    
             delBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-        </svg>
-      `;
-
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          `;
+    
             delBtn.onclick = () => {
               const currentData =
                 currentView === "front" ? frontDesignData : backDesignData;
@@ -1905,7 +1979,7 @@
                   item.left === objData.left &&
                   item.top === objData.top
               );
-
+    
               if (indexToRemove > -1) {
                 // Remove from storage array
                 currentData.objects.splice(indexToRemove, 1);
@@ -1920,21 +1994,21 @@
               updateDesignList();
               updateUIFromActiveObject();
             };
-
+    
             componentCard.appendChild(componentName);
             componentCard.appendChild(delBtn);
             fragment.appendChild(componentCard);
           });
           designListContainer.appendChild(fragment);
         }
-
+    
         if (!hasComponents) {
           noComponentsMessage.classList.remove("hidden");
         } else {
           noComponentsMessage.classList.add("hidden");
         }
       }
-
+    
       const saveDesignButton = document.getElementById("saveDesign");
       if (saveDesignButton) {
         saveDesignButton.onclick = () => {
@@ -1942,37 +2016,41 @@
           saveCurrentDesignToData(
             currentView === "front" ? frontDesignData : backDesignData
           );
-
+    
           // Combine data from both sides for localStorage
           const fullDesignData = {
-            front: frontDesignData.objects,
-            back: backDesignData.objects,
+            front: frontDesignData, // Store full data objects (including canvas dimensions)
+            back: backDesignData,   // Store full data objects
           };
-
+    
           dragGuideLineX.set("visible", false);
           dragGuideLineY.set("visible", false);
           labelX.set("visible", false);
           labelY.set("visible", false);
           canvas.renderAll();
-
+    
           const json = JSON.stringify(fullDesignData);
           localStorage.setItem("kaosDesign", json);
           window.location.href = "preview_product.html";
         };
       }
-
+    
       const clearCanvasButton = document.getElementById("clearCanvas");
       if (clearCanvasButton) {
         clearCanvasButton.onclick = () => {
           // Clear only design objects from the current view
           clearCanvasObjects();
-
+    
           if (currentView === "front") {
             frontDesignData.objects = [];
+            frontDesignData.canvasWidth = 0; // Reset dimensions
+            frontDesignData.canvasHeight = 0;
           } else {
             backDesignData.objects = [];
+            backDesignData.canvasWidth = 0; // Reset dimensions
+            backDesignData.canvasHeight = 0;
           }
-
+    
           canvas.discardActiveObject();
           canvas.renderAll();
           updateDesignList();
@@ -1980,15 +2058,77 @@
         };
       }
     </script>
-    <!-- panel control js -->
     <script>
       // panel-controls.js
       // This script manages zoom, pan, and view switching functionalities.
-
+    
       let isDragging = false;
       let lastPosX;
       let lastPosY;
-
+    
+      // Function to apply zoom level
+      const applyZoom = (selectedPercentage) => {
+        const zoomLevel = selectedPercentage / 100;
+    
+        const viewportCenterX = canvas.width / 2;
+        const viewportCenterY = canvas.height / 2;
+    
+        const newVpt = [
+          zoomLevel,
+          0,
+          0,
+          zoomLevel,
+          viewportCenterX - viewportCenterX * zoomLevel,
+          viewportCenterY - viewportCenterY * zoomLevel,
+        ];
+    
+        canvas.setViewportTransform(newVpt);
+        canvas.setZoom(zoomLevel);
+    
+        // Ensure background image and guide lines are also updated
+        if (bgImageObject) {
+          const currentCanvasWidth = canvas.getWidth();
+          const currentCanvasHeight = canvas.getHeight();
+          const imgAspectRatio = bgImageObject.width / bgImageObject.height;
+          const canvasAspectRatio = currentCanvasWidth / currentCanvasHeight;
+    
+          let currentScale;
+          if (imgAspectRatio > canvasAspectRatio) {
+            currentScale = currentCanvasHeight / bgImageObject.height;
+          } else {
+            currentScale = currentCanvasWidth / bgImageObject.width;
+          }
+    
+          const scaledWidth = bgImageObject.width * currentScale;
+          const scaledHeight = bgImageObject.height * currentScale;
+    
+          const currentCenterX = (currentCanvasWidth - scaledWidth) / 2;
+          const currentCenterY = (currentCanvasHeight - scaledHeight) / 2;
+    
+          bgImageObject.set({
+            left: currentCenterX,
+            top: currentCenterY,
+            scaleX: currentScale,
+            scaleY: currentScale,
+          });
+        }
+    
+        centerGuideLineX.set({
+          x1: 0,
+          y1: canvas.getHeight() / 2,
+          x2: canvas.getWidth(),
+          y2: canvas.getHeight() / 2,
+        });
+        centerGuideLineY.set({
+          x1: canvas.getWidth() / 2,
+          y1: 0,
+          x2: canvas.getWidth() / 2,
+          y2: canvas.getHeight(),
+        });
+    
+        canvas.renderAll();
+      };
+    
       // --- Zoom functionality ---
       const zoomSelect = document.querySelector(
         ".flex.items-center.gap-1.sm\\:gap-2.flex-shrink-0 > select"
@@ -1996,43 +2136,10 @@
       if (zoomSelect) {
         zoomSelect.addEventListener("change", (e) => {
           const selectedPercentage = parseInt(e.target.value.replace("%", ""));
-          const zoomLevel = selectedPercentage / 100;
-
-          const viewportCenterX = canvas.width / 2;
-          const viewportCenterY = canvas.height / 2;
-
-          const newVpt = [
-            zoomLevel,
-            0,
-            0,
-            zoomLevel,
-            viewportCenterX - viewportCenterX * zoomLevel,
-            viewportCenterY - viewportCenterY * zoomLevel,
-          ];
-
-          canvas.setViewportTransform(newVpt);
-          canvas.setZoom(zoomLevel);
-
-          updateBgImagePositionOnRender();
-
-          centerGuideLineX.set({
-            x1: 0,
-            y1: canvas.height / 2,
-            x2: canvas.width,
-            y2: canvas.height / 2,
-          });
-          centerGuideLineY.set({
-            x1: canvas.width / 2,
-            y1: 0,
-            y1: 0,
-            x2: canvas.width / 2,
-            y2: canvas.height,
-          });
-
-          canvas.renderAll();
+          applyZoom(selectedPercentage);
         });
       }
-
+    
       // --- Pan (drag) Canvas functionality ---
       canvas.on("mouse:down", function (opt) {
         const evt = opt.e;
@@ -2048,7 +2155,7 @@
           canvas.setCursor("grab");
         }
       });
-
+    
       canvas.on("mouse:move", function (opt) {
         if (isDragging) {
           const evt = opt.e;
@@ -2061,13 +2168,13 @@
           canvas.setCursor("grabbing");
         }
       });
-
+    
       canvas.on("mouse:up", function (opt) {
         isDragging = false;
         canvas.selection = true;
         canvas.setCursor("default");
       });
-
+    
       // --- Switch Front/Back Shirt View (Bottom Panel) ---
       const panelFrontViewButton = document.querySelector(
         ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(1)"
@@ -2075,12 +2182,12 @@
       const panelBackViewButton = document.querySelector(
         ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(2)"
       ); // Get "Back" button
-
+    
       if (panelFrontViewButton) {
         panelFrontViewButton.addEventListener("click", () => {
           if (currentView !== "front") {
             saveCurrentDesignToData(backDesignData);
-            clearCanvasObjects();
+            clearCanvasObjects(); // Clear before setting background for a clean switch
             setBackgroundImage(frontImageUrl);
             loadDesignFromData(frontDesignData);
             currentView = "front";
@@ -2091,12 +2198,12 @@
           }
         });
       }
-
+    
       if (panelBackViewButton) {
         panelBackViewButton.addEventListener("click", () => {
           if (currentView !== "back") {
             saveCurrentDesignToData(frontDesignData);
-            clearCanvasObjects();
+            clearCanvasObjects(); // Clear before setting background for a clean switch
             setBackgroundImage(backImageUrl);
             loadDesignFromData(backDesignData);
             currentView = "back";
@@ -2108,11 +2215,10 @@
         });
       }
     </script>
-    <!-- drag guide js -->
     <script>
       // drag-guides.js
       // This script handles the display and logic for drag guide lines and coordinate labels.
-
+    
       canvas.on("object:moving", function (e) {
         const obj = e.target;
         if (
@@ -2132,15 +2238,15 @@
           canvas.renderAll();
           return;
         }
-
+    
         const centerX = canvas.getWidth() / 2;
         const centerY = canvas.getHeight() / 2;
         const objCenter = obj.getCenterPoint();
         const tolerance = 5;
-
+    
         const isCenterX = Math.abs(objCenter.x - centerX) < tolerance;
         const isCenterY = Math.abs(objCenter.y - centerY) < tolerance;
-
+    
         dragGuideLineX.set({
           x1: 0,
           y1: objCenter.y,
@@ -2150,7 +2256,7 @@
           strokeWidth: isCenterY ? 2.5 : 1,
           stroke: isCenterY ? "#dc2626" : "#10B981",
         });
-
+    
         dragGuideLineY.set({
           x1: objCenter.x,
           y1: 0,
@@ -2160,35 +2266,35 @@
           strokeWidth: isCenterX ? 2.5 : 1,
           stroke: isCenterX ? "#dc2626" : "#10B981",
         });
-
+    
         if (isCenterX) obj.left = centerX - obj.getScaledWidth() / 2;
         if (isCenterY) obj.top = centerY - obj.getScaledHeight() / 2;
-
+    
         const x = Math.round(obj.left ?? 0);
         const y = Math.round(obj.top ?? 0);
-
+    
         labelX.set({
           text: `X: ${x}`,
           left: obj.left,
           top: obj.top - 20,
           visible: true,
         });
-
+    
         labelY.set({
           text: `Y: ${y}`,
           left: obj.left,
           top: obj.top - 35,
           visible: true,
         });
-
+    
         canvas.bringToFront(dragGuideLineX);
         canvas.bringToFront(dragGuideLineY);
         canvas.bringToFront(labelX);
         canvas.bringToFront(labelY);
-
+    
         canvas.renderAll();
       });
-
+    
       canvas.on("mouse:up", () => {
         dragGuideLineX.set("visible", false);
         dragGuideLineY.set("visible", false);
@@ -2197,44 +2303,61 @@
         canvas.renderAll();
       });
     </script>
-    <!-- modal preview js -->
     <script>
       // modal-preview.js
       // This script manages the preview modal for displaying front and back designs.
-
+    
       // Function to generate a preview image for the modal (front or back)
       function generatePreviewImageForModal(viewToPreview) {
         return new Promise((resolve) => {
+          // Define internal rendering dimensions for the temporary canvas.
+          const PREVIEW_RENDER_WIDTH = 500;
+          const PREVIEW_RENDER_HEIGHT = 450;
+    
           const tempCanvasElement = document.createElement("canvas");
+          tempCanvasElement.width = PREVIEW_RENDER_WIDTH;
+          tempCanvasElement.height = PREVIEW_RENDER_HEIGHT;
+    
           const tempCanvas = new fabric.Canvas(tempCanvasElement, {
-            width: canvas.getWidth(),
-            height: canvas.getHeight(),
+            width: PREVIEW_RENDER_WIDTH,
+            height: PREVIEW_RENDER_HEIGHT,
             backgroundColor: "transparent",
           });
-
+    
           let tempBgImageUrl =
             viewToPreview === "front" ? frontImageUrl : backImageUrl;
-          let tempDataObjects =
-            viewToPreview === "front"
-              ? frontDesignData.objects
-              : backDesignData.objects;
-
+          let tempDataObjects;
+          let savedCanvasWidth, savedCanvasHeight;
+    
+          if (viewToPreview === "front") {
+            tempDataObjects = frontDesignData.objects;
+            savedCanvasWidth = frontDesignData.canvasWidth || canvas.getWidth();
+            savedCanvasHeight = frontDesignData.canvasHeight || canvas.getHeight();
+          } else {
+            tempDataObjects = backDesignData.objects;
+            savedCanvasWidth = backDesignData.canvasWidth || canvas.getWidth();
+            savedCanvasHeight = backDesignData.canvasHeight || canvas.getHeight();
+          }
+    
           // Load background image to the temporary canvas
           fabric.Image.fromURL(tempBgImageUrl, function (img) {
             const canvasWidth = tempCanvas.getWidth();
             const canvasHeight = tempCanvas.getHeight();
             const imgAspectRatio = img.width / img.height;
             const canvasAspectRatio = canvasWidth / canvasHeight;
-
+    
             let scale;
             if (imgAspectRatio > canvasAspectRatio) {
               scale = canvasHeight / img.height;
             } else {
               scale = canvasWidth / img.width;
             }
+    
             img.scale(scale);
+    
             const centerX = (canvasWidth - img.width * scale) / 2;
             const centerY = (canvasHeight - img.height * scale) / 2;
+    
             tempCanvas.setBackgroundImage(
               img,
               tempCanvas.renderAll.bind(tempCanvas),
@@ -2243,29 +2366,47 @@
                 top: centerY,
                 originX: "left",
                 originY: "top",
+                selectable: false,
+                evented: false,
               }
             );
-
+    
             // After background is loaded, add design objects
             fabric.util.enlivenObjects(
               tempDataObjects,
               function (enlivenedObjects) {
+                // Calculate scaling factors from the saved design's canvas size to the modal preview canvas size
+                const widthScaleFactor = PREVIEW_RENDER_WIDTH / savedCanvasWidth;
+                const heightScaleFactor = PREVIEW_RENDER_HEIGHT / savedCanvasHeight;
+    
                 enlivenedObjects.forEach((obj) => {
-                  tempCanvas.add(obj);
+                  const clonedObj = fabric.util.object.clone(obj);
+    
+                  clonedObj.set({
+                    left: obj.left * widthScaleFactor,
+                    top: obj.top * heightScaleFactor,
+                    scaleX: obj.scaleX * widthScaleFactor,
+                    scaleY: obj.scaleY * heightScaleFactor,
+                    fontSize:
+                      obj.type === "textbox"
+                        ? obj.fontSize * heightScaleFactor // Scale font based on height factor
+                        : obj.fontSize,
+                  });
+                  tempCanvas.add(clonedObj);
                 });
                 tempCanvas.renderAll();
                 const dataURL = tempCanvas.toDataURL({
                   format: "png",
-                  multiplier: 2,
+                  multiplier: 1.5, // You can increase this for higher quality, but it will increase file size
                 });
-                tempCanvas.dispose(); // Important to clean up temporary canvas
+                tempCanvas.dispose();
                 resolve(dataURL);
               }
             );
           });
         });
       }
-
+    
       document.addEventListener("DOMContentLoaded", function () {
         const previewButton = document.getElementById("previewButton");
         const previewModal = document.getElementById("previewModal");
@@ -2275,96 +2416,90 @@
         const previewModalContent = document.getElementById(
           "previewModalContent"
         );
-
+    
         const modalFrontViewButton = document.getElementById("frontViewButton");
         const modalBackViewButton = document.getElementById("backViewButton");
-
+    
         // Event listener to open the modal
-        previewButton.addEventListener("click", async function () {
-          // Save current design before opening preview
-          saveCurrentDesignToData(
-            currentView === "front" ? frontDesignData : backDesignData
-          );
-
-          // Hide guide lines on the main canvas (optional, as preview uses temp canvas)
-          const guideObjects = [
-            centerGuideLineX,
-            centerGuideLineY,
-            dragGuideLineX,
-            dragGuideLineY,
-            labelX,
-            labelY,
-          ];
-          guideObjects.forEach((obj) => obj.set("visible", false));
-          canvas.renderAll(); // Re-render main canvas after hiding
-
-          // Generate preview for the currently active view
-          const initialViewForModal = currentView;
-          const dataURL = await generatePreviewImageForModal(
-            initialViewForModal
-          );
-          designPreviewImage.src = dataURL;
-
-          previewModal.classList.remove("hidden");
-          document.body.classList.add("overflow-hidden");
-
-          setTimeout(() => {
-            previewModalContent.classList.remove(
-              "opacity-0",
-              "-translate-y-10"
+        if (previewButton) {
+          previewButton.addEventListener("click", async function () {
+            // Save current view's design before opening modal to ensure latest state
+            saveCurrentDesignToData(
+              currentView === "front" ? frontDesignData : backDesignData
             );
-            previewModalContent.classList.add("opacity-100", "translate-y-0");
-          }, 10);
-
-          // Restore visibility of guide lines on the main canvas
-          centerGuideLineX.set("visible", true);
-          centerGuideLineY.set("visible", true);
-          dragGuideLineX.set("visible", false);
-          dragGuideLineY.set("visible", false);
-          labelX.set("visible", false);
-          labelY.set("visible", false);
-          canvas.renderAll();
-        });
-
+    
+            const guideObjects = [
+              centerGuideLineX,
+              centerGuideLineY,
+              dragGuideLineX,
+              dragGuideLineY,
+              labelX,
+              labelY,
+            ];
+            guideObjects.forEach((obj) => obj.set("visible", false));
+            canvas.renderAll();
+    
+            const initialViewForModal = currentView;
+            const dataURL = await generatePreviewImageForModal(
+              initialViewForModal
+            );
+            designPreviewImage.src = dataURL;
+    
+            // Ensure the correct button is highlighted when opening the modal
+            if (initialViewForModal === "front") {
+              modalFrontViewButton.classList.add("bg-gray-200");
+              modalBackViewButton.classList.remove("bg-gray-200");
+            } else {
+              modalBackViewButton.classList.add("bg-gray-200");
+              modalFrontViewButton.classList.remove("bg-gray-200");
+            }
+    
+    
+            previewModal.classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+    
+            setTimeout(() => {
+              previewModalContent.classList.remove("opacity-0", "scale-95");
+              previewModalContent.classList.add("opacity-100", "scale-100");
+            }, 10);
+    
+            // Re-enable main canvas guide lines if needed (they are non-interactive anyway)
+            centerGuideLineX.set("visible", true);
+            centerGuideLineY.set("visible", true);
+            dragGuideLineX.set("visible", false);
+            dragGuideLineY.set("visible", false);
+            labelX.set("visible", false);
+            labelY.set("visible", false);
+            canvas.renderAll();
+          });
+        }
+    
         // Event listener for "Front" button in the modal
         if (modalFrontViewButton) {
           modalFrontViewButton.addEventListener("click", async () => {
             const dataURL = await generatePreviewImageForModal("front");
             designPreviewImage.src = dataURL;
+            modalFrontViewButton.classList.add("bg-gray-200");
+            modalBackViewButton.classList.remove("bg-gray-200");
           });
         }
-
+    
         // Event listener for "Back" button in the modal
         if (modalBackViewButton) {
           modalBackViewButton.addEventListener("click", async () => {
             const dataURL = await generatePreviewImageForModal("back");
             designPreviewImage.src = dataURL;
+            modalBackViewButton.classList.add("bg-gray-200");
+            modalFrontViewButton.classList.remove("bg-gray-200");
           });
         }
-
-        closeModalButton.addEventListener("click", function () {
-          previewModalContent.classList.remove("opacity-100", "translate-y-0");
-          previewModalContent.classList.add("opacity-0", "-translate-y-10");
-
-          previewModalContent.addEventListener(
-            "transitionend",
-            function handler() {
-              previewModal.classList.add("hidden");
-              document.body.classList.remove("overflow-hidden");
-              previewModalContent.removeEventListener("transitionend", handler);
-            }
-          );
-          canvas.renderAll();
-        });
-
-        previewModal.addEventListener("click", function (event) {
-          if (event.target === previewModal) {
-            previewModalContent.classList.remove(
-              "opacity-100",
-              "translate-y-0"
-            );
-            previewModalContent.classList.add("opacity-0", "-translate-y-10");
-
+    
+        // Close Modal Button Event Listener
+        if (closeModalButton) {
+          closeModalButton.addEventListener("click", function () {
+            previewModalContent.classList.remove("opacity-100", "scale-100");
+            previewModalContent.classList.add("opacity-0", "scale-95");
+    
             previewModalContent.addEventListener(
               "transitionend",
               function handler() {
@@ -2374,23 +2509,47 @@
                   "transitionend",
                   handler
                 );
-              }
+              },
+              { once: true }
             );
             canvas.renderAll();
-          }
-        });
-
+          });
+        }
+    
+        // Close Modal when clicking outside
+        if (previewModal) {
+          previewModal.addEventListener("click", function (event) {
+            if (event.target === previewModal) {
+              previewModalContent.classList.remove("opacity-100", "scale-100");
+              previewModalContent.classList.add("opacity-0", "scale-95");
+    
+              previewModalContent.addEventListener(
+                "transitionend",
+                function handler() {
+                  previewModal.classList.add("hidden");
+                  document.body.classList.remove("overflow-hidden");
+                  previewModalContent.removeEventListener(
+                    "transitionend",
+                    handler
+                  );
+                },
+                { once: true }
+              );
+              canvas.renderAll();
+            }
+          });
+        }
+    
+        // Close Modal with Escape key
         document.addEventListener("keydown", function (event) {
           if (
             event.key === "Escape" &&
+            previewModal &&
             !previewModal.classList.contains("hidden")
           ) {
-            previewModalContent.classList.remove(
-              "opacity-100",
-              "translate-y-0"
-            );
-            previewModalContent.classList.add("opacity-0", "-translate-y-10");
-
+            previewModalContent.classList.remove("opacity-100", "scale-100");
+            previewModalContent.classList.add("opacity-0", "scale-95");
+    
             previewModalContent.addEventListener(
               "transitionend",
               function handler() {
@@ -2400,75 +2559,64 @@
                   "transitionend",
                   handler
                 );
-              }
+              },
+              { once: true }
             );
             canvas.renderAll();
           }
         });
       });
     </script>
-    <!-- event listener js -->
     <script>
       // event-listeners.js
       // This script contains global event listeners for window resize and DOMContentLoaded.
-
-      window.addEventListener("resize", () => {
-        const canvasWrapper = document.getElementById("canvas-wrapper");
-        if (canvasWrapper) {
-          canvas.setWidth(canvasWrapper.clientWidth);
-          canvas.setHeight(canvasWrapper.clientHeight);
-          canvas.renderAll();
-          updateBgImagePositionOnRender();
-
-          centerGuideLineX.set({
-            x1: 0,
-            y1: canvas.getHeight() / 2,
-            x2: canvas.getWidth(),
-            y2: canvas.getHeight() / 2,
-          });
-          centerGuideLineY.set({
-            x1: canvas.getWidth() / 2,
-            y1: 0,
-            x2: canvas.getWidth() / 2,
-            y2: canvas.getHeight(),
-          });
-          canvas.renderAll();
-        }
-      });
-
+    
       document.addEventListener("DOMContentLoaded", () => {
-        // Set initial product background (front)
-        setBackgroundImage(frontImageUrl);
-
         const savedFullDesign = localStorage.getItem("kaosDesign");
         if (savedFullDesign) {
           try {
             const parsedDesign = JSON.parse(savedFullDesign);
             if (parsedDesign.front) {
-              frontDesignData.objects = parsedDesign.front;
+              // Copy all properties, including canvasWidth/Height
+              Object.assign(frontDesignData, parsedDesign.front);
             }
             if (parsedDesign.back) {
-              backDesignData.objects = parsedDesign.back;
+              // Copy all properties, including canvasWidth/Height
+              Object.assign(backDesignData, parsedDesign.back);
             }
+            // Ensure initializeCanvasAndBackground has set up the canvas dimensions first
+            initializeCanvasAndBackground(); // This will also scale any existing objects
             loadDesignFromData(frontDesignData);
             currentView = "front";
           } catch (e) {
             console.error("Error parsing saved design from localStorage:", e);
             frontDesignData.objects = [];
+            frontDesignData.canvasWidth = 0;
+            frontDesignData.canvasHeight = 0;
             backDesignData.objects = [];
+            backDesignData.canvasWidth = 0;
+            backDesignData.canvasHeight = 0;
             updateDesignList();
           }
         } else {
+          initializeCanvasAndBackground(); // Call if no saved design, to set up initial canvas
           updateDesignList();
         }
-
-        window.dispatchEvent(new Event("resize"));
+    
+        // Set default zoom to 75% after all other initializations
+        if (zoomSelect) {
+          zoomSelect.value = "75%"; // Set the dropdown to 75%
+          applyZoom(75); // Apply the 75% zoom programmatically
+        }
+    
         updateUIFromActiveObject();
-
-        centerGuideLineX.set("visible", true);
-        centerGuideLineY.set("visible", true);
+    
         canvas.renderAll();
       });
+    
+      // Ensure resize listener also uses the `initializeCanvasAndBackground` from fabric-canvas-init.js
+      // This is already set up in fabric-canvas-init.js: window.addEventListener("resize", initializeCanvasAndBackground);
+      // No need to duplicate here.
     </script>
   </body>
 </html>
