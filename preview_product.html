@@ -193,33 +193,6 @@
           Total Harga : Rp 125.000
         </span>
       </div>
-
-      <!-- Kanan: Tombol Aksi -->
-      <div
-        class="hidden sm:flex sm:static sm:bottom-auto right-4 bottom-6 gap-2 sm:gap-3 flex-shrink-0"
-      >
-        <!-- Download -->
-        <a
-          href="#"
-          class="flex items-center justify-center gap-2 text-xs sm:text-sm font-quantify px-3 py-1.5 sm:px-4 sm:py-2 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-full hover:bg-[#c1985e] transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 sm:h-5 sm:w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
-            />
-          </svg>
-          Download
-        </a>
-      </div>
     </div>
 
     <!-- SECTION PREVIEW PRODUK -->
@@ -319,9 +292,9 @@
         </div>
       </div>
 
-      <!-- informasi desain section -->
+      <!-- informasi produk section -->
       <div
-        class="w-full lg:w-80 flex-none bg-white border border-[#d1a86f] p-4 rounded-2xl shadow-xl mt-2 lg:mt-0 max-h-[680px] overflow-y-auto"
+        class="w-full lg:w-80 flex-none bg-white border border-[#d1a86f] p-4 rounded-2xl shadow-xl mt-2 lg:mt-0"
       >
         <h2
           class="text-xl font-bold text-[#0f2d25] mb-6 font-quantify text-center"
@@ -479,26 +452,49 @@
           </div>
         </div>
 
-        <div class="mt-10 text-center">
-          <button
-            class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition text-[15px]"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+        <!-- button section -->
+        <div class="mt-20 text-center">
+          <div class="flex flex-col items-center justify-center space-y-4">
+            <button
+              id="downloadImageButton"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-yellow-400 text-black font-medium hover:bg-yellow-500 transition text-[15px] w-full max-w-xs"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
                 stroke-width="2"
-                d="M6 9V2h12v7M6 18h12v2a1 1 0 01-1 1H7a1 1 0 01-1-1v-2zm12 0H6v-4h12v4z"
-              />
-            </svg>
-            Checkout Produk
-          </button>
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
+              </svg>
+              Unduh Gambar
+            </button>
+            <button
+              class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition text-[15px] w-full max-w-xs"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 9V2h12v7M6 18h12v2a1 1 0 01-1 1H7a1 1 0 01-1-1v-2zm12 0H6v-4h12v4z"
+                />
+              </svg>
+              Checkout Produk
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -780,12 +776,16 @@
     <script src="js/script.js"></script>
     <!-- fabric js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-    <!-- preview js -->
+    <!-- preview canvas init js -->
     <script>
+      // preview-canvas-init.js
+      // This script initializes the Fabric.js canvas for the preview
+      // and defines global variables for product images and saved design data.
+
       let canvas;
       let currentZoom = 1;
       let currentSide = "front";
-      let backgroundAsObject = null; // Ini akan menjadi objek Fabric.js untuk background
+      let backgroundAsObject = null; // This will be the Fabric.js object for the background
 
       const productImages = {
         front: "image/product4.jpeg",
@@ -806,11 +806,11 @@
         const canvasWrapper = document.getElementById("canvas-wrapper");
 
         if (!canvasElement || !canvasWrapper) {
-          console.error("Elemen canvas atau wrapper tidak ditemukan.");
+          console.error("Canvas or wrapper element not found.");
           return;
         }
 
-        // Ambil desain dari localStorage
+        // Retrieve design from localStorage
         const savedFullDesign = localStorage.getItem(localStorageKey);
         if (savedFullDesign) {
           try {
@@ -822,125 +822,47 @@
               savedDesigns.canvasHeight = parsedDesign.canvasHeight;
             }
           } catch (e) {
-            console.error("Error parsing design dari localStorage:", e);
+            console.error("Error parsing design from localStorage:", e);
           }
         }
 
-        // Atur ukuran kanvas preview sesuai dengan yang disimpan (atau default)
+        // Set preview canvas size according to saved (or default)
         canvasElement.width = savedDesigns.canvasWidth;
         canvasElement.height = savedDesigns.canvasHeight;
 
         canvas = new fabric.Canvas("previewCanvas", {
-          selection: false, // Menonaktifkan box selection
-          interactive: false, // Menonaktifkan interaksi objek default Fabric.js
+          selection: false, // Disable box selection
+          interactive: false, // Disable default Fabric.js object interaction
           preserveObjectStacking: true,
           renderOnAddRemove: false,
           backgroundColor: "transparent",
           width: savedDesigns.canvasWidth,
           height: savedDesigns.canvasHeight,
-          // Tambahkan event mouse wheel untuk zoom (jika belum ada)
-          // Ini dari Fabric.js docs untuk pan/zoom
         });
 
-        // Sesuaikan ukuran wrapper agar sesuai dengan canvas
+        // Adjust wrapper size to match canvas
         canvasWrapper.style.width = `${savedDesigns.canvasWidth}px`;
         canvasWrapper.style.height = `${savedDesigns.canvasHeight + 50}px`;
 
-        displayDesign("front");
-        setupPanelControls();
-
+        // Initialize zoom select value
         const zoomSelect = document.getElementById("zoomSelect");
         if (zoomSelect) zoomSelect.value = "100";
-
-        // PENTING: Inisialisasi event pan di sini, setelah canvas dibuat.
-        // Variabel global untuk pan
-        let isDragging = false;
-        let lastPosX;
-        let lastPosY;
-
-        canvas.on("mouse:down", function (opt) {
-          // Hanya aktifkan pan jika zoom lebih dari 100%
-          // dan tidak ada objek yang secara eksplisit dapat dipilih/dragable.
-          // Karena `interactive: false` dan semua objek diset `evented: false`,
-          // kita tidak perlu memeriksa `opt.target === null` lagi.
-          // Setiap klik pada kanvas (bukan di luar elemen kanvas) akan dianggap sebagai upaya pan.
-          if (canvas.getZoom() > 1.0) {
-            isDragging = true;
-            canvas.selection = false; // Memastikan tidak ada box selection
-            lastPosX = opt.e.clientX;
-            lastPosY = opt.e.clientY;
-            canvas.setCursor("grab"); // Mengubah kursor
-          }
-        });
-
-        canvas.on("mouse:move", function (opt) {
-          if (isDragging) {
-            const evt = opt.e;
-            const vpt = this.viewportTransform;
-            vpt[4] += evt.clientX - lastPosX;
-            vpt[5] += evt.clientY - lastPosY;
-            this.requestRenderAll(); // Gunakan requestRenderAll untuk performa lebih baik
-            lastPosX = evt.clientX;
-            lastPosY = evt.clientY;
-            canvas.setCursor("grabbing"); // Mengubah kursor saat menggeser
-          }
-        });
-
-        canvas.on("mouse:up", function (opt) {
-          isDragging = false;
-          canvas.selection = true; // Mengembalikan properti selection ke nilai awalnya (false dari init)
-          canvas.setCursor("default"); // Mengembalikan kursor
-        });
       });
-
-      function setupPanelControls() {
-        const zoomSelect = document.getElementById("zoomSelect");
-        if (zoomSelect) {
-          zoomSelect.addEventListener("change", function () {
-            currentZoom = parseFloat(this.value) / 100;
-            updateCanvasZoom();
-          });
-        }
-
-        const depanButton = document.getElementById("depanButton");
-        const belakangButton = document.getElementById("belakangButton");
-
-        if (depanButton) {
-          depanButton.addEventListener("click", () => {
-            if (currentSide !== "front") displayDesign("front");
-          });
-        }
-
-        if (belakangButton) {
-          belakangButton.addEventListener("click", () => {
-            if (currentSide !== "back") displayDesign("back");
-          });
-        }
-      }
-
-      function updateCanvasZoom() {
-        if (currentZoom !== 1) {
-          const centerPoint = new fabric.Point(
-            canvas.width / 2,
-            canvas.height / 2
-          );
-          // Menggunakan zoomToPoint untuk zoom yang terpusat
-          canvas.zoomToPoint(centerPoint, currentZoom);
-        } else {
-          canvas.setZoom(1);
-          canvas.setViewportTransform([1, 0, 0, 1, 0, 0]); // Reset pan to center
-        }
-        canvas.renderAll();
-      }
+    </script>
+    <!-- preview design display js -->
+    <script>
+      // preview-design-display.js
+      // This script contains the core logic for displaying saved designs on the canvas,
+      // including loading background images, design objects, and fonts.
 
       async function displayDesign(side) {
         currentSide = side;
-        canvas.clear(); // Bersihkan semua objek dari canvas terlebih dahulu
+        canvas.clear(); // Clear all objects from canvas first
 
         const designObjectsData = savedDesigns?.[side] || [];
         const backgroundImageURL = productImages?.[side];
 
-        // Tombol aktif/nonaktif
+        // Active/inactive buttons for view switching
         const depanButton = document.getElementById("depanButton");
         const belakangButton = document.getElementById("belakangButton");
         if (depanButton) {
@@ -952,7 +874,7 @@
           belakangButton.classList.toggle("bg-white", side !== "back");
         }
 
-        // Load font jika perlu
+        // Load fonts if necessary
         if (designObjectsData && designObjectsData.length > 0) {
           const fontFamiliesToLoad = new Set();
           designObjectsData.forEach((obj) => {
@@ -984,7 +906,7 @@
           );
         }
 
-        // Memuat gambar latar belakang sebagai objek Fabric.js
+        // Load background image as a Fabric.js object
         backgroundAsObject = await new Promise((resolve, reject) => {
           fabric.Image.fromURL(
             backgroundImageURL,
@@ -1017,8 +939,8 @@
                 top: centerY,
                 originX: "left",
                 originY: "top",
-                selectable: false, // TIDAK dapat dipilih
-                evented: false, // TIDAK akan memblokir event mouse ke kanvas
+                selectable: false, // NOT selectable
+                evented: false, // Will NOT block mouse events to the canvas
                 hasControls: false,
                 hasBorders: false,
                 objectCaching: false,
@@ -1039,13 +961,13 @@
           );
         });
 
-        // Tambahkan background duluan
+        // Add background first
         if (backgroundAsObject) {
           canvas.add(backgroundAsObject);
           canvas.sendToBack(backgroundAsObject);
         }
 
-        // Load objek desain menggunakan loadFromJSON
+        // Load design objects using loadFromJSON
         if (designObjectsData && designObjectsData.length > 0) {
           const fabricJSONFormat = {
             objects: designObjectsData,
@@ -1054,7 +976,7 @@
             canvas.loadFromJSON(
               fabricJSONFormat,
               () => {
-                console.log("Preview: Objek desain berhasil dimuat.");
+                console.log("Preview: Design objects successfully loaded.");
                 if (backgroundAsObject) {
                   canvas.sendToBack(backgroundAsObject);
                 }
@@ -1062,7 +984,7 @@
                 resolve();
               },
               function (o, object) {
-                // Pastikan objek desain tidak dapat dipilih atau diinteraksi di preview
+                // Ensure design objects are not selectable or interactive in preview
                 object.set({
                   selectable: false,
                   evented: false,
@@ -1080,8 +1002,109 @@
         updateCanvasZoom();
         canvas.renderAll();
       }
+    </script>
+    <!-- panel control js -->
+    <script>
+      // preview-panel-controls.js
+      // This script handles the zoom and view switching controls in the preview panel.
 
-      // Resize canvas jika jendela diubah ukurannya
+      function setupPanelControls() {
+        const zoomSelect = document.getElementById("zoomSelect");
+        if (zoomSelect) {
+          zoomSelect.addEventListener("change", function () {
+            currentZoom = parseFloat(this.value) / 100;
+            updateCanvasZoom();
+          });
+        }
+
+        const depanButton = document.getElementById("depanButton");
+        const belakangButton = document.getElementById("belakangButton");
+
+        if (depanButton) {
+          depanButton.addEventListener("click", () => {
+            if (currentSide !== "front") displayDesign("front");
+          });
+        }
+
+        if (belakangButton) {
+          belakangButton.addEventListener("click", () => {
+            if (currentSide !== "back") displayDesign("back");
+          });
+        }
+      }
+
+      function updateCanvasZoom() {
+        if (currentZoom !== 1) {
+          const centerPoint = new fabric.Point(
+            canvas.width / 2,
+            canvas.height / 2
+          );
+          // Use zoomToPoint for centered zoom
+          canvas.zoomToPoint(centerPoint, currentZoom);
+        } else {
+          canvas.setZoom(1);
+          canvas.setViewportTransform([1, 0, 0, 1, 0, 0]); // Reset pan to center
+        }
+        canvas.renderAll();
+      }
+    </script>
+    <!-- preview canvas interaction js -->
+    <script>
+      // preview-canvas-interaction.js
+      // This script handles interactive features for the preview canvas,
+      // specifically pan functionality when zoomed in.
+
+      let isDragging = false;
+      let lastPosX;
+      let lastPosY;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // IMPORTANT: Initialize pan events here, after canvas is created.
+        canvas.on("mouse:down", function (opt) {
+          // Only enable pan if zoom is more than 100%
+          if (canvas.getZoom() > 1.0) {
+            isDragging = true;
+            canvas.selection = false; // Ensure no box selection
+            lastPosX = opt.e.clientX;
+            lastPosY = opt.e.clientY;
+            canvas.setCursor("grab"); // Change cursor
+          }
+        });
+
+        canvas.on("mouse:move", function (opt) {
+          if (isDragging) {
+            const evt = opt.e;
+            const vpt = this.viewportTransform;
+            vpt[4] += evt.clientX - lastPosX;
+            vpt[5] += evt.clientY - lastPosY;
+            this.requestRenderAll(); // Use requestRenderAll for better performance
+            lastPosX = evt.clientX;
+            lastPosY = evt.clientY;
+            canvas.setCursor("grabbing"); // Change cursor while dragging
+          }
+        });
+
+        canvas.on("mouse:up", function (opt) {
+          isDragging = false;
+          canvas.selection = false; // Keep selection off, as interactive is false
+          canvas.setCursor("default"); // Restore cursor
+        });
+      });
+    </script>
+    <!-- event listener js -->
+    <script>
+      // preview-event-listeners.js
+      // This script contains global event listeners for the preview page,
+      // including DOMContentLoaded to set up initial display and window resize.
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Ensure Fabric.js canvas and associated elements are ready
+        // before attempting to display the design or set up controls.
+        displayDesign("front"); // Display front design initially
+        setupPanelControls(); // Setup panel controls after elements are available
+      });
+
+      // Resize canvas if window is resized
       window.addEventListener("resize", () => {
         const canvasWrapper = document.getElementById("canvas-wrapper");
         if (canvasWrapper) {

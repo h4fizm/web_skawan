@@ -194,33 +194,6 @@
           Total Harga : Rp 125.000
         </span>
       </div>
-
-      <!-- Kanan: Tombol Aksi -->
-      <div
-        class="hidden sm:flex sm:static sm:bottom-auto right-4 bottom-6 gap-2 sm:gap-3 flex-shrink-0"
-      >
-        <!-- Download -->
-        <a
-          href="#"
-          class="flex items-center justify-center gap-2 text-xs sm:text-sm font-quantify px-3 py-1.5 sm:px-4 sm:py-2 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-full hover:bg-[#c1985e] transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 sm:h-5 sm:w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
-            />
-          </svg>
-          Download
-        </a>
-      </div>
     </div>
 
     <!-- SECTION DESAIN PRODUK -->
@@ -1262,12 +1235,306 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
     <!-- custom js -->
     <script src="js/script.js"></script>
-    <!-- main design features js -->
+    <!-- fabric canvas init js -->
     <script>
-      // design features js
-      // ============================
-      // === FONT SIZE & FONT API ===
-      // ============================
+      // fabric-canvas-init.js
+      // This script initializes the Fabric.js canvas and defines global variables
+      // for background images and design data for front and back views.
+
+      const canvas = new fabric.Canvas("tshirtCanvas", {
+        preserveObjectStacking: true,
+        selection: true,
+        controlsAboveOverlay: true,
+      });
+
+      let bgImageObject = null;
+      let currentView = "front"; // State for the current view (front/back)
+      const frontDesignData = { objects: [] }; // Stores serialized JSON objects for front design
+      const backDesignData = { objects: [] }; // Stores serialized JSON objects for back design
+
+      const frontImageUrl = "image/product4.jpeg";
+      const backImageUrl = "image/product1.jpeg"; // Temporary back image
+
+      // Initialize background image for the canvas
+      fabric.Image.fromURL(frontImageUrl, (img) => {
+        bgImageObject = img;
+        const canvasWidth = canvas.getWidth();
+        const canvasHeight = canvas.getHeight();
+        const imgAspectRatio = img.width / img.height;
+        const canvasAspectRatio = canvasWidth / canvasHeight;
+
+        let scale;
+        if (imgAspectRatio > canvasAspectRatio) {
+          scale = canvasHeight / img.height;
+        } else {
+          scale = canvasWidth / img.width;
+        }
+
+        img.scale(scale);
+
+        const centerX = (canvasWidth - img.width * scale) / 2;
+        const centerY = (canvasHeight - img.height * scale) / 2;
+
+        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+          left: centerX,
+          top: centerY,
+          originX: "left",
+          originY: "top",
+          selectable: false,
+          evented: false,
+        });
+
+        canvas.off("after:render", updateBgImagePositionOnRender);
+        canvas.on("after:render", updateBgImagePositionOnRender);
+        canvas.renderAll(); // Initial render after background is set
+      });
+
+      // Guide lines (always visible and non-interactive)
+      const centerGuideLineX = new fabric.Line(
+        [0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2],
+        {
+          stroke: "#dc2626", // red
+          strokeWidth: 1,
+          selectable: false,
+          evented: false,
+          hasControls: false,
+          visible: true,
+          originX: "left",
+          originY: "top",
+        }
+      );
+
+      const centerGuideLineY = new fabric.Line(
+        [canvas.getWidth() / 2, 0, canvas.getWidth() / 2, canvas.getHeight()],
+        {
+          stroke: "#dc2626", // red
+          strokeWidth: 1,
+          selectable: false,
+          evented: false,
+          hasControls: false,
+          visible: true,
+          originX: "left",
+          originY: "top",
+        }
+      );
+
+      canvas.add(centerGuideLineX);
+      canvas.add(centerGuideLineY);
+
+      // Drag guide lines (only appear during dragging and non-interactive)
+      const dragGuideLineX = new fabric.Line([0, 0, 0, 0], {
+        stroke: "#10B981", // Green for drag guide lines
+        strokeWidth: 1,
+        selectable: false,
+        evented: false,
+        hasControls: false,
+        visible: false,
+      });
+
+      const dragGuideLineY = new fabric.Line([0, 0, 0, 0], {
+        stroke: "#10B981", // Green for drag guide lines
+        strokeWidth: 1,
+        selectable: false,
+        evented: false,
+        hasControls: false,
+        visible: false,
+      });
+
+      canvas.add(dragGuideLineX);
+      canvas.add(dragGuideLineY);
+
+      // Coordinate labels (only appear during dragging and non-interactive)
+      const labelX = new fabric.Text("", {
+        fontSize: 12,
+        fill: "#10B981",
+        backgroundColor: "rgba(255,255,255,0.8)",
+        originX: "left",
+        originY: "top",
+        selectable: false,
+        evented: false,
+        hasControls: false,
+        visible: false,
+      });
+
+      const labelY = new fabric.Text("", {
+        fontSize: 12,
+        fill: "#10B981",
+        backgroundColor: "rgba(255,255,255,0.8)",
+        originX: "left",
+        originY: "top",
+        selectable: false,
+        evented: false,
+        hasControls: false,
+        visible: false,
+      });
+
+      canvas.add(labelX);
+      canvas.add(labelY);
+    </script>
+    <!-- canvas helpers js -->
+    <script>
+      // canvas-helpers.js
+      // This script contains helper functions for managing the Fabric.js canvas,
+      // including background image handling, design saving/loading, and UI updates.
+
+      // Function to set the background image of the canvas
+      const setBackgroundImage = (imgUrl) => {
+        fabric.Image.fromURL(imgUrl, (img) => {
+          bgImageObject = img;
+          const canvasWidth = canvas.getWidth();
+          const canvasHeight = canvas.getHeight();
+          const imgAspectRatio = img.width / img.height;
+          const canvasAspectRatio = canvasWidth / canvasHeight;
+
+          let scale;
+          if (imgAspectRatio > canvasAspectRatio) {
+            scale = canvasHeight / img.height;
+          } else {
+            scale = canvasWidth / img.width;
+          }
+
+          img.scale(scale);
+
+          const centerX = (canvasWidth - img.width * scale) / 2;
+          const centerY = (canvasHeight - img.height * scale) / 2;
+
+          canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+            left: centerX,
+            top: centerY,
+            originX: "left",
+            originY: "top",
+            selectable: false,
+            evented: false,
+          });
+        });
+      };
+
+      // Function to update background image position on render
+      const updateBgImagePositionOnRender = () => {
+        if (bgImageObject) {
+          const canvasWidth = canvas.getWidth();
+          const canvasHeight = canvas.getHeight();
+          const imgAspectRatio = bgImageObject.width / bgImageObject.height;
+          const canvasAspectRatio = canvasWidth / canvasHeight;
+
+          let currentScale;
+          if (imgAspectRatio > canvasAspectRatio) {
+            currentScale = canvasHeight / bgImageObject.height;
+          } else {
+            currentScale = canvasWidth / bgImageObject.width;
+          }
+
+          const scaledWidth = bgImageObject.width * currentScale;
+          const scaledHeight = bgImageObject.height * currentScale;
+
+          const currentCenterX = (canvasWidth - scaledWidth) / 2;
+          const currentCenterY = (canvasHeight - scaledHeight) / 2;
+
+          bgImageObject.set({
+            left: currentCenterX,
+            top: currentCenterY,
+            scaleX: currentScale,
+            scaleY: currentScale,
+          });
+        }
+      };
+
+      // Function to save current design objects to specified data storage
+      function saveCurrentDesignToData(designStorage) {
+        designStorage.objects = canvas
+          .getObjects()
+          .filter(
+            (obj) =>
+              obj !== bgImageObject &&
+              obj !== centerGuideLineX &&
+              obj !== centerGuideLineY &&
+              obj !== dragGuideLineX &&
+              obj !== dragGuideLineY &&
+              obj !== labelX &&
+              obj !== labelY
+          )
+          .map((obj) => obj.toJSON());
+        console.log(`Saved design for ${currentView}:`, designStorage);
+      }
+
+      // Function to clear design objects from the canvas (excluding background and guide lines)
+      function clearCanvasObjects() {
+        const objectsToRemove = canvas.getObjects().filter((obj) => {
+          return (
+            obj !== bgImageObject &&
+            obj !== centerGuideLineX &&
+            obj !== centerGuideLineY &&
+            obj !== dragGuideLineX &&
+            obj !== dragGuideLineY &&
+            obj !== labelX &&
+            obj !== labelY
+          );
+        });
+
+        objectsToRemove.forEach((obj) => {
+          canvas.remove(obj);
+        });
+        canvas.discardActiveObject();
+        canvas.renderAll();
+      }
+
+      // Function to load design objects from specified data storage
+      function loadDesignFromData(designStorage) {
+        fabric.util.enlivenObjects(
+          designStorage.objects,
+          function (enlivenedObjects) {
+            enlivenedObjects.forEach((obj) => {
+              if (obj.type === "textbox" && obj.fontFamily) {
+                const font = obj.fontFamily;
+                const fontId = `font-link-${font.replace(/[^a-zA-Z0-9]/g, "")}`;
+                if (!document.getElementById(fontId)) {
+                  const link = document.createElement("link");
+                  link.id = fontId;
+                  link.rel = "stylesheet";
+                  link.href = `https://fonts.googleapis.com/css2?family=${font.replace(
+                    / /g,
+                    "+"
+                  )}&display=swap`;
+                  document.head.appendChild(link);
+                }
+              }
+              canvas.add(obj);
+            });
+            canvas.renderAll();
+            updateDesignList();
+            updateUIFromActiveObject();
+          }
+        );
+      }
+
+      // Function to load custom fonts from a design JSON
+      const loadCustomFontsFromDesign = (json) => {
+        const designData = JSON.parse(json);
+        if (designData && designData.objects) {
+          designData.objects.forEach((obj) => {
+            if (obj.type === "textbox" && obj.fontFamily) {
+              const font = obj.fontFamily;
+              const fontId = `font-link-${font.replace(/[^a-zA-Z0-9]/g, "")}`;
+              if (!document.getElementById(fontId)) {
+                const link = document.createElement("link");
+                link.id = fontId;
+                link.rel = "stylesheet";
+                link.href = `https://fonts.googleapis.com/css2?family=${font.replace(
+                  / /g,
+                  "+"
+                )}&display=swap`;
+                document.head.appendChild(link);
+              }
+            }
+          });
+        }
+      };
+    </script>
+    <!-- font features js -->
+    <script>
+      // font-features.js
+      // This script handles font selection, API fetching, and rendering.
+
       const fontSizeSelect = document.getElementById("fontSize");
       if (fontSizeSelect) {
         for (let i = 10; i <= 64; i += 2) {
@@ -1280,7 +1547,7 @@
 
       let currentFont = "Arial";
       let fontsList = [];
-      const apiKey = "AIzaSyBbHsIzkkLsTKLNRcomvRlw-qZqWeC91OU"; // Ganti dengan API Key Google Fonts Anda yang valid
+      const apiKey = "AIzaSyBbHsIzkkLsTKLNRcomvRlw-qZqWeC91OU"; // Replace with your valid Google Fonts API Key
 
       fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}`)
         .then((r) => r.json())
@@ -1311,12 +1578,12 @@
 
           const div = document.createElement("div");
           div.className =
-            "border p-2 rounded text-center text-sm cursor-pointer hover:bg-gray-100 mb-1 font-list-item"; // Menambahkan kelas untuk styling
+            "border p-2 rounded text-center text-sm cursor-pointer hover:bg-gray-100 mb-1 font-list-item";
           div.textContent = font;
           div.style.fontFamily = font;
           div.onclick = () => {
             currentFont = font;
-            const fontModal = document.getElementById("fontModal"); // Asumsi ada modal font
+            const fontModal = document.getElementById("fontModal");
 
             const activeObject = canvas.getActiveObject();
             if (activeObject && activeObject.type === "textbox") {
@@ -1342,181 +1609,12 @@
           renderFonts(fontsList.filter((f) => f.toLowerCase().includes(q)));
         };
       }
-
-      // =======================
-      // === INIT FABRIC JS ===
-      // =======================
-      const canvas = new fabric.Canvas("tshirtCanvas", {
-        preserveObjectStacking: true,
-        selection: true,
-        controlsAboveOverlay: true,
-      });
-
-      // Deklarasi variabel global untuk background dan garis bantu
-      let bgImageObject = null;
-      let currentView = "front"; // Menambahkan state untuk view (depan/belakang)
-      const frontDesignData = { objects: [] }; // Menyimpan objek JSON serialisasi untuk desain depan
-      const backDesignData = { objects: [] }; // Menyimpan objek JSON serialisasi untuk desain belakang
-
-      // Gambar background untuk depan dan belakang
-      const frontImageUrl = "image/product4.jpeg";
-      const backImageUrl = "image/product1.jpeg"; // Gambar belakang sementara
-
-      const setBackgroundImage = (imgUrl) => {
-        fabric.Image.fromURL(imgUrl, (img) => {
-          bgImageObject = img;
-          const canvasWidth = canvas.getWidth();
-          const canvasHeight = canvas.getHeight();
-          const imgAspectRatio = img.width / img.height;
-          const canvasAspectRatio = canvasWidth / canvasHeight;
-
-          let scale;
-          if (imgAspectRatio > canvasAspectRatio) {
-            scale = canvasHeight / img.height;
-          } else {
-            scale = canvasWidth / img.width;
-          }
-
-          img.scale(scale);
-
-          const centerX = (canvasWidth - img.width * scale) / 2;
-          const centerY = (canvasHeight - img.height * scale) / 2;
-
-          canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-            left: centerX,
-            top: centerY,
-            originX: "left",
-            originY: "top",
-            selectable: false,
-            evented: false,
-          });
-
-          canvas.off("after:render", updateBgImagePositionOnRender);
-          canvas.on("after:render", updateBgImagePositionOnRender);
-        });
-      };
-
-      const updateBgImagePositionOnRender = () => {
-        if (bgImageObject) {
-          const canvasWidth = canvas.getWidth();
-          const canvasHeight = canvas.getHeight();
-          const imgAspectRatio = bgImageObject.width / bgImageObject.height;
-          const canvasAspectRatio = canvasWidth / canvasHeight;
-
-          let currentScale;
-          if (imgAspectRatio > canvasAspectRatio) {
-            currentScale = canvasHeight / bgImageObject.height;
-          } else {
-            currentScale = canvasWidth / bgImageObject.width;
-          }
-
-          const scaledWidth = bgImageObject.width * currentScale;
-          const scaledHeight = bgImageObject.height * currentScale;
-
-          const currentCenterX = (canvasWidth - scaledWidth) / 2;
-          const currentCenterY = (canvasHeight - scaledHeight) / 2;
-
-          bgImageObject.set({
-            left: currentCenterX,
-            top: currentCenterY,
-            scaleX: currentScale,
-            scaleY: currentScale,
-          });
-        }
-      };
-
-      // --- Fungsi Pembantu untuk Depan/Belakang ---
-
-      // Fungsi untuk menyimpan objek desain saat ini ke penyimpanan data yang ditentukan
-      function saveCurrentDesignToData(designStorage) {
-        designStorage.objects = canvas
-          .getObjects()
-          .filter(
-            (obj) =>
-              obj !== bgImageObject &&
-              obj !== centerGuideLineX &&
-              obj !== centerGuideLineY &&
-              obj !== dragGuideLineX &&
-              obj !== dragGuideLineY &&
-              obj !== labelX &&
-              obj !== labelY
-          )
-          .map((obj) => obj.toJSON());
-        console.log(`Saved design for ${currentView}:`, designStorage);
-      }
-
-      // Fungsi untuk membersihkan objek desain dari canvas (kecuali background dan garis bantu)
-      function clearCanvasObjects() {
-        const objectsToRemove = canvas.getObjects().filter((obj) => {
-          return (
-            obj !== bgImageObject &&
-            obj !== centerGuideLineX &&
-            obj !== centerGuideLineY &&
-            obj !== dragGuideLineX &&
-            obj !== dragGuideLineY &&
-            obj !== labelX &&
-            obj !== labelY
-          );
-        });
-
-        objectsToRemove.forEach((obj) => {
-          canvas.remove(obj);
-        });
-        canvas.discardActiveObject();
-        canvas.renderAll();
-      }
-
-      // Fungsi untuk memuat objek desain dari penyimpanan data yang ditentukan
-      function loadDesignFromData(designStorage) {
-        fabric.util.enlivenObjects(
-          designStorage.objects,
-          function (enlivenedObjects) {
-            enlivenedObjects.forEach((obj) => {
-              if (obj.type === "textbox" && obj.fontFamily) {
-                const font = obj.fontFamily;
-                const fontId = `font-link-${font.replace(/[^a-zA-Z0-9]/g, "")}`;
-                if (!document.getElementById(fontId)) {
-                  const link = document.createElement("link");
-                  link.id = fontId;
-                  link.rel = "stylesheet";
-                  link.href = `https://fonts.googleapis.com/css2?family=${font.replace(
-                    / /g,
-                    "+"
-                  )}&display=swap`;
-                  document.head.appendChild(link);
-                }
-              }
-              canvas.add(obj);
-            });
-            canvas.renderAll();
-            updateDesignList();
-            updateUIFromActiveObject();
-          }
-        );
-      }
-      // --- Akhir Fungsi Pembantu untuk Depan/Belakang ---
-
-      const loadCustomFontsFromDesign = (json) => {
-        const designData = JSON.parse(json);
-        if (designData && designData.objects) {
-          designData.objects.forEach((obj) => {
-            if (obj.type === "textbox" && obj.fontFamily) {
-              const font = obj.fontFamily;
-              const fontId = `font-link-${font.replace(/[^a-zA-Z0-9]/g, "")}`;
-              if (!document.getElementById(fontId)) {
-                const link = document.createElement("link");
-                link.id = fontId;
-                link.rel = "stylesheet";
-                link.href = `https://fonts.googleapis.com/css2?family=${font.replace(
-                  / /g,
-                  "+"
-                )}&display=swap`;
-                document.head.appendChild(link);
-              }
-            }
-          });
-        }
-      };
+    </script>
+    <!-- text image control js -->
+    <script>
+      // text-image-controls.js
+      // This script handles adding text and images to the canvas
+      // and updating the UI controls for selected objects.
 
       function addTextToCanvas(font = "Arial") {
         const textColorInput = document.getElementById("textColor");
@@ -1561,176 +1659,42 @@
         );
       }
 
-      // === Garis bantu center fix (SELALU TERLIHAT dan TIDAK BISA DIINTERAKSI) ===
-      const centerGuideLineX = new fabric.Line(
-        [0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2],
-        {
-          stroke: "#dc2626", // merah
-          strokeWidth: 1,
-          selectable: false,
-          evented: false,
-          hasControls: false,
-          visible: true,
-          originX: "left",
-          originY: "top",
-        }
-      );
+      const uploadPhotoInput = document.getElementById("upload-photo");
+      if (uploadPhotoInput) {
+        uploadPhotoInput.onchange = (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (f) => {
+            fabric.Image.fromURL(f.target.result, (img) => {
+              img.set({
+                left: 50,
+                top: 50,
+                selectable: true,
+                evented: true,
+                hasControls: true,
+                hasBorders: true,
+                cornerColor: "#d1a86f",
+                cornerSize: 10,
+                transparentCorners: false,
+                padding: 5,
+              });
 
-      const centerGuideLineY = new fabric.Line(
-        [canvas.getWidth() / 2, 0, canvas.getWidth() / 2, canvas.getHeight()],
-        {
-          stroke: "#dc2626", // merah
-          strokeWidth: 1,
-          selectable: false,
-          evented: false,
-          hasControls: false,
-          visible: true,
-          originX: "left",
-          originY: "top",
-        }
-      );
+              const maxDim = Math.max(img.width, img.height);
+              const scaleFactor = 150 / maxDim;
+              img.scale(scaleFactor);
 
-      canvas.add(centerGuideLineX);
-      canvas.add(centerGuideLineY);
+              canvas.add(img).setActiveObject(img);
+              canvas.renderAll();
+              updateDesignList();
+            });
+          };
+          reader.readAsDataURL(file);
+          e.target.value = "";
+        };
+      }
 
-      // === Garis bantu saat drag (HANYA MUNCUL SAAT DRAGGING dan TIDAK BISA DIINTERAKSI) ===
-      const dragGuideLineX = new fabric.Line([0, 0, 0, 0], {
-        stroke: "#10B981", // Hijau untuk garis bantu drag
-        strokeWidth: 1,
-        selectable: false,
-        evented: false,
-        hasControls: false,
-        visible: false,
-      });
-
-      const dragGuideLineY = new fabric.Line([0, 0, 0, 0], {
-        stroke: "#10B981", // Hijau untuk garis bantu drag
-        strokeWidth: 1,
-        selectable: false,
-        evented: false,
-        hasControls: false,
-        visible: false,
-      });
-
-      canvas.add(dragGuideLineX);
-      canvas.add(dragGuideLineY);
-
-      // === Label koordinat X dan Y (HANYA MUNCUL SAAT DRAGGING dan TIDAK BISA DIINTERAKSI) ===
-      const labelX = new fabric.Text("", {
-        fontSize: 12,
-        fill: "#10B981",
-        backgroundColor: "rgba(255,255,255,0.8)",
-        originX: "left",
-        originY: "top",
-        selectable: false,
-        evented: false,
-        hasControls: false,
-        visible: false,
-      });
-
-      const labelY = new fabric.Text("", {
-        fontSize: 12,
-        fill: "#10B981",
-        backgroundColor: "rgba(255,255,255,0.8)",
-        originX: "left",
-        originY: "top",
-        selectable: false,
-        evented: false,
-        hasControls: false,
-        visible: false,
-      });
-
-      canvas.add(labelX);
-      canvas.add(labelY);
-
-      // === Event drag (moving) ===
-      canvas.on("object:moving", function (e) {
-        const obj = e.target;
-        if (
-          !obj ||
-          obj === bgImageObject ||
-          obj === centerGuideLineX ||
-          obj === centerGuideLineY ||
-          obj === dragGuideLineX ||
-          obj === dragGuideLineY ||
-          obj === labelX ||
-          obj === labelY
-        ) {
-          dragGuideLineX.set("visible", false);
-          dragGuideLineY.set("visible", false);
-          labelX.set("visible", false);
-          labelY.set("visible", false);
-          canvas.renderAll();
-          return;
-        }
-
-        const centerX = canvas.getWidth() / 2;
-        const centerY = canvas.getHeight() / 2;
-        const objCenter = obj.getCenterPoint();
-        const tolerance = 5;
-
-        const isCenterX = Math.abs(objCenter.x - centerX) < tolerance;
-        const isCenterY = Math.abs(objCenter.y - centerY) < tolerance;
-
-        dragGuideLineX.set({
-          x1: 0,
-          y1: objCenter.y,
-          x2: canvas.getWidth(),
-          y2: objCenter.y,
-          visible: true,
-          strokeWidth: isCenterY ? 2.5 : 1,
-          stroke: isCenterY ? "#dc2626" : "#10B981",
-        });
-
-        dragGuideLineY.set({
-          x1: objCenter.x,
-          y1: 0,
-          x2: objCenter.x,
-          y2: canvas.getHeight(),
-          visible: true,
-          strokeWidth: isCenterX ? 2.5 : 1,
-          stroke: isCenterX ? "#dc2626" : "#10B981",
-        });
-
-        if (isCenterX) obj.left = centerX - obj.getScaledWidth() / 2;
-        if (isCenterY) obj.top = centerY - obj.getScaledHeight() / 2;
-
-        const x = Math.round(obj.left ?? 0);
-        const y = Math.round(obj.top ?? 0);
-
-        labelX.set({
-          text: `X: ${x}`,
-          left: obj.left,
-          top: obj.top - 20,
-          visible: true,
-        });
-
-        labelY.set({
-          text: `Y: ${y}`,
-          left: obj.left,
-          top: obj.top - 35,
-          visible: true,
-        });
-
-        canvas.bringToFront(dragGuideLineX);
-        canvas.bringToFront(dragGuideLineY);
-        canvas.bringToFront(labelX);
-        canvas.bringToFront(labelY);
-
-        canvas.renderAll();
-      });
-
-      canvas.on("mouse:up", () => {
-        dragGuideLineX.set("visible", false);
-        dragGuideLineY.set("visible", false);
-        labelX.set("visible", false);
-        labelY.set("visible", false);
-        canvas.renderAll();
-      });
-
-      // ===============================
-      // === UPDATE UI DARI OBJEK ===
-      // ===============================
+      // Function to update UI from active object
       function updateUIFromActiveObject() {
         const o = canvas.getActiveObject();
         const textColor = document.getElementById("textColor");
@@ -1784,9 +1748,7 @@
       canvas.on("object:modified", updateUIFromActiveObject);
       canvas.on("selection:cleared", updateUIFromActiveObject);
 
-      // ======================
-      // === TEXT CONTROL ====
-      // ======================
+      // Function to update active text properties
       function updateActiveText(prop, val) {
         const o = canvas.getActiveObject();
         if (o && o.type === "textbox") {
@@ -1871,48 +1833,12 @@
           };
         }
       });
+    </script>
+    <!-- design management js -->
+    <script>
+      // design-management.js
+      // This script manages the design list, saving, and clearing operations.
 
-      // =====================
-      // === GAMBAR UPLOAD ===
-      // =====================
-      const uploadPhotoInput = document.getElementById("upload-photo");
-      if (uploadPhotoInput) {
-        uploadPhotoInput.onchange = (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = (f) => {
-            fabric.Image.fromURL(f.target.result, (img) => {
-              img.set({
-                left: 50,
-                top: 50,
-                selectable: true,
-                evented: true,
-                hasControls: true,
-                hasBorders: true,
-                cornerColor: "#d1a86f",
-                cornerSize: 10,
-                transparentCorners: false,
-                padding: 5,
-              });
-
-              const maxDim = Math.max(img.width, img.height);
-              const scaleFactor = 150 / maxDim;
-              img.scale(scaleFactor);
-
-              canvas.add(img).setActiveObject(img);
-              canvas.renderAll();
-              updateDesignList();
-            });
-          };
-          reader.readAsDataURL(file);
-          e.target.value = "";
-        };
-      }
-
-      // ============================
-      // === DESIGN LIST & SAVE ====
-      // ============================
       function updateDesignList() {
         const designListContainer = document.getElementById("designList");
         const noComponentsMessage = document.getElementById(
@@ -1920,7 +1846,7 @@
         );
         if (!designListContainer || !noComponentsMessage) return;
 
-        // Bersihkan semua elemen anak dari designListContainer KECUALI noComponentsMessage
+        // Clear all child elements from designListContainer EXCEPT noComponentsMessage
         while (designListContainer.children.length > 0) {
           const lastChild = designListContainer.lastChild;
           if (lastChild && lastChild.id !== "noComponentsMessage") {
@@ -1934,7 +1860,7 @@
 
         let hasComponents = false;
 
-        // Filter objek-objek drawable berdasarkan currentView
+        // Filter drawable objects based on currentView
         const currentDesignObjects = (
           currentView === "front" ? frontDesignData : backDesignData
         ).objects;
@@ -1943,7 +1869,7 @@
           hasComponents = true;
           const fragment = document.createDocumentFragment();
           currentDesignObjects.forEach((objData, i) => {
-            // Gunakan objData dari penyimpanan
+            // Use objData from storage
             const componentCard = document.createElement("div");
             componentCard.className =
               "flex items-center justify-between bg-white border border-gray-200 rounded-lg p-3 shadow-sm mb-2";
@@ -1961,15 +1887,15 @@
               "p-1 rounded-full text-red-500 hover:bg-red-100 hover:text-red-700 transition flex items-center justify-center";
 
             delBtn.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            `;
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+      `;
 
             delBtn.onclick = () => {
               const currentData =
                 currentView === "front" ? frontDesignData : backDesignData;
-              // Cari indeks objData di currentData.objects
+              // Find the index of objData in currentData.objects
               const indexToRemove = currentData.objects.findIndex(
                 (item) =>
                   item.type === objData.type &&
@@ -1981,9 +1907,9 @@
               );
 
               if (indexToRemove > -1) {
-                // Hapus dari array penyimpanan
+                // Remove from storage array
                 currentData.objects.splice(indexToRemove, 1);
-                // Muat ulang canvas untuk merefleksikan perubahan
+                // Reload canvas to reflect changes
                 clearCanvasObjects();
                 loadDesignFromData(currentData);
               } else {
@@ -2012,12 +1938,12 @@
       const saveDesignButton = document.getElementById("saveDesign");
       if (saveDesignButton) {
         saveDesignButton.onclick = () => {
-          // Simpan desain tampilan saat ini sebelum menyimpan ke localStorage
+          // Save current view's design before saving to localStorage
           saveCurrentDesignToData(
             currentView === "front" ? frontDesignData : backDesignData
           );
 
-          // Gabungkan data dari kedua sisi untuk disimpan di localStorage
+          // Combine data from both sides for localStorage
           const fullDesignData = {
             front: frontDesignData.objects,
             back: backDesignData.objects,
@@ -2038,7 +1964,7 @@
       const clearCanvasButton = document.getElementById("clearCanvas");
       if (clearCanvasButton) {
         clearCanvasButton.onclick = () => {
-          // Bersihkan hanya objek desain dari tampilan saat ini
+          // Clear only design objects from the current view
           clearCanvasObjects();
 
           if (currentView === "front") {
@@ -2053,77 +1979,237 @@
           updateUIFromActiveObject();
         };
       }
+    </script>
+    <!-- panel control js -->
+    <script>
+      // panel-controls.js
+      // This script manages zoom, pan, and view switching functionalities.
 
-      window.addEventListener("resize", () => {
-        const canvasWrapper = document.getElementById("canvas-wrapper");
-        if (canvasWrapper) {
-          canvas.setWidth(canvasWrapper.clientWidth);
-          canvas.setHeight(canvasWrapper.clientHeight);
-          canvas.renderAll();
+      let isDragging = false;
+      let lastPosX;
+      let lastPosY;
+
+      // --- Zoom functionality ---
+      const zoomSelect = document.querySelector(
+        ".flex.items-center.gap-1.sm\\:gap-2.flex-shrink-0 > select"
+      );
+      if (zoomSelect) {
+        zoomSelect.addEventListener("change", (e) => {
+          const selectedPercentage = parseInt(e.target.value.replace("%", ""));
+          const zoomLevel = selectedPercentage / 100;
+
+          const viewportCenterX = canvas.width / 2;
+          const viewportCenterY = canvas.height / 2;
+
+          const newVpt = [
+            zoomLevel,
+            0,
+            0,
+            zoomLevel,
+            viewportCenterX - viewportCenterX * zoomLevel,
+            viewportCenterY - viewportCenterY * zoomLevel,
+          ];
+
+          canvas.setViewportTransform(newVpt);
+          canvas.setZoom(zoomLevel);
+
           updateBgImagePositionOnRender();
 
           centerGuideLineX.set({
             x1: 0,
-            y1: canvas.getHeight() / 2,
-            x2: canvas.getWidth(),
-            y2: canvas.getHeight() / 2,
+            y1: canvas.height / 2,
+            x2: canvas.width,
+            y2: canvas.height / 2,
           });
           centerGuideLineY.set({
-            x1: canvas.getWidth() / 2,
+            x1: canvas.width / 2,
             y1: 0,
-            x2: canvas.getWidth() / 2,
-            y2: canvas.getHeight(),
+            y1: 0,
+            x2: canvas.width / 2,
+            y2: canvas.height,
           });
+
           canvas.renderAll();
+        });
+      }
+
+      // --- Pan (drag) Canvas functionality ---
+      canvas.on("mouse:down", function (opt) {
+        const evt = opt.e;
+        if (
+          !canvas.getActiveObject() &&
+          opt.target === null &&
+          canvas.getZoom() > 1.0
+        ) {
+          isDragging = true;
+          canvas.selection = false;
+          lastPosX = evt.clientX;
+          lastPosY = evt.clientY;
+          canvas.setCursor("grab");
         }
       });
 
-      document.addEventListener("DOMContentLoaded", () => {
-        // Mengatur background produk awal (depan)
-        setBackgroundImage(frontImageUrl);
+      canvas.on("mouse:move", function (opt) {
+        if (isDragging) {
+          const evt = opt.e;
+          const vpt = this.viewportTransform;
+          vpt[4] += evt.clientX - lastPosX;
+          vpt[5] += evt.clientY - lastPosY;
+          this.requestRenderAll();
+          lastPosX = evt.clientX;
+          lastPosY = evt.clientY;
+          canvas.setCursor("grabbing");
+        }
+      });
 
-        const savedFullDesign = localStorage.getItem("kaosDesign");
-        if (savedFullDesign) {
-          try {
-            const parsedDesign = JSON.parse(savedFullDesign);
-            if (parsedDesign.front) {
-              frontDesignData.objects = parsedDesign.front;
-            }
-            if (parsedDesign.back) {
-              backDesignData.objects = parsedDesign.back;
-            }
+      canvas.on("mouse:up", function (opt) {
+        isDragging = false;
+        canvas.selection = true;
+        canvas.setCursor("default");
+      });
+
+      // --- Switch Front/Back Shirt View (Bottom Panel) ---
+      const panelFrontViewButton = document.querySelector(
+        ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(1)"
+      ); // Get "Front" button
+      const panelBackViewButton = document.querySelector(
+        ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(2)"
+      ); // Get "Back" button
+
+      if (panelFrontViewButton) {
+        panelFrontViewButton.addEventListener("click", () => {
+          if (currentView !== "front") {
+            saveCurrentDesignToData(backDesignData);
+            clearCanvasObjects();
+            setBackgroundImage(frontImageUrl);
             loadDesignFromData(frontDesignData);
             currentView = "front";
-          } catch (e) {
-            console.error("Error parsing saved design from localStorage:", e);
-            frontDesignData.objects = [];
-            backDesignData.objects = [];
+            canvas.renderAll();
             updateDesignList();
+            updateUIFromActiveObject();
+            console.log("Switched to Front View (Panel)");
           }
-        } else {
-          updateDesignList();
+        });
+      }
+
+      if (panelBackViewButton) {
+        panelBackViewButton.addEventListener("click", () => {
+          if (currentView !== "back") {
+            saveCurrentDesignToData(frontDesignData);
+            clearCanvasObjects();
+            setBackgroundImage(backImageUrl);
+            loadDesignFromData(backDesignData);
+            currentView = "back";
+            canvas.renderAll();
+            updateDesignList();
+            updateUIFromActiveObject();
+            console.log("Switched to Back View (Panel)");
+          }
+        });
+      }
+    </script>
+    <!-- drag guide js -->
+    <script>
+      // drag-guides.js
+      // This script handles the display and logic for drag guide lines and coordinate labels.
+
+      canvas.on("object:moving", function (e) {
+        const obj = e.target;
+        if (
+          !obj ||
+          obj === bgImageObject ||
+          obj === centerGuideLineX ||
+          obj === centerGuideLineY ||
+          obj === dragGuideLineX ||
+          obj === dragGuideLineY ||
+          obj === labelX ||
+          obj === labelY
+        ) {
+          dragGuideLineX.set("visible", false);
+          dragGuideLineY.set("visible", false);
+          labelX.set("visible", false);
+          labelY.set("visible", false);
+          canvas.renderAll();
+          return;
         }
 
-        window.dispatchEvent(new Event("resize"));
-        updateUIFromActiveObject();
+        const centerX = canvas.getWidth() / 2;
+        const centerY = canvas.getHeight() / 2;
+        const objCenter = obj.getCenterPoint();
+        const tolerance = 5;
 
-        centerGuideLineX.set("visible", true);
-        centerGuideLineY.set("visible", true);
+        const isCenterX = Math.abs(objCenter.x - centerX) < tolerance;
+        const isCenterY = Math.abs(objCenter.y - centerY) < tolerance;
+
+        dragGuideLineX.set({
+          x1: 0,
+          y1: objCenter.y,
+          x2: canvas.getWidth(),
+          y2: objCenter.y,
+          visible: true,
+          strokeWidth: isCenterY ? 2.5 : 1,
+          stroke: isCenterY ? "#dc2626" : "#10B981",
+        });
+
+        dragGuideLineY.set({
+          x1: objCenter.x,
+          y1: 0,
+          x2: objCenter.x,
+          y2: canvas.getHeight(),
+          visible: true,
+          strokeWidth: isCenterX ? 2.5 : 1,
+          stroke: isCenterX ? "#dc2626" : "#10B981",
+        });
+
+        if (isCenterX) obj.left = centerX - obj.getScaledWidth() / 2;
+        if (isCenterY) obj.top = centerY - obj.getScaledHeight() / 2;
+
+        const x = Math.round(obj.left ?? 0);
+        const y = Math.round(obj.top ?? 0);
+
+        labelX.set({
+          text: `X: ${x}`,
+          left: obj.left,
+          top: obj.top - 20,
+          visible: true,
+        });
+
+        labelY.set({
+          text: `Y: ${y}`,
+          left: obj.left,
+          top: obj.top - 35,
+          visible: true,
+        });
+
+        canvas.bringToFront(dragGuideLineX);
+        canvas.bringToFront(dragGuideLineY);
+        canvas.bringToFront(labelX);
+        canvas.bringToFront(labelY);
+
         canvas.renderAll();
       });
 
-      // ============================================
-      // === MODAL PREVIEW & PANEL KONTROL JS ===
-      // ============================================
+      canvas.on("mouse:up", () => {
+        dragGuideLineX.set("visible", false);
+        dragGuideLineY.set("visible", false);
+        labelX.set("visible", false);
+        labelY.set("visible", false);
+        canvas.renderAll();
+      });
+    </script>
+    <!-- modal preview js -->
+    <script>
+      // modal-preview.js
+      // This script manages the preview modal for displaying front and back designs.
 
-      // Fungsi untuk menghasilkan gambar preview untuk modal (depan atau belakang)
+      // Function to generate a preview image for the modal (front or back)
       function generatePreviewImageForModal(viewToPreview) {
         return new Promise((resolve) => {
           const tempCanvasElement = document.createElement("canvas");
           const tempCanvas = new fabric.Canvas(tempCanvasElement, {
             width: canvas.getWidth(),
             height: canvas.getHeight(),
-            backgroundColor: "transparent", // Penting jika background baju transparan
+            backgroundColor: "transparent",
           });
 
           let tempBgImageUrl =
@@ -2133,7 +2219,7 @@
               ? frontDesignData.objects
               : backDesignData.objects;
 
-          // Load background image ke kanvas sementara
+          // Load background image to the temporary canvas
           fabric.Image.fromURL(tempBgImageUrl, function (img) {
             const canvasWidth = tempCanvas.getWidth();
             const canvasHeight = tempCanvas.getHeight();
@@ -2160,7 +2246,7 @@
               }
             );
 
-            // Setelah background dimuat, tambahkan objek desain
+            // After background is loaded, add design objects
             fabric.util.enlivenObjects(
               tempDataObjects,
               function (enlivenedObjects) {
@@ -2172,7 +2258,7 @@
                   format: "png",
                   multiplier: 2,
                 });
-                tempCanvas.dispose(); // Sangat penting untuk membersihkan kanvas sementara
+                tempCanvas.dispose(); // Important to clean up temporary canvas
                 resolve(dataURL);
               }
             );
@@ -2190,18 +2276,17 @@
           "previewModalContent"
         );
 
-        const modalFrontViewButton = document.getElementById("frontViewButton"); // Ambil tombol di dalam modal
-        const modalBackViewButton = document.getElementById("backViewButton"); // Ambil tombol di dalam modal
+        const modalFrontViewButton = document.getElementById("frontViewButton");
+        const modalBackViewButton = document.getElementById("backViewButton");
 
-        // Fungsi untuk membuka modal
+        // Event listener to open the modal
         previewButton.addEventListener("click", async function () {
-          // Gunakan async karena generatePreviewImageForModal adalah Promise
-          // Pastikan desain saat ini tersimpan sebelum membuka preview
+          // Save current design before opening preview
           saveCurrentDesignToData(
             currentView === "front" ? frontDesignData : backDesignData
           );
 
-          // Sembunyikan garis bantu di canvas utama (opsional, karena preview menggunakan canvas sementara)
+          // Hide guide lines on the main canvas (optional, as preview uses temp canvas)
           const guideObjects = [
             centerGuideLineX,
             centerGuideLineY,
@@ -2211,10 +2296,10 @@
             labelY,
           ];
           guideObjects.forEach((obj) => obj.set("visible", false));
-          canvas.renderAll(); // Render ulang canvas utama setelah menyembunyikan
+          canvas.renderAll(); // Re-render main canvas after hiding
 
-          // Generate preview untuk tampilan yang sedang aktif di canvas desain saat preview dibuka
-          const initialViewForModal = currentView; // Simpan tampilan saat ini
+          // Generate preview for the currently active view
+          const initialViewForModal = currentView;
           const dataURL = await generatePreviewImageForModal(
             initialViewForModal
           );
@@ -2231,8 +2316,8 @@
             previewModalContent.classList.add("opacity-100", "translate-y-0");
           }, 10);
 
-          // Kembalikan visibilitas garis bantu di canvas utama
-          centerGuideLineX.set("visible", true); // Asumsi garis tengah selalu terlihat
+          // Restore visibility of guide lines on the main canvas
+          centerGuideLineX.set("visible", true);
           centerGuideLineY.set("visible", true);
           dragGuideLineX.set("visible", false);
           dragGuideLineY.set("visible", false);
@@ -2241,7 +2326,7 @@
           canvas.renderAll();
         });
 
-        // Event listener untuk tombol "Depan" di modal
+        // Event listener for "Front" button in the modal
         if (modalFrontViewButton) {
           modalFrontViewButton.addEventListener("click", async () => {
             const dataURL = await generatePreviewImageForModal("front");
@@ -2249,7 +2334,7 @@
           });
         }
 
-        // Event listener untuk tombol "Belakang" di modal
+        // Event listener for "Back" button in the modal
         if (modalBackViewButton) {
           modalBackViewButton.addEventListener("click", async () => {
             const dataURL = await generatePreviewImageForModal("back");
@@ -2321,133 +2406,69 @@
           }
         });
       });
+    </script>
+    <!-- event listener js -->
+    <script>
+      // event-listeners.js
+      // This script contains global event listeners for window resize and DOMContentLoaded.
 
-      // ============================
-      // === PANEL KONTROL JS (ZOOM, PAN, SWITCH VIEW) ===
-      // ============================
-
-      // === Variabel Global untuk Pan ===
-      let isDragging = false;
-      let lastPosX;
-      let lastPosY;
-
-      // --- Fungsionalitas Zoom ---
-      const zoomSelect = document.querySelector(
-        ".flex.items-center.gap-1.sm\\:gap-2.flex-shrink-0 > select"
-      );
-      if (zoomSelect) {
-        zoomSelect.addEventListener("change", (e) => {
-          const selectedPercentage = parseInt(e.target.value.replace("%", ""));
-          const zoomLevel = selectedPercentage / 100;
-
-          const viewportCenterX = canvas.width / 2;
-          const viewportCenterY = canvas.height / 2;
-
-          const newVpt = [
-            zoomLevel,
-            0,
-            0,
-            zoomLevel,
-            viewportCenterX - viewportCenterX * zoomLevel,
-            viewportCenterY - viewportCenterY * zoomLevel,
-          ];
-
-          canvas.setViewportTransform(newVpt);
-          canvas.setZoom(zoomLevel);
-
+      window.addEventListener("resize", () => {
+        const canvasWrapper = document.getElementById("canvas-wrapper");
+        if (canvasWrapper) {
+          canvas.setWidth(canvasWrapper.clientWidth);
+          canvas.setHeight(canvasWrapper.clientHeight);
+          canvas.renderAll();
           updateBgImagePositionOnRender();
 
           centerGuideLineX.set({
             x1: 0,
-            y1: canvas.height / 2,
-            x2: canvas.width,
-            y2: canvas.height / 2,
+            y1: canvas.getHeight() / 2,
+            x2: canvas.getWidth(),
+            y2: canvas.getHeight() / 2,
           });
           centerGuideLineY.set({
-            x1: canvas.width / 2,
+            x1: canvas.getWidth() / 2,
             y1: 0,
-            x2: canvas.width / 2,
-            y2: canvas.height,
+            x2: canvas.getWidth() / 2,
+            y2: canvas.getHeight(),
           });
-
           canvas.renderAll();
-        });
-      }
-
-      // === Fungsionalitas Pan (geser) Canvas ===
-      canvas.on("mouse:down", function (opt) {
-        const evt = opt.e;
-        if (
-          !canvas.getActiveObject() &&
-          opt.target === null &&
-          canvas.getZoom() > 1.0
-        ) {
-          isDragging = true;
-          canvas.selection = false;
-          lastPosX = evt.clientX;
-          lastPosY = evt.clientY;
-          canvas.setCursor("grab");
         }
       });
 
-      canvas.on("mouse:move", function (opt) {
-        if (isDragging) {
-          const evt = opt.e;
-          const vpt = this.viewportTransform;
-          vpt[4] += evt.clientX - lastPosX;
-          vpt[5] += evt.clientY - lastPosY;
-          this.requestRenderAll();
-          lastPosX = evt.clientX;
-          lastPosY = evt.clientY;
-          canvas.setCursor("grabbing");
-        }
-      });
+      document.addEventListener("DOMContentLoaded", () => {
+        // Set initial product background (front)
+        setBackgroundImage(frontImageUrl);
 
-      canvas.on("mouse:up", function (opt) {
-        isDragging = false;
-        canvas.selection = true;
-        canvas.setCursor("default");
-      });
-
-      // --- Fungsionalitas Switch Depan/Belakang Baju (Panel Bawah) ---
-      const panelFrontViewButton = document.querySelector(
-        ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(1)"
-      ); // Dapatkan tombol "Depan"
-      const panelBackViewButton = document.querySelector(
-        ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(2)"
-      ); // Dapatkan tombol "Belakang"
-
-      if (panelFrontViewButton) {
-        panelFrontViewButton.addEventListener("click", () => {
-          if (currentView !== "front") {
-            saveCurrentDesignToData(backDesignData);
-            clearCanvasObjects();
-            setBackgroundImage(frontImageUrl);
+        const savedFullDesign = localStorage.getItem("kaosDesign");
+        if (savedFullDesign) {
+          try {
+            const parsedDesign = JSON.parse(savedFullDesign);
+            if (parsedDesign.front) {
+              frontDesignData.objects = parsedDesign.front;
+            }
+            if (parsedDesign.back) {
+              backDesignData.objects = parsedDesign.back;
+            }
             loadDesignFromData(frontDesignData);
             currentView = "front";
-            canvas.renderAll();
+          } catch (e) {
+            console.error("Error parsing saved design from localStorage:", e);
+            frontDesignData.objects = [];
+            backDesignData.objects = [];
             updateDesignList();
-            updateUIFromActiveObject();
-            console.log("Switched to Front View (Panel)");
           }
-        });
-      }
+        } else {
+          updateDesignList();
+        }
 
-      if (panelBackViewButton) {
-        panelBackViewButton.addEventListener("click", () => {
-          if (currentView !== "back") {
-            saveCurrentDesignToData(frontDesignData);
-            clearCanvasObjects();
-            setBackgroundImage(backImageUrl);
-            loadDesignFromData(backDesignData);
-            currentView = "back";
-            canvas.renderAll();
-            updateDesignList();
-            updateUIFromActiveObject();
-            console.log("Switched to Back View (Panel)");
-          }
-        });
-      }
+        window.dispatchEvent(new Event("resize"));
+        updateUIFromActiveObject();
+
+        centerGuideLineX.set("visible", true);
+        centerGuideLineY.set("visible", true);
+        canvas.renderAll();
+      });
     </script>
   </body>
 </html>
