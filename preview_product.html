@@ -199,20 +199,25 @@
     <div
       class="relative overflow-visible z-0 flex flex-col lg:flex-row gap-6 mt-40 px-4 mb-5"
     >
+      <!-- preview product -->
       <div
         class="flex-1 relative z-0 flex justify-center items-center px-4 sm:px-0 border border-black rounded-2xl shadow-xl p-4 sm:p-6 bg-white"
       >
         <div class="w-full max-w-[500px] space-y-4 flex flex-col items-center">
-          <!-- canvas section -->
           <div
             id="canvas-wrapper"
-            class="bg-white p-2 sm:p-4 flex justify-center items-center"
-            style="width: 600px; height: 650px; overflow: hidden"
+            class="bg-white p-2 sm:p-4 flex justify-center items-center relative overflow-hidden"
+            style="
+              width: 100%;
+              padding-top: calc(100% * var(--canvas-aspect-ratio));
+            "
           >
-            <canvas id="previewCanvas" width="600" height="600"></canvas>
+            <canvas
+              id="previewCanvas"
+              class="absolute top-0 left-0 w-full h-full"
+            ></canvas>
           </div>
 
-          <!-- panel button -->
           <div
             class="bg-white border border-gray-300 rounded-xl shadow-md px-2.5 sm:px-4 py-2 sm:py-3 flex flex-wrap justify-center items-center gap-1.5 sm:gap-2 w-full max-w-[320px] sm:max-w-[560px] z-30"
           >
@@ -289,6 +294,32 @@
               Edit
             </a>
           </div>
+        </div>
+      </div>
+
+      <!-- === Tombol Aksi Mobile (Hanya muncul di mobile) === -->
+      <div class="sm:hidden mt-6 px-4 w-full">
+        <div class="flex flex-col gap-3 w-full">
+          <a
+            href="#"
+            class="w-full flex items-center justify-center gap-2 text-sm font-quantify px-4 py-3 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-xl hover:bg-[#c1985e] transition"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
+              />
+            </svg>
+            Download
+          </a>
         </div>
       </div>
 
@@ -496,32 +527,6 @@
             </button>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- === Tombol Aksi Mobile (Hanya muncul di mobile) === -->
-    <div class="sm:hidden mt-4 px-4 w-full">
-      <div class="flex flex-col gap-3 w-full">
-        <a
-          href="#"
-          class="w-full flex items-center justify-center gap-2 text-sm font-quantify px-4 py-3 border border-[#d1a86f] text-[#0f2d25] bg-[#d1a86f] rounded-xl hover:bg-[#c1985e] transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
-            />
-          </svg>
-          Download
-        </a>
       </div>
     </div>
 
@@ -776,12 +781,13 @@
     <script src="js/script.js"></script>
     <!-- fabric js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-    <!-- preview canvas init js -->
     <script>
-      // preview-canvas-init.js
-      // This script initializes the Fabric.js canvas for the preview
-      // and defines global variables for product images and saved design data.
+      // =====================================
+      // KODE GABUNGAN UNTUK SEMUA FILE JAVASCRIPT
+      // UNTUK HALAMAN preview_product.html
+      // =====================================
 
+      // --- preview-canvas-init.js ---
       let canvas;
       let currentZoom = 1;
       let currentSide = "front";
@@ -792,16 +798,70 @@
         back: "image/product1.jpeg",
       };
 
+      // Inisialisasi savedDesigns dengan objek kosong untuk 'front' dan 'back'
+      // Ini penting agar Object.assign bisa bekerja saat memuat data dari localStorage.
       const savedDesigns = {
-        front: null,
-        back: null,
-        canvasWidth: 600, // Default width
-        canvasHeight: 600, // Default height
+        front: { objects: [], canvasWidth: 600, canvasHeight: 600 },
+        back: { objects: [], canvasWidth: 600, canvasHeight: 600 },
+        // Ini adalah dimensi referensi dari kanvas Design Product,
+        // kita akan menggunakannya untuk penskalaan objek
+        referenceWidth: 600, // Misal, lebar kanvas saat design dibuat
+        referenceHeight: 600, // Misal, tinggi kanvas saat design dibuat
       };
 
       const localStorageKey = "kaosDesign";
 
-      document.addEventListener("DOMContentLoaded", function () {
+      // Function to resize canvas and its contents
+      const resizeCanvas = async () => {
+        const canvasWrapper = document.getElementById("canvas-wrapper");
+        if (!canvasWrapper) return;
+
+        // Ambil lebar yang tersedia dari parent container (misal: max-w-[500px])
+        const availableWidth = canvasWrapper.clientWidth;
+
+        // Tentukan lebar kanvas preview berdasarkan lebar yang tersedia
+        // Biarkan tinggi kanvas ditentukan berdasarkan aspek rasio gambar latar belakang
+        const currentProductImage = productImages[currentSide];
+
+        // Load image temporarily to get its dimensions
+        const imgTemp = new Image();
+        imgTemp.src = currentProductImage;
+        await new Promise((resolve) => {
+          imgTemp.onload = resolve;
+          imgTemp.onerror = resolve; // Resolve even on error to prevent hanging
+        });
+
+        const originalImageWidth =
+          imgTemp.naturalWidth || savedDesigns.referenceWidth;
+        const originalImageHeight =
+          imgTemp.naturalHeight || savedDesigns.referenceHeight;
+
+        const imageAspectRatio = originalImageWidth / originalImageHeight;
+
+        let newCanvasWidth = availableWidth;
+        let newCanvasHeight = newCanvasWidth / imageAspectRatio;
+
+        // Set Fabric.js canvas dimensions
+        canvas.setDimensions({
+          width: newCanvasWidth,
+          height: newCanvasHeight,
+        });
+
+        // Update canvas wrapper style to match new canvas dimensions
+        canvasWrapper.style.width = `${newCanvasWidth}px`;
+        canvasWrapper.style.height = `${newCanvasHeight}px`;
+
+        // Re-load and re-scale background image to fit new canvas size
+        await loadBackgroundImage(currentSide, newCanvasWidth, newCanvasHeight);
+
+        // Re-load and re-scale design objects
+        await displayDesignObjectsOnly(currentSide); // Panggil fungsi baru untuk memuat objek saja
+
+        updateCanvasZoom(); // Apply current zoom after resizing
+        canvas.renderAll();
+      };
+
+      document.addEventListener("DOMContentLoaded", async function () {
         const canvasElement = document.getElementById("previewCanvas");
         const canvasWrapper = document.getElementById("canvas-wrapper");
 
@@ -815,66 +875,165 @@
         if (savedFullDesign) {
           try {
             const parsedDesign = JSON.parse(savedFullDesign);
-            if (parsedDesign.front) savedDesigns.front = parsedDesign.front;
-            if (parsedDesign.back) savedDesigns.back = parsedDesign.back;
-            if (parsedDesign.canvasWidth && parsedDesign.canvasHeight) {
-              savedDesigns.canvasWidth = parsedDesign.canvasWidth;
-              savedDesigns.canvasHeight = parsedDesign.canvasHeight;
+
+            // Ambil dimensi kanvas referensi dari desain yang disimpan
+            if (
+              parsedDesign.front &&
+              parsedDesign.front.canvasWidth &&
+              parsedDesign.front.canvasHeight
+            ) {
+              savedDesigns.referenceWidth = parsedDesign.front.canvasWidth;
+              savedDesigns.referenceHeight = parsedDesign.front.canvasHeight;
+            } else if (
+              parsedDesign.back &&
+              parsedDesign.back.canvasWidth &&
+              parsedDesign.back.canvasHeight
+            ) {
+              // Fallback if only back design has dimensions
+              savedDesigns.referenceWidth = parsedDesign.back.canvasWidth;
+              savedDesigns.referenceHeight = parsedDesign.back.canvasHeight;
             }
+
+            // Assign data to the initialized objects
+            if (parsedDesign.front)
+              Object.assign(savedDesigns.front, parsedDesign.front);
+            if (parsedDesign.back)
+              Object.assign(savedDesigns.back, parsedDesign.back);
           } catch (e) {
             console.error("Error parsing design from localStorage:", e);
+            // Reset to default if parsing fails
+            savedDesigns.front = {
+              objects: [],
+              canvasWidth: 600,
+              canvasHeight: 600,
+            };
+            savedDesigns.back = {
+              objects: [],
+              canvasWidth: 600,
+              canvasHeight: 600,
+            };
           }
         }
 
-        // Set preview canvas size according to saved (or default)
-        canvasElement.width = savedDesigns.canvasWidth;
-        canvasElement.height = savedDesigns.canvasHeight;
-
+        // Initialize Fabric.js canvas with the *reference* dimensions.
+        // These are the dimensions relative to which objects were saved.
+        // The actual display size will be handled by resizeCanvas.
         canvas = new fabric.Canvas("previewCanvas", {
           selection: false, // Disable box selection
           interactive: false, // Disable default Fabric.js object interaction
           preserveObjectStacking: true,
           renderOnAddRemove: false,
           backgroundColor: "transparent",
-          width: savedDesigns.canvasWidth,
-          height: savedDesigns.canvasHeight,
+          width: savedDesigns.referenceWidth, // Initial internal rendering width
+          height: savedDesigns.referenceHeight, // Initial internal rendering height
         });
 
-        // Adjust wrapper size to match canvas
-        canvasWrapper.style.width = `${savedDesigns.canvasWidth}px`;
-        canvasWrapper.style.height = `${savedDesigns.canvasHeight + 50}px`;
+        // Initial resize and display of the current side
+        // Ini akan memanggil loadBackgroundImage dan displayDesignObjectsOnly
+        await resizeCanvas();
+        updateCanvasZoom(); // Apply current zoom after initial display
 
-        // Initialize zoom select value
-        const zoomSelect = document.getElementById("zoomSelect");
-        if (zoomSelect) zoomSelect.value = "100";
-      });
-    </script>
-    <!-- preview design display js -->
-    <script>
-      // preview-design-display.js
-      // This script contains the core logic for displaying saved designs on the canvas,
-      // including loading background images, design objects, and fonts.
-
-      async function displayDesign(side) {
-        currentSide = side;
-        canvas.clear(); // Clear all objects from canvas first
-
-        const designObjectsData = savedDesigns?.[side] || [];
-        const backgroundImageURL = productImages?.[side];
-
-        // Active/inactive buttons for view switching
+        // Initial button state (Depan should be active by default)
         const depanButton = document.getElementById("depanButton");
-        const belakangButton = document.getElementById("belakangButton");
         if (depanButton) {
-          depanButton.classList.toggle("bg-gray-200", side === "front");
-          depanButton.classList.toggle("bg-white", side !== "front");
-        }
-        if (belakangButton) {
-          belakangButton.classList.toggle("bg-gray-200", side === "back");
-          belakangButton.classList.toggle("bg-white", side !== "back");
+          depanButton.classList.add("bg-gray-200");
         }
 
-        // Load fonts if necessary
+        // Add resize listener to window
+        window.addEventListener("resize", resizeCanvas);
+      });
+
+      // --- preview-design-display.js ---
+      async function loadBackgroundImage(side, targetWidth, targetHeight) {
+        const backgroundImageURL = productImages?.[side];
+        if (!backgroundImageURL) {
+          canvas.setBackgroundImage(null, canvas.renderAll.bind(canvas));
+          backgroundAsObject = null;
+          return;
+        }
+
+        backgroundAsObject = await new Promise((resolve, reject) => {
+          fabric.Image.fromURL(
+            backgroundImageURL,
+            (img) => {
+              if (!img) {
+                console.warn(
+                  "Background image failed to load:",
+                  backgroundImageURL
+                );
+                return resolve(null);
+              }
+
+              const imgAspectRatio = img.width / img.height;
+              const canvasAspectRatio = targetWidth / targetHeight;
+
+              let scale;
+              // Determine scale to fit the image entirely within the canvas while maintaining aspect ratio
+              if (imgAspectRatio > canvasAspectRatio) {
+                // Image is wider relative to canvas, scale by width
+                scale = targetWidth / img.width;
+              } else {
+                // Image is taller relative to canvas, scale by height
+                scale = targetHeight / img.height;
+              }
+              img.scale(scale);
+
+              const centerX = (targetWidth - img.width * scale) / 2;
+              const centerY = (targetHeight - img.height * scale) / 2;
+
+              img.set({
+                left: centerX,
+                top: centerY,
+                originX: "left",
+                originY: "top",
+                selectable: false,
+                evented: false,
+                hasControls: false,
+                hasBorders: false,
+                objectCaching: false,
+              });
+              resolve(img);
+            },
+            {
+              crossOrigin: "anonymous",
+              onError: (err) => {
+                console.error(
+                  "Failed to load background image with Fabric.js:",
+                  backgroundImageURL,
+                  err
+                );
+                resolve(null);
+              },
+            }
+          );
+        });
+
+        if (backgroundAsObject) {
+          canvas.setBackgroundImage(
+            backgroundAsObject,
+            canvas.renderAll.bind(canvas)
+          );
+          // Send background to back just in case
+          canvas.sendToBack(backgroundAsObject);
+        } else {
+          canvas.setBackgroundImage(null, canvas.renderAll.bind(canvas));
+        }
+      }
+
+      // New function to only display design objects (without clearing canvas or background)
+      async function displayDesignObjectsOnly(side) {
+        // Hapus hanya objek desain, jaga background
+        canvas.remove(
+          ...canvas.getObjects().filter((obj) => obj !== backgroundAsObject)
+        );
+
+        const designData = savedDesigns?.[side];
+        const designObjectsData = designData ? designData.objects : [];
+        // Use the reference dimensions from when the design was *saved*
+        const savedDesignWidth = savedDesigns.referenceWidth;
+        const savedDesignHeight = savedDesigns.referenceHeight;
+
+        // Load fonts first
         if (designObjectsData && designObjectsData.length > 0) {
           const fontFamiliesToLoad = new Set();
           designObjectsData.forEach((obj) => {
@@ -906,77 +1065,62 @@
           );
         }
 
-        // Load background image as a Fabric.js object
-        backgroundAsObject = await new Promise((resolve, reject) => {
-          fabric.Image.fromURL(
-            backgroundImageURL,
-            (img) => {
-              if (!img) {
-                console.warn(
-                  "Background image failed to load:",
-                  backgroundImageURL
-                );
-                return resolve(null);
-              }
-              const canvasWidth = canvas.getWidth();
-              const canvasHeight = canvas.getHeight();
-              const imgAspectRatio = img.width / img.height;
-              const canvasAspectRatio = canvasWidth / canvasHeight;
-
-              let scale;
-              if (imgAspectRatio > canvasAspectRatio) {
-                scale = canvasHeight / img.height;
-              } else {
-                scale = canvasWidth / img.width;
-              }
-              img.scale(scale);
-
-              const centerX = (canvasWidth - img.width * scale) / 2;
-              const centerY = (canvasHeight - img.height * scale) / 2;
-
-              img.set({
-                left: centerX,
-                top: centerY,
-                originX: "left",
-                originY: "top",
-                selectable: false, // NOT selectable
-                evented: false, // Will NOT block mouse events to the canvas
-                hasControls: false,
-                hasBorders: false,
-                objectCaching: false,
-              });
-              resolve(img);
-            },
-            {
-              crossOrigin: "anonymous",
-              onError: (err) => {
-                console.error(
-                  "Failed to load background image with Fabric.js:",
-                  backgroundImageURL,
-                  err
-                );
-                resolve(null);
-              },
-            }
-          );
-        });
-
-        // Add background first
-        if (backgroundAsObject) {
-          canvas.add(backgroundAsObject);
-          canvas.sendToBack(backgroundAsObject);
-        }
-
         // Load design objects using loadFromJSON
         if (designObjectsData && designObjectsData.length > 0) {
+          // Calculate scaling factors from the saved design's canvas size to the *current actual* canvas size
+          const currentCanvasWidth = canvas.getWidth();
+          const currentCanvasHeight = canvas.getHeight();
+
+          const scaleFactorX = currentCanvasWidth / savedDesignWidth;
+          const scaleFactorY = currentCanvasHeight / savedDesignHeight;
+
+          // Create a temporary JSON structure to load. Fabric.js's loadFromJSON expects a specific format.
           const fabricJSONFormat = {
             objects: designObjectsData,
           };
+
           await new Promise((resolve) => {
             canvas.loadFromJSON(
               fabricJSONFormat,
               () => {
-                console.log("Preview: Design objects successfully loaded.");
+                // Once objects are loaded, iterate and apply the scaling
+                canvas.forEachObject((obj) => {
+                  if (obj === backgroundAsObject) return; // Skip background
+
+                  // Apply scaling to the object properties
+                  // PENTING: Lakukan scaling terhadap posisi relatif dari origin point objek.
+                  // Fabric.js secara default menggunakan originX/Y 'left'/'top'.
+                  // Jika ingin objek tetap di tengah, gunakan pendekatan ini.
+                  obj.set({
+                    originX: obj.originX || "left", // Preserve original originX/Y or set default
+                    originY: obj.originY || "top", // Preserve original originX/Y or set default
+                  });
+
+                  const objCenterX = obj.left + obj.getScaledWidth() / 2;
+                  const objCenterY = obj.top + obj.getScaledHeight() / 2;
+
+                  obj.set({
+                    left:
+                      objCenterX * scaleFactorX -
+                      (obj.getScaledWidth() * scaleFactorX) / 2,
+                    top:
+                      objCenterY * scaleFactorY -
+                      (obj.getScaledHeight() * scaleFactorY) / 2,
+                    scaleX: obj.scaleX * scaleFactorX,
+                    scaleY: obj.scaleY * scaleFactorY,
+                    selectable: false, // Ensure not selectable
+                    evented: false, // Ensure not interactive
+                    hasControls: false,
+                    hasBorders: false,
+                  });
+                  // For textboxes, scale font size
+                  if (obj.type === "textbox") {
+                    obj.set("fontSize", obj.fontSize * scaleFactorY);
+                    obj.initDimensions(); // Recalculate dimensions for scaled font
+                  }
+                  obj.setCoords(); // Update object's bounding box
+                });
+
                 if (backgroundAsObject) {
                   canvas.sendToBack(backgroundAsObject);
                 }
@@ -984,30 +1128,40 @@
                 resolve();
               },
               function (o, object) {
-                // Ensure design objects are not selectable or interactive in preview
-                object.set({
-                  selectable: false,
-                  evented: false,
-                  hasControls: false,
-                  hasBorders: false,
-                });
-                object.setCoords();
+                // Progress function (optional, not scaling here)
               }
             );
           });
         } else {
-          canvas.renderAll();
+          canvas.renderAll(); // Render even if no design objects
+        }
+      }
+
+      async function displayDesign(side) {
+        currentSide = side;
+        canvas.clear(); // Clear all objects including background
+
+        // Active/inactive buttons for view switching
+        const depanButton = document.getElementById("depanButton");
+        const belakangButton = document.getElementById("belakangButton");
+        if (depanButton) {
+          depanButton.classList.toggle("bg-gray-200", side === "front");
+          depanButton.classList.toggle("bg-white", side !== "front");
+        }
+        if (belakangButton) {
+          belakangButton.classList.toggle("bg-gray-200", side === "back");
+          belakangButton.classList.toggle("bg-white", side !== "back");
         }
 
-        updateCanvasZoom();
+        // Re-adjust canvas size based on the new background image's aspect ratio
+        // This is crucial for responsive layout and avoiding extra space
+        await resizeCanvas(); // This now handles loading background and objects for the new side
+
+        updateCanvasZoom(); // Apply current zoom after loading
         canvas.renderAll();
       }
-    </script>
-    <!-- panel control js -->
-    <script>
-      // preview-panel-controls.js
-      // This script handles the zoom and view switching controls in the preview panel.
 
+      // --- panel-controls.js ---
       function setupPanelControls() {
         const zoomSelect = document.getElementById("zoomSelect");
         if (zoomSelect) {
@@ -1031,15 +1185,157 @@
             if (currentSide !== "back") displayDesign("back");
           });
         }
+
+        const downloadImageButton = document.getElementById(
+          "downloadImageButton"
+        );
+        if (downloadImageButton) {
+          downloadImageButton.addEventListener("click", () => {
+            // Create a temporary canvas for high-res export
+            const exportCanvasElement = document.createElement("canvas");
+            const exportCanvas = new fabric.Canvas(exportCanvasElement, {
+              backgroundColor: "transparent",
+            });
+
+            // Use a higher resolution for export, e.g., 1000px width
+            const EXPORT_WIDTH = 1000;
+            let EXPORT_HEIGHT = EXPORT_WIDTH; // Default to square
+
+            // Get saved design data for the current side
+            const designData = savedDesigns[currentSide];
+            const designObjectsData = designData ? designData.objects : [];
+            const savedDesignWidth = savedDesigns.referenceWidth;
+            const savedDesignHeight = savedDesigns.referenceHeight;
+
+            // Determine actual aspect ratio of the current product image for export
+            const currentProductImage = productImages[currentSide];
+            const imgTemp = new Image();
+            imgTemp.src = currentProductImage;
+            imgTemp.onload = async () => {
+              const originalImageWidth = imgTemp.naturalWidth;
+              const originalImageHeight = imgTemp.naturalHeight;
+              const imageAspectRatio = originalImageWidth / originalImageHeight;
+              EXPORT_HEIGHT = EXPORT_WIDTH / imageAspectRatio;
+
+              exportCanvas.setDimensions({
+                width: EXPORT_WIDTH,
+                height: EXPORT_HEIGHT,
+              });
+
+              // Load background image for export canvas
+              const exportBg = await new Promise((resolve) => {
+                fabric.Image.fromURL(
+                  currentProductImage,
+                  (img) => {
+                    if (!img) return resolve(null);
+
+                    const imgAspect = img.width / img.height;
+                    const exportCanvasAspect = EXPORT_WIDTH / EXPORT_HEIGHT;
+                    let scale;
+                    if (imgAspect > exportCanvasAspect) {
+                      scale = EXPORT_HEIGHT / img.height;
+                    } else {
+                      scale = EXPORT_WIDTH / img.width;
+                    }
+                    img.scale(scale);
+                    img.set({
+                      left: (EXPORT_WIDTH - img.width * scale) / 2,
+                      top: (EXPORT_HEIGHT - img.height * scale) / 2,
+                      originX: "left",
+                      originY: "top",
+                      selectable: false,
+                      evented: false,
+                    });
+                    resolve(img);
+                  },
+                  { crossOrigin: "anonymous" }
+                );
+              });
+
+              if (exportBg) {
+                exportCanvas.setBackgroundImage(
+                  exportBg,
+                  exportCanvas.renderAll.bind(exportCanvas)
+                );
+              }
+
+              // Calculate scaling factors for objects
+              const scaleFactorX = EXPORT_WIDTH / savedDesignWidth;
+              const scaleFactorY = EXPORT_HEIGHT / savedDesignHeight;
+
+              // Load and scale design objects to export canvas
+              fabric.util.enlivenObjects(
+                designObjectsData,
+                function (enlivenedObjects) {
+                  enlivenedObjects.forEach((obj) => {
+                    // Apply originX/Y before scaling to maintain relative position
+                    obj.set({
+                      originX: obj.originX || "left",
+                      originY: obj.originY || "top",
+                    });
+
+                    const objCenterX = obj.left + obj.getScaledWidth() / 2;
+                    const objCenterY = obj.top + obj.getScaledHeight() / 2;
+
+                    obj.set({
+                      left:
+                        objCenterX * scaleFactorX -
+                        (obj.getScaledWidth() * scaleFactorX) / 2,
+                      top:
+                        objCenterY * scaleFactorY -
+                        (obj.getScaledHeight() * scaleFactorY) / 2,
+                      scaleX: obj.scaleX * scaleFactorX,
+                      scaleY: obj.scaleY * scaleFactorY,
+                      selectable: false,
+                      evented: false,
+                      hasControls: false,
+                      hasBorders: false, // Ensure non-interactive
+                    });
+                    if (obj.type === "textbox") {
+                      obj.set("fontSize", obj.fontSize * scaleFactorY);
+                      obj.initDimensions(); // Recalculate dimensions for scaled font
+                    }
+                    exportCanvas.add(obj);
+                  });
+                  exportCanvas.renderAll();
+
+                  // Generate image and download
+                  const dataURL = exportCanvas.toDataURL({
+                    format: "png",
+                    multiplier: 1, // Multiplier already handled by EXPORT_WIDTH/HEIGHT
+                  });
+
+                  const link = document.createElement("a");
+                  link.href = dataURL;
+                  link.download = `Kaos_Design_${currentSide}.png`;
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+
+                  exportCanvas.dispose(); // Clean up temporary canvas
+                }
+              );
+            };
+            imgTemp.onerror = () => {
+              console.error(
+                "Could not load image for export to determine aspect ratio."
+              );
+              alert(
+                "Gagal memuat gambar produk untuk export. Silakan coba lagi."
+              );
+            };
+          });
+        }
       }
 
       function updateCanvasZoom() {
+        if (!canvas) return; // Ensure canvas is initialized
+
         if (currentZoom !== 1) {
           const centerPoint = new fabric.Point(
-            canvas.width / 2,
-            canvas.height / 2
+            canvas.getWidth() / 2,
+            canvas.getHeight() / 2
           );
-          // Use zoomToPoint for centered zoom
           canvas.zoomToPoint(centerPoint, currentZoom);
         } else {
           canvas.setZoom(1);
@@ -1047,81 +1343,114 @@
         }
         canvas.renderAll();
       }
-    </script>
-    <!-- preview canvas interaction js -->
-    <script>
-      // preview-canvas-interaction.js
-      // This script handles interactive features for the preview canvas,
-      // specifically pan functionality when zoomed in.
 
+      // --- preview-canvas-interaction.js ---
       let isDragging = false;
       let lastPosX;
       let lastPosY;
 
       document.addEventListener("DOMContentLoaded", function () {
         // IMPORTANT: Initialize pan events here, after canvas is created.
-        canvas.on("mouse:down", function (opt) {
-          // Only enable pan if zoom is more than 100%
-          if (canvas.getZoom() > 1.0) {
-            isDragging = true;
-            canvas.selection = false; // Ensure no box selection
-            lastPosX = opt.e.clientX;
-            lastPosY = opt.e.clientY;
-            canvas.setCursor("grab"); // Change cursor
-          }
-        });
-
-        canvas.on("mouse:move", function (opt) {
-          if (isDragging) {
-            const evt = opt.e;
-            const vpt = this.viewportTransform;
-            vpt[4] += evt.clientX - lastPosX;
-            vpt[5] += evt.clientY - lastPosY;
-            this.requestRenderAll(); // Use requestRenderAll for better performance
-            lastPosX = evt.clientX;
-            lastPosY = evt.clientY;
-            canvas.setCursor("grabbing"); // Change cursor while dragging
-          }
-        });
-
-        canvas.on("mouse:up", function (opt) {
-          isDragging = false;
-          canvas.selection = false; // Keep selection off, as interactive is false
-          canvas.setCursor("default"); // Restore cursor
-        });
-      });
-    </script>
-    <!-- event listener js -->
-    <script>
-      // preview-event-listeners.js
-      // This script contains global event listeners for the preview page,
-      // including DOMContentLoaded to set up initial display and window resize.
-
-      document.addEventListener("DOMContentLoaded", function () {
-        // Ensure Fabric.js canvas and associated elements are ready
-        // before attempting to display the design or set up controls.
-        displayDesign("front"); // Display front design initially
-        setupPanelControls(); // Setup panel controls after elements are available
-      });
-
-      // Resize canvas if window is resized
-      window.addEventListener("resize", () => {
-        const canvasWrapper = document.getElementById("canvas-wrapper");
-        if (canvasWrapper) {
-          const targetWidth = savedDesigns.canvasWidth;
-          const targetHeight = savedDesigns.canvasHeight;
-
-          canvas.setDimensions({
-            width: targetWidth,
-            height: targetHeight,
+        // Ensure canvas is defined before attaching events
+        // This will be called after `canvas` is available from preview-canvas-init.js
+        if (canvas) {
+          canvas.on("mouse:down", function (opt) {
+            // Only enable pan if zoom is more than 100%
+            if (canvas.getZoom() > 1.0) {
+              isDragging = true;
+              canvas.selection = false; // Ensure no box selection
+              lastPosX = opt.e.clientX;
+              lastPosY = opt.e.clientY;
+              canvas.setCursor("grab"); // Change cursor
+            }
           });
 
-          canvasWrapper.style.width = `${targetWidth}px`;
-          canvasWrapper.style.height = `${targetHeight + 50}px`;
+          canvas.on("mouse:move", function (opt) {
+            if (isDragging) {
+              const evt = opt.e;
+              const vpt = this.viewportTransform;
+              vpt[4] += evt.clientX - lastPosX;
+              vpt[5] += evt.clientY - lastPosY;
+              this.requestRenderAll(); // Use requestRenderAll for better performance
+              lastPosX = evt.clientX;
+              lastPosY = evt.clientY;
+              canvas.setCursor("grabbing"); // Change cursor while dragging
+            }
+          });
 
-          displayDesign(currentSide);
+          canvas.on("mouse:up", function (opt) {
+            isDragging = false;
+            canvas.selection = false; // Keep selection off, as interactive is false
+            canvas.setCursor("default"); // Restore cursor
+          });
+        } else {
+          console.warn("Canvas not initialized for pan controls.");
         }
       });
+
+      // --- event-listeners.js ---
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Made async to allow await
+        const savedFullDesign = localStorage.getItem(localStorageKey); // Use localStorageKey
+
+        // Initial call to resize and display first, without waiting for localStorage
+        // This ensures canvas is set up and responsive immediately.
+        await resizeCanvas(); // This also calls loadBackgroundImage and displayDesignObjectsOnly
+
+        if (savedFullDesign) {
+          try {
+            const parsedDesign = JSON.parse(savedFullDesign);
+            // Ensure properties exist before assigning
+            if (parsedDesign.front) {
+              Object.assign(savedDesigns.front, parsedDesign.front);
+            }
+            if (parsedDesign.back) {
+              Object.assign(savedDesigns.back, parsedDesign.back);
+            }
+            // Update reference dimensions from parsed design
+            if (parsedDesign.front && parsedDesign.front.canvasWidth) {
+              savedDesigns.referenceWidth = parsedDesign.front.canvasWidth;
+              savedDesigns.referenceHeight = parsedDesign.front.canvasHeight;
+            } else if (parsedDesign.back && parsedDesign.back.canvasWidth) {
+              savedDesigns.referenceWidth = parsedDesign.back.canvasWidth;
+              savedDesigns.referenceHeight = parsedDesign.back.canvasHeight;
+            }
+
+            // Reload the current side's design data, which now has the correct objects
+            // resizeCanvas already loaded initial background and objects, this just loads the saved ones over.
+            displayDesign(currentSide); // This will reload with saved data and update buttons
+          } catch (e) {
+            console.error("Error parsing saved design from localStorage:", e);
+            // Reset design data if parsing fails to avoid errors
+            savedDesigns.front = {
+              objects: [],
+              canvasWidth: 600,
+              canvasHeight: 600,
+            };
+            savedDesigns.back = {
+              objects: [],
+              canvasWidth: 600,
+              canvasHeight: 600,
+            };
+          }
+        } else {
+          console.log("No saved design found in localStorage.");
+        }
+
+        // Set default zoom to 100% after all other initializations
+        const zoomSelect = document.getElementById("zoomSelect"); // Get element by ID
+        if (zoomSelect) {
+          zoomSelect.value = "100"; // Set the dropdown to 100%
+          updateCanvasZoom(); // Apply the 100% zoom programmatically
+        }
+
+        // Setup panel controls (buttons, zoom select)
+        setupPanelControls();
+
+        canvas.renderAll();
+      });
+
+      // window.addEventListener("resize", resizeCanvas); // Already handled in preview-canvas-init.js DOMContentLoaded
     </script>
   </body>
 </html>
