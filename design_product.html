@@ -1241,59 +1241,53 @@
     <!-- custom js -->
     <script src="js/script.js"></script>
     <script>
-      // =====================================
-      // KODE GABUNGAN UNTUK SEMUA FILE JAVASCRIPT
-      // =====================================
-    
-      // --- fabric-canvas-init.js ---
       const canvas = new fabric.Canvas("tshirtCanvas", {
         preserveObjectStacking: true,
         selection: true,
         controlsAboveOverlay: true,
       });
-    
+
       let bgImageObject = null;
       let currentView = "front"; // State for the current view (front/back)
       // Inisialisasi properti canvasWidth dan canvasHeight di sini juga untuk memastikan keberadaan properti
       const frontDesignData = { objects: [], canvasWidth: 0, canvasHeight: 0 }; // Stores serialized JSON objects for front design
       const backDesignData = { objects: [], canvasWidth: 0, canvasHeight: 0 }; // Stores serialized JSON objects for back design
-    
+
       const frontImageUrl = "image/product4.jpeg";
       const backImageUrl = "image/product1.jpeg"; // Temporary back image
-    
+
       // Store initial/current canvas dimensions for scaling
       let lastCanvasWidth = 0;
       let lastCanvasHeight = 0;
-    
+
       // Initialize background image for the canvas
       // This function will be called initially and on resize
       const initializeCanvasAndBackground = () => {
         const canvasWrapper = document.getElementById("canvas-wrapper");
         if (!canvasWrapper) return;
-    
+
         const currentWrapperWidth = canvasWrapper.clientWidth;
         const currentWrapperHeight = canvasWrapper.clientHeight;
-    
-        // Calculate scaling factor if canvas size is changing
+
+        // Set new canvas dimensions based on wrapper
+        canvas.setDimensions(
+          {
+            width: currentWrapperWidth,
+            height: currentWrapperHeight,
+          },
+          { cssOnly: false }
+        ); // Ensure Fabric.js internal dimensions are updated
+
+        // Calculate scaling factor for existing objects if canvas size is changing
         let scaleFactorX = 1;
         let scaleFactorY = 1;
-    
+
         // Only calculate scale factor if we have a previous size to compare
         if (lastCanvasWidth > 0 && lastCanvasHeight > 0) {
           scaleFactorX = currentWrapperWidth / lastCanvasWidth;
           scaleFactorY = currentWrapperHeight / lastCanvasHeight;
         }
-    
-        // Set new canvas dimensions based on wrapper
-        canvas.setDimensions({
-          width: currentWrapperWidth,
-          height: currentWrapperHeight,
-        }, { cssOnly: false }); // Ensure Fabric.js internal dimensions are updated
-    
-        // Update last recorded dimensions AFTER setting new dimensions
-        lastCanvasWidth = currentWrapperWidth;
-        lastCanvasHeight = currentWrapperHeight;
-    
+
         // Scale existing objects on the canvas (excluding background and guide lines)
         // This loop handles scaling when the browser window is resized
         canvas.forEachObject((obj) => {
@@ -1308,32 +1302,30 @@
           ) {
             return;
           }
-    
+
           // Apply scaling to position and dimensions
-          // PENTING: Lakukan scaling terhadap posisi relatif dari origin point objek.
-          // Fabric.js secara default menggunakan originX/Y 'left'/'top'.
-          // Jika ingin objek tetap di tengah, gunakan pendekatan ini.
-          const objCenterX = obj.left + obj.getScaledWidth() / 2;
-          const objCenterY = obj.top + obj.getScaledHeight() / 2;
-    
           obj.set({
-            left: objCenterX * scaleFactorX - (obj.getScaledWidth() * scaleFactorX) / 2,
-            top: objCenterY * scaleFactorY - (obj.getScaledHeight() * scaleFactorY) / 2,
+            left: obj.left * scaleFactorX,
+            top: obj.top * scaleFactorY,
             scaleX: obj.scaleX * scaleFactorX,
             scaleY: obj.scaleY * scaleFactorY,
           });
-    
+
           // For textboxes, also scale the font size
           if (obj.type === "textbox") {
             obj.set("fontSize", obj.fontSize * scaleFactorY);
-            // Penting: re-render iText (textbox) after font size change to prevent layout issues
             obj.initDimensions(); // Recalculate dimensions based on new font size
           }
           obj.setCoords(); // Update object's bounding box after scaling
         });
-    
+
+        // Update last recorded dimensions AFTER setting new dimensions and scaling objects
+        lastCanvasWidth = currentWrapperWidth;
+        lastCanvasHeight = currentWrapperHeight;
+
         // Re-load and re-scale background image to fit new canvas size
-        const currentBgImageUrl = currentView === "front" ? frontImageUrl : backImageUrl;
+        const currentBgImageUrl =
+          currentView === "front" ? frontImageUrl : backImageUrl;
         fabric.Image.fromURL(
           currentBgImageUrl,
           (img) => {
@@ -1342,7 +1334,7 @@
             const canvasHeight = canvas.getHeight();
             const imgAspectRatio = img.width / img.height;
             const canvasAspectRatio = canvasWidth / canvasHeight;
-    
+
             let scale;
             // Scale to fit within the canvas, prioritizing fitting fully
             if (imgAspectRatio > canvasAspectRatio) {
@@ -1350,13 +1342,13 @@
             } else {
               scale = canvasWidth / img.width; // If image is taller, scale by width
             }
-    
+
             img.scale(scale);
-    
+
             // Center the background image
             const centerX = (canvasWidth - img.width * scale) / 2;
             const centerY = (canvasHeight - img.height * scale) / 2;
-    
+
             canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
               left: centerX,
               top: centerY,
@@ -1365,7 +1357,7 @@
               selectable: false,
               evented: false,
             });
-    
+
             // Update guide lines positions after canvas resize
             centerGuideLineX.set({
               x1: 0,
@@ -1381,10 +1373,10 @@
             });
             canvas.renderAll();
           },
-          { crossOrigin: 'anonymous' } // Add crossOrigin for images from external sources
+          { crossOrigin: "anonymous" } // Add crossOrigin for images from external sources
         );
       };
-    
+
       // Guide lines (always visible and non-interactive) - initialize them after canvas is ready
       const centerGuideLineX = new fabric.Line([0, 0, 0, 0], {
         stroke: "#dc2626", // red
@@ -1396,7 +1388,7 @@
         originX: "left",
         originY: "top",
       });
-    
+
       const centerGuideLineY = new fabric.Line([0, 0, 0, 0], {
         stroke: "#dc2626", // red
         strokeWidth: 1,
@@ -1407,10 +1399,10 @@
         originX: "left",
         originY: "top",
       });
-    
+
       canvas.add(centerGuideLineX);
       canvas.add(centerGuideLineY);
-    
+
       // Drag guide lines (only appear during dragging and non-interactive)
       const dragGuideLineX = new fabric.Line([0, 0, 0, 0], {
         stroke: "#10B981", // Green for drag guide lines
@@ -1420,7 +1412,7 @@
         hasControls: false,
         visible: false,
       });
-    
+
       const dragGuideLineY = new fabric.Line([0, 0, 0, 0], {
         stroke: "#10B981", // Green for drag guide lines
         strokeWidth: 1,
@@ -1429,10 +1421,10 @@
         hasControls: false,
         visible: false,
       });
-    
+
       canvas.add(dragGuideLineX);
       canvas.add(dragGuideLineY);
-    
+
       // Coordinate labels (only appear during dragging and non-interactive)
       const labelX = new fabric.Text("", {
         fontSize: 12,
@@ -1445,7 +1437,7 @@
         hasControls: false,
         visible: false,
       });
-    
+
       const labelY = new fabric.Text("", {
         fontSize: 12,
         fill: "#10B981",
@@ -1457,58 +1449,61 @@
         hasControls: false,
         visible: false,
       });
-    
+
       canvas.add(labelX);
       canvas.add(labelY);
-    
+
       // Initial call to set up canvas and background
       document.addEventListener(
         "DOMContentLoaded",
         initializeCanvasAndBackground
       );
       window.addEventListener("resize", initializeCanvasAndBackground);
-    
-    
-      // --- canvas-helpers.js ---
+    </script>
+    <script>
       // Function to set the background image of the canvas
       const setBackgroundImage = (imgUrl) => {
-        fabric.Image.fromURL(imgUrl, (img) => {
-          bgImageObject = img;
-          const canvasWidth = canvas.getWidth();
-          const canvasHeight = canvas.getHeight();
-          const imgAspectRatio = img.width / img.height;
-          const canvasAspectRatio = canvasWidth / canvasHeight;
-    
-          let scale;
-          if (imgAspectRatio > canvasAspectRatio) {
-            scale = canvasHeight / img.height;
-          } else {
-            scale = canvasWidth / img.width;
-          }
-    
-          img.scale(scale);
-    
-          const centerX = (canvasWidth - img.width * scale) / 2;
-          const centerY = (canvasHeight - img.height * scale) / 2;
-    
-          canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-            left: centerX,
-            top: centerY,
-            originX: "left",
-            originY: "top",
-            selectable: false,
-            evented: false,
-          });
-          canvas.renderAll(); // Ensure canvas renders after background is set
-        }, { crossOrigin: 'anonymous' }); // Add crossOrigin
+        fabric.Image.fromURL(
+          imgUrl,
+          (img) => {
+            bgImageObject = img;
+            const canvasWidth = canvas.getWidth();
+            const canvasHeight = canvas.getHeight();
+            const imgAspectRatio = img.width / img.height;
+            const canvasAspectRatio = canvasWidth / canvasHeight;
+
+            let scale;
+            if (imgAspectRatio > canvasAspectRatio) {
+              scale = canvasHeight / img.height;
+            } else {
+              scale = canvasWidth / img.width;
+            }
+
+            img.scale(scale);
+
+            const centerX = (canvasWidth - img.width * scale) / 2;
+            const centerY = (canvasHeight - img.height * scale) / 2;
+
+            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+              left: centerX,
+              top: centerY,
+              originX: "left",
+              originY: "top",
+              selectable: false,
+              evented: false,
+            });
+            canvas.renderAll(); // Ensure canvas renders after background is set
+          },
+          { crossOrigin: "anonymous" }
+        ); // Add crossOrigin
       };
-    
+
       // Function to save current design objects to specified data storage
       function saveCurrentDesignToData(designStorage) {
         // Store the current canvas dimensions along with the design objects
         designStorage.canvasWidth = canvas.getWidth();
         designStorage.canvasHeight = canvas.getHeight();
-    
+
         // Fabric.js toJSON() includes originX/Y and fontFamily by default for most objects
         designStorage.objects = canvas
           .getObjects()
@@ -1522,10 +1517,21 @@
               obj !== labelX &&
               obj !== labelY
           )
-          .map((obj) => obj.toJSON(['originX', 'originY', 'fontFamily', 'textAlign', 'fontWeight', 'fontStyle', 'backgroundColor', 'padding'])); // Ensure these properties are explicitly saved
+          .map((obj) =>
+            obj.toJSON([
+              "originX",
+              "originY",
+              "fontFamily",
+              "textAlign",
+              "fontWeight",
+              "fontStyle",
+              "backgroundColor",
+              "padding",
+            ])
+          ); // Ensure these properties are explicitly saved
         console.log(`Saved design for ${currentView}:`, designStorage);
       }
-    
+
       // Function to clear design objects from the canvas (excluding background and guide lines)
       function clearCanvasObjects() {
         const objectsToRemove = canvas.getObjects().filter((obj) => {
@@ -1539,34 +1545,36 @@
             obj !== labelY
           );
         });
-    
+
         objectsToRemove.forEach((obj) => {
           canvas.remove(obj);
         });
         canvas.discardActiveObject();
         canvas.renderAll();
       }
-    
+
       // Function to load design objects from specified data storage
       function loadDesignFromData(designStorage) {
         clearCanvasObjects(); // Clear existing objects before loading new ones
-    
+
         fabric.util.enlivenObjects(
           designStorage.objects,
           function (enlivenedObjects) {
             // Get the current canvas dimensions
             const currentCanvasWidth = canvas.getWidth();
             const currentCanvasHeight = canvas.getHeight();
-    
+
             // Get the canvas dimensions from when the design was saved
             // Fallback to current dimensions if not stored (e.g., initial load without saved data)
-            const savedCanvasWidth = designStorage.canvasWidth || currentCanvasWidth;
-            const savedCanvasHeight = designStorage.canvasHeight || currentCanvasHeight;
-    
+            const savedCanvasWidth =
+              designStorage.canvasWidth || currentCanvasWidth;
+            const savedCanvasHeight =
+              designStorage.canvasHeight || currentCanvasHeight;
+
             // Calculate scaling factors
             const scaleFactorX = currentCanvasWidth / savedCanvasWidth;
             const scaleFactorY = currentCanvasHeight / savedCanvasHeight;
-    
+
             enlivenedObjects.forEach((obj) => {
               // Load fonts dynamically if they are textboxes
               if (obj.type === "textbox" && obj.fontFamily) {
@@ -1583,34 +1591,22 @@
                   document.head.appendChild(link);
                 }
               }
-    
+
               // Apply scaling to the object properties
-              // PENTING: Atur originX/Y terlebih dahulu jika ingin centering bekerja dengan konsisten
-              // Jika objek disimpan dengan originX/Y tertentu, gunakan itu. Default ke 'left'/'top'.
               obj.set({
-                originX: obj.originX || 'left',
-                originY: obj.originY || 'top',
-              });
-    
-              // Jika objek disimpan dengan properti yang berhubungan dengan posisi relatif terhadap origin
-              // seperti 'center', kita harus menghitung posisi absolut baru berdasarkan scaled center.
-              const objCenterX = obj.left + obj.getScaledWidth() / 2;
-              const objCenterY = obj.top + obj.getScaledHeight() / 2;
-    
-              obj.set({
-                left: objCenterX * scaleFactorX - (obj.getScaledWidth() * scaleFactorX) / 2,
-                top: objCenterY * scaleFactorY - (obj.getScaledHeight() * scaleFactorY) / 2,
+                left: obj.left * scaleFactorX,
+                top: obj.top * scaleFactorY,
                 scaleX: obj.scaleX * scaleFactorX,
                 scaleY: obj.scaleY * scaleFactorY,
               });
-    
+
               // For textboxes, also scale the font size
               if (obj.type === "textbox") {
                 obj.set("fontSize", obj.fontSize * scaleFactorY);
                 obj.initDimensions(); // Recalculate textbox dimensions after font change
               }
               obj.setCoords(); // Update bounding box
-    
+
               canvas.add(obj);
             });
             canvas.renderAll();
@@ -1619,7 +1615,7 @@
           }
         );
       }
-    
+
       // Function to load custom fonts from a design JSON (used for initial load from local storage)
       const loadCustomFontsFromDesign = (json) => {
         try {
@@ -1627,12 +1623,12 @@
           if (designData && (designData.front || designData.back)) {
             const allObjects = [];
             if (designData.front && designData.front.objects) {
-                allObjects.push(...designData.front.objects);
+              allObjects.push(...designData.front.objects);
             }
             if (designData.back && designData.back.objects) {
-                allObjects.push(...designData.back.objects);
+              allObjects.push(...designData.back.objects);
             }
-    
+
             allObjects.forEach((obj) => {
               if (obj.type === "textbox" && obj.fontFamily) {
                 const font = obj.fontFamily;
@@ -1654,9 +1650,8 @@
           console.error("Error parsing JSON or loading fonts from design:", e);
         }
       };
-    
-    
-      // --- font-features.js ---
+    </script>
+    <script>
       const fontSizeSelect = document.getElementById("fontSize");
       if (fontSizeSelect) {
         for (let i = 10; i <= 64; i += 2) {
@@ -1666,11 +1661,11 @@
           fontSizeSelect.appendChild(opt);
         }
       }
-    
+
       let currentFont = "Arial";
       let fontsList = [];
       const apiKey = "AIzaSyBbHsIzkkLsTKLNRcomvRlw-qZqWeC91OU"; // Replace with your valid Google Fonts API Key
-    
+
       fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}`)
         .then((r) => r.json())
         .then((d) => {
@@ -1678,13 +1673,13 @@
           renderFonts(fontsList);
         })
         .catch((error) => console.error("Error fetching fonts:", error));
-    
+
       function renderFonts(arr) {
         const container = document.getElementById("fontList");
         if (!container) return;
-    
+
         container.innerHTML = "";
-    
+
         arr.slice(0, 50).forEach((font) => {
           const fontId = `font-link-${font.replace(/[^a-zA-Z0-9]/g, "")}`;
           if (!document.getElementById(fontId)) {
@@ -1697,7 +1692,7 @@
             )}&display=swap`;
             document.head.appendChild(link);
           }
-    
+
           const div = document.createElement("div");
           div.className =
             "border p-2 rounded text-center text-sm cursor-pointer hover:bg-gray-100 mb-1 font-list-item";
@@ -1706,7 +1701,7 @@
           div.onclick = () => {
             currentFont = font;
             const fontModal = document.getElementById("fontModal");
-    
+
             const activeObject = canvas.getActiveObject();
             if (activeObject && activeObject.type === "textbox") {
               activeObject.set({ fontFamily: currentFont });
@@ -1717,7 +1712,7 @@
             } else {
               addTextToCanvas(currentFont);
             }
-    
+
             if (fontModal) {
               fontModal.classList.add("hidden");
             }
@@ -1725,7 +1720,7 @@
           container.appendChild(div);
         });
       }
-    
+
       const fontSearchInput = document.getElementById("fontSearch");
       if (fontSearchInput) {
         fontSearchInput.oninput = (e) => {
@@ -1733,18 +1728,17 @@
           renderFonts(fontsList.filter((f) => f.toLowerCase().includes(q)));
         };
       }
-    
-    
-      // --- text-image-controls.js ---
+    </script>
+    <script>
       function addTextToCanvas(font = "Arial") {
         const textColorInput = document.getElementById("textColor");
         const fontSizeInput = document.getElementById("fontSize");
         const bgTransparentCheckbox = document.getElementById("bgTransparent");
         const textBgColorInput = document.getElementById("textBgColor");
-    
+
         const text = new fabric.Textbox("Teks Baru", {
-          left: 100,
-          top: 100,
+          left: canvas.getWidth() / 2, // Center new text horizontally
+          top: canvas.getHeight() / 2, // Center new text vertically
           fontFamily: font,
           fontSize: parseInt(fontSizeInput ? fontSizeInput.value : 16),
           fill: textColorInput ? textColorInput.value : "#000000",
@@ -1765,27 +1759,22 @@
           cornerSize: 10,
           transparentCorners: false,
           padding: 5,
-          // Penting: Set originX dan originY jika Anda ingin konsistensi centering
-          // Contoh: untuk center awal
-          // originX: 'center',
-          // originY: 'center',
-          // left: canvas.getWidth() / 2,
-          // top: canvas.getHeight() / 2,
+          originX: "center", // Set origin to center for consistent positioning
+          originY: "center",
         });
         canvas.add(text).setActiveObject(text);
         canvas.renderAll();
         updateDesignList();
-        updateUIFromActiveObject();
         saveDesignAutomatically(); // Autosave after adding new object
       }
-    
+
       const addTextButton = document.getElementById("addTextButton");
       if (addTextButton) {
         addTextButton.addEventListener("click", () =>
           addTextToCanvas(currentFont)
         );
       }
-    
+
       const uploadPhotoInput = document.getElementById("upload-photo");
       if (uploadPhotoInput) {
         uploadPhotoInput.onchange = (e) => {
@@ -1793,40 +1782,46 @@
           if (!file) return;
           const reader = new FileReader();
           reader.onload = (f) => {
-            fabric.Image.fromURL(f.target.result, (img) => {
-              img.set({
-                left: 50,
-                top: 50,
-                selectable: true,
-                evented: true,
-                hasControls: true,
-                            hasBorders: true,
-                cornerColor: "#d1a86f",
-                cornerSize: 10,
-                transparentCorners: false,
-                padding: 5,
-                // Penting: Set originX dan originY jika Anda ingin konsistensi centering
-                // originX: 'left',
-                // originY: 'top',
-              });
-    
-              // Scale newly added image to a reasonable default size (e.g., 25% of the smaller canvas dimension)
-              const maxDim = Math.max(img.width, img.height);
-              const canvasMinDim = Math.min(canvas.getWidth(), canvas.getHeight()); // Use min to ensure it fits in either dimension
-              const scaleFactor = (canvasMinDim * 0.25) / maxDim;
-              img.scale(scaleFactor);
-    
-              canvas.add(img).setActiveObject(img);
-              canvas.renderAll();
-              updateDesignList();
-              saveDesignAutomatically(); // Autosave after adding new object
-            }, { crossOrigin: 'anonymous' }); // Add crossOrigin
+            fabric.Image.fromURL(
+              f.target.result,
+              (img) => {
+                img.set({
+                  left: canvas.getWidth() / 2, // Center new image horizontally
+                  top: canvas.getHeight() / 2, // Center new image vertically
+                  selectable: true,
+                  evented: true,
+                  hasControls: true,
+                  hasBorders: true,
+                  cornerColor: "#d1a86f",
+                  cornerSize: 10,
+                  transparentCorners: false,
+                  padding: 5,
+                  originX: "center", // Set origin to center for consistent positioning
+                  originY: "center",
+                });
+
+                // Scale newly added image to a reasonable default size (e.g., 25% of the smaller canvas dimension)
+                const maxDim = Math.max(img.width, img.height);
+                const canvasMinDim = Math.min(
+                  canvas.getWidth(),
+                  canvas.getHeight()
+                ); // Use min to ensure it fits in either dimension
+                const scaleFactor = (canvasMinDim * 0.25) / maxDim;
+                img.scale(scaleFactor);
+
+                canvas.add(img).setActiveObject(img);
+                canvas.renderAll();
+                updateDesignList();
+                saveDesignAutomatically(); // Autosave after adding new object
+              },
+              { crossOrigin: "anonymous" }
+            ); // Add crossOrigin
           };
           reader.readAsDataURL(file);
           e.target.value = "";
         };
       }
-    
+
       // Function to update UI from active object
       function updateUIFromActiveObject() {
         const o = canvas.getActiveObject();
@@ -1839,13 +1834,13 @@
         const alignLeft = document.getElementById("alignLeft");
         const alignCenter = document.getElementById("alignCenter");
         const alignRight = document.getElementById("alignRight");
-    
+
         if (!o || o.type !== "textbox") {
           if (textColor) textColor.value = "#000000";
           if (fontSize) fontSize.value = "16";
           if (textBgColor) textBgColor.value = "#ffffff";
           if (bgTransparent) bgTransparent.checked = false;
-    
+
           [boldBtn, italicBtn, alignLeft, alignCenter, alignRight].forEach(
             (btn) => {
               if (btn) btn.classList.remove("bg-gray-300");
@@ -1853,12 +1848,12 @@
           );
           return;
         }
-    
+
         if (textColor) textColor.value = o.fill || "#000000";
         if (fontSize) fontSize.value = o.fontSize || 16;
         if (textBgColor) textBgColor.value = o.backgroundColor || "#ffffff";
         if (bgTransparent) bgTransparent.checked = !o.backgroundColor;
-    
+
         [boldBtn, italicBtn].forEach((btn) => {
           if (btn) btn.classList.remove("bg-gray-300");
         });
@@ -1866,7 +1861,7 @@
           boldBtn.classList.add("bg-gray-300");
         if (italicBtn && o.fontStyle === "italic")
           italicBtn.classList.add("bg-gray-300");
-    
+
         [alignLeft, alignCenter, alignRight].forEach((btn) => {
           if (btn) btn.classList.remove("bg-gray-300");
         });
@@ -1875,18 +1870,19 @@
         const activeAlignBtn = document.getElementById(alignId);
         if (activeAlignBtn) activeAlignBtn.classList.add("bg-gray-300");
       }
-    
+
       canvas.on("selection:created", updateUIFromActiveObject);
       canvas.on("selection:updated", updateUIFromActiveObject);
       canvas.on("object:modified", updateUIFromActiveObject);
       canvas.on("selection:cleared", updateUIFromActiveObject);
-    
+
       // Function to update active text properties
       function updateActiveText(prop, val) {
         const o = canvas.getActiveObject();
         if (o && o.type === "textbox") {
           o.set(prop, val);
-          if (prop === "fontSize") { // Recalculate dimensions if font size changes
+          if (prop === "fontSize") {
+            // Recalculate dimensions if font size changes
             o.initDimensions();
           }
           canvas.renderAll();
@@ -1894,16 +1890,16 @@
           saveDesignAutomatically(); // Autosave after text property change
         }
       }
-    
+
       const textColorInput = document.getElementById("textColor");
       if (textColorInput) {
         textColorInput.onchange = (e) =>
           updateActiveText("fill", e.target.value);
       }
-    
+
       const textBgColorInput = document.getElementById("textBgColor");
       const bgTransparentCheckbox = document.getElementById("bgTransparent");
-    
+
       if (textBgColorInput) {
         textBgColorInput.onchange = (e) => {
           const v =
@@ -1913,7 +1909,7 @@
           updateActiveText("backgroundColor", v);
         };
       }
-    
+
       if (bgTransparentCheckbox) {
         bgTransparentCheckbox.onchange = () => {
           const val = bgTransparentCheckbox.checked
@@ -1924,13 +1920,13 @@
           updateActiveText("backgroundColor", val);
         };
       }
-    
+
       const fontSizeInput = document.getElementById("fontSize");
       if (fontSizeInput) {
         fontSizeInput.onchange = (e) =>
           updateActiveText("fontSize", parseInt(e.target.value));
       }
-    
+
       const boldBtn = document.getElementById("boldBtn");
       if (boldBtn) {
         boldBtn.onclick = () => {
@@ -1945,7 +1941,7 @@
           }
         };
       }
-    
+
       const italicBtn = document.getElementById("italicBtn");
       if (italicBtn) {
         italicBtn.onclick = () => {
@@ -1960,7 +1956,7 @@
           }
         };
       }
-    
+
       ["alignLeft", "alignCenter", "alignRight"].forEach((id) => {
         const alignButton = document.getElementById(id);
         if (alignButton) {
@@ -1976,35 +1972,30 @@
           };
         }
       });
-    
-    
-      // --- design-management.js ---
+    </script>
+    <script>
       function updateDesignList() {
         const designListContainer = document.getElementById("designList");
         const noComponentsMessage = document.getElementById(
           "noComponentsMessage"
         );
         if (!designListContainer || !noComponentsMessage) return;
-    
+
         // Clear all child elements from designListContainer EXCEPT noComponentsMessage
-        while (designListContainer.children.length > 0) {
-          const lastChild = designListContainer.lastChild;
-          if (lastChild && lastChild.id !== "noComponentsMessage") {
-            designListContainer.removeChild(lastChild);
-          } else if (lastChild && lastChild.id === "noComponentsMessage") {
-            break;
-          } else {
-            designListContainer.removeChild(lastChild);
+        // Create a temporary array of children to avoid issues with live HTMLCollection
+        Array.from(designListContainer.children).forEach((child) => {
+          if (child && child.id !== "noComponentsMessage") {
+            designListContainer.removeChild(child);
           }
-        }
-    
+        });
+
         let hasComponents = false;
-    
+
         // Filter drawable objects based on currentView
         const currentDesignObjects = (
           currentView === "front" ? frontDesignData : backDesignData
         ).objects;
-    
+
         if (currentDesignObjects.length > 0) {
           hasComponents = true;
           const fragment = document.createDocumentFragment();
@@ -2013,71 +2004,152 @@
             const componentCard = document.createElement("div");
             componentCard.className =
               "flex items-center justify-between bg-white border border-gray-200 rounded-lg p-3 shadow-sm mb-2";
-    
+
             const componentName = document.createElement("span");
             componentName.className =
               "text-sm font-medium text-[#0f2d25] truncate";
             componentName.textContent =
               objData.type === "textbox"
-                ? `Teks: "${objData.text}"`
+                ? `Teks: "${
+                    objData.text.length > 20
+                      ? objData.text.substring(0, 17) + "..."
+                      : objData.text
+                  }"` // Truncate long text
                 : `Gambar ${i + 1}`;
-    
+
             const delBtn = document.createElement("button");
             delBtn.className =
               "p-1 rounded-full text-red-500 hover:bg-red-100 hover:text-red-700 transition flex items-center justify-center";
-    
+
             delBtn.innerHTML = `
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             `;
-    
+
             delBtn.onclick = () => {
               const currentData =
                 currentView === "front" ? frontDesignData : backDesignData;
-              // Find the index of objData in currentData.objects
-              // This comparison might be tricky with Fabric.js objects because of floating point numbers in position/scale.
-              // A more robust way would be to associate a unique ID with each object.
-              const indexToRemove = currentData.objects.findIndex(
-                (item) =>
-                  item.type === objData.type &&
-                  (item.type === "textbox"
-                    ? item.text === objData.text && item.fontFamily === objData.fontFamily // Also compare font for text
-                    : item.src === objData.src) &&
-                  Math.abs(item.left - objData.left) < 1 && // Use small tolerance for comparison
-                  Math.abs(item.top - objData.top) < 1
-              );
-    
-              if (indexToRemove > -1) {
+
+              // Find the actual Fabric.js object on the canvas that corresponds to objData
+              // We'll use a more robust comparison by checking type and approximate position/scale
+              const objectOnCanvas = canvas.getObjects().find((obj) => {
+                if (
+                  obj === bgImageObject ||
+                  obj === centerGuideLineX ||
+                  obj === centerGuideLineY ||
+                  obj === dragGuideLineX ||
+                  obj === dragGuideLineY ||
+                  obj === labelX ||
+                  obj === labelY
+                ) {
+                  return false;
+                }
+
+                // Compare properties that uniquely identify the object
+                if (obj.type === objData.type) {
+                  if (obj.type === "textbox") {
+                    return (
+                      obj.text === objData.text &&
+                      obj.fontFamily === objData.fontFamily &&
+                      Math.abs(obj.left - objData.left) < 0.1 && // Use very small tolerance for precision
+                      Math.abs(obj.top - objData.top) < 0.1 &&
+                      Math.abs(obj.scaleX - objData.scaleX) < 0.01 &&
+                      Math.abs(obj.scaleY - objData.scaleY) < 0.01
+                    );
+                  } else if (obj.type === "image") {
+                    return (
+                      obj.getSrc() === objData.src &&
+                      Math.abs(obj.left - objData.left) < 0.1 &&
+                      Math.abs(obj.top - objData.top) < 0.1 &&
+                      Math.abs(obj.scaleX - objData.scaleX) < 0.01 &&
+                      Math.abs(obj.scaleY - objData.scaleY) < 0.01
+                    );
+                  }
+                }
+                return false;
+              });
+
+              if (objectOnCanvas) {
+                canvas.remove(objectOnCanvas); // Remove from canvas
                 // Remove from storage array
-                currentData.objects.splice(indexToRemove, 1);
-                // Reload canvas to reflect changes
-                clearCanvasObjects();
-                loadDesignFromData(currentData);
+                currentData.objects = currentData.objects.filter((item) => {
+                  // Keep items that are NOT the one we just removed
+                  if (item.type === objData.type) {
+                    if (item.type === "textbox") {
+                      return !(
+                        item.text === objData.text &&
+                        item.fontFamily === objData.fontFamily &&
+                        Math.abs(item.left - objData.left) < 0.1 &&
+                        Math.abs(item.top - objData.top) < 0.1 &&
+                        Math.abs(item.scaleX - objData.scaleX) < 0.01 &&
+                        Math.abs(item.scaleY - objData.scaleY) < 0.01
+                      );
+                    } else if (item.type === "image") {
+                      return !(
+                        item.src === objData.src &&
+                        Math.abs(item.left - objData.left) < 0.1 &&
+                        Math.abs(item.top - objData.top) < 0.1 &&
+                        Math.abs(item.scaleX - objData.scaleX) < 0.01 &&
+                        Math.abs(item.scaleY - objData.scaleY) < 0.01
+                      );
+                    }
+                  }
+                  return true; // Keep other objects
+                });
+                canvas.discardActiveObject();
+                canvas.renderAll();
                 saveDesignAutomatically(); // Autosave after deletion
               } else {
                 console.warn(
-                  "Object not found in design list data for deletion."
+                  "Object not found on canvas or in design list data for deletion."
                 );
+                // If the object isn't found on canvas (perhaps due to a previous bug or desync),
+                // still try to remove it from the data to keep lists consistent.
+                currentData.objects = currentData.objects.filter((item) => {
+                  // Similar comparison logic as above
+                  if (item.type === objData.type) {
+                    if (item.type === "textbox") {
+                      return !(
+                        item.text === objData.text &&
+                        item.fontFamily === objData.fontFamily &&
+                        Math.abs(item.left - objData.left) < 0.1 &&
+                        Math.abs(item.top - objData.top) < 0.1 &&
+                        Math.abs(item.scaleX - objData.scaleX) < 0.01 &&
+                        Math.abs(item.scaleY - objData.scaleY) < 0.01
+                      );
+                    } else if (item.type === "image") {
+                      return !(
+                        item.src === objData.src &&
+                        Math.abs(item.left - objData.left) < 0.1 &&
+                        Math.abs(item.top - objData.top) < 0.1 &&
+                        Math.abs(item.scaleX - objData.scaleX) < 0.01 &&
+                        Math.abs(item.scaleY - objData.scaleY) < 0.01
+                      );
+                    }
+                  }
+                  return true;
+                });
+                saveDesignAutomatically(); // Autosave even if removed only from data
               }
               updateDesignList();
               updateUIFromActiveObject();
             };
-    
+
             componentCard.appendChild(componentName);
             componentCard.appendChild(delBtn);
             fragment.appendChild(componentCard);
           });
           designListContainer.appendChild(fragment);
         }
-    
+
         if (!hasComponents) {
           noComponentsMessage.classList.remove("hidden");
         } else {
           noComponentsMessage.classList.add("hidden");
         }
       }
-    
+
       const saveDesignButton = document.getElementById("saveDesign");
       if (saveDesignButton) {
         saveDesignButton.onclick = () => {
@@ -2085,69 +2157,56 @@
           saveCurrentDesignToData(
             currentView === "front" ? frontDesignData : backDesignData
           );
-    
+
           // Combine data from both sides for localStorage
           const fullDesignData = {
             front: frontDesignData, // Store full data objects (including canvas dimensions)
-            back: backDesignData,   // Store full data objects
+            back: backDesignData, // Store full data objects
           };
-    
+
           dragGuideLineX.set("visible", false);
           dragGuideLineY.set("visible", false);
           labelX.set("visible", false);
           labelY.set("visible", false);
           canvas.renderAll();
-    
+
           const json = JSON.stringify(fullDesignData);
           localStorage.setItem("kaosDesign", json);
           window.location.href = "preview_product.html";
         };
       }
-    
+
       // --- AUTOSAVE FUNCTIONALITY ---
       // Function to save current design to localStorage automatically
       function saveDesignAutomatically() {
-          // Get current design data for the active view
-          const currentDesignDataStorage = currentView === 'front' ? frontDesignData : backDesignData;
-          saveCurrentDesignToData(currentDesignDataStorage);
-    
-          // Get the other side's data to ensure both are up-to-date for full save
-          const otherDesignDataStorage = currentView === 'front' ? backDesignData : frontDesignData;
-          // Note: We are not explicitly calling saveCurrentDesignToData for the other side here
-          // as its data should have been saved when switching views.
-          // If a user never switches, the other side will remain empty or with old data.
-          // For full robustness, you might periodically save both or ensure switch logic is strict.
-    
-          const fullDesignData = {
-              front: frontDesignData,
-              back: backDesignData,
-          };
-    
-          localStorage.setItem("kaosDesign", JSON.stringify(fullDesignData));
-          // console.log("Design autosaved!");
+        // Get current design data for the active view
+        const currentDesignDataStorage =
+          currentView === "front" ? frontDesignData : backDesignData;
+        saveCurrentDesignToData(currentDesignDataStorage);
+
+        // Get the other side's data to ensure both are up-to-date for full save
+        const otherDesignDataStorage =
+          currentView === "front" ? backDesignData : frontDesignData;
+        // Note: We are not explicitly calling saveCurrentDesignToData for the other side here
+        // as its data should have been saved when switching views.
+        // If a user never switches, the other side will remain empty or with old data.
+        // For full robustness, you might periodically save both or ensure switch logic is strict.
+
+        const fullDesignData = {
+          front: frontDesignData,
+          back: backDesignData,
+        };
+
+        localStorage.setItem("kaosDesign", JSON.stringify(fullDesignData));
+        // console.log("Design autosaved!");
       }
-    
-      // Add event listeners for autosave
-      // Trigger autosave when an object is added, modified, or removed
-      document.addEventListener("DOMContentLoaded", () => {
-        // Pastikan canvas sudah diinisialisasi sebelum attach event listener
-        if (canvas) {
-            canvas.on('object:added', saveDesignAutomatically);
-            canvas.on('object:modified', saveDesignAutomatically);
-            canvas.on('object:removed', saveDesignAutomatically);
-            // When selection is cleared (e.g., user clicks off object), it might also mean a change
-            canvas.on('selection:cleared', saveDesignAutomatically);
-        } else {
-            console.warn("Canvas not ready for autosave event listeners.");
-        }
-      });
-    
+
       const clearCanvasButton = document.getElementById("clearCanvas");
       if (clearCanvasButton) {
         clearCanvasButton.onclick = () => {
           // Clear only design objects from the current view
           clearCanvasObjects();
-    
+
           if (currentView === "front") {
             frontDesignData.objects = [];
             frontDesignData.canvasWidth = 0; // Reset dimensions
@@ -2157,7 +2216,7 @@
             backDesignData.canvasWidth = 0; // Reset dimensions
             backDesignData.canvasHeight = 0;
           }
-    
+
           canvas.discardActiveObject();
           canvas.renderAll();
           updateDesignList();
@@ -2165,20 +2224,19 @@
           saveDesignAutomatically(); // Autosave after clearing canvas
         };
       }
-    
-    
-      // --- panel-controls.js ---
+    </script>
+    <script>
       let isDragging = false;
       let lastPosX;
       let lastPosY;
-    
+
       // Function to apply zoom level
       const applyZoom = (selectedPercentage) => {
         const zoomLevel = selectedPercentage / 100;
-    
+
         const viewportCenterX = canvas.width / 2;
         const viewportCenterY = canvas.height / 2;
-    
+
         const newVpt = [
           zoomLevel,
           0,
@@ -2187,30 +2245,30 @@
           viewportCenterX - viewportCenterX * zoomLevel,
           viewportCenterY - viewportCenterY * zoomLevel,
         ];
-    
+
         canvas.setViewportTransform(newVpt);
         canvas.setZoom(zoomLevel);
-    
+
         // Ensure background image and guide lines are also updated
         if (bgImageObject) {
           const currentCanvasWidth = canvas.getWidth();
           const currentCanvasHeight = canvas.getHeight();
           const imgAspectRatio = bgImageObject.width / bgImageObject.height;
           const canvasAspectRatio = currentCanvasWidth / currentCanvasHeight;
-    
+
           let currentScale;
           if (imgAspectRatio > canvasAspectRatio) {
             currentScale = currentCanvasHeight / bgImageObject.height;
           } else {
             currentScale = currentCanvasWidth / bgImageObject.width;
           }
-    
+
           const scaledWidth = bgImageObject.width * currentScale;
           const scaledHeight = bgImageObject.height * currentScale;
-    
+
           const currentCenterX = (currentCanvasWidth - scaledWidth) / 2;
           const currentCenterY = (currentCanvasHeight - scaledHeight) / 2;
-    
+
           bgImageObject.set({
             left: currentCenterX,
             top: currentCenterY,
@@ -2218,7 +2276,7 @@
             scaleY: currentScale,
           });
         }
-    
+
         centerGuideLineX.set({
           x1: 0,
           y1: canvas.getHeight() / 2,
@@ -2231,10 +2289,10 @@
           x2: canvas.getWidth() / 2,
           y2: canvas.getHeight(),
         });
-    
+
         canvas.renderAll();
       };
-    
+
       // --- Zoom functionality ---
       const zoomSelect = document.querySelector(
         ".flex.items-center.gap-1.sm\\:gap-2.flex-shrink-0 > select"
@@ -2245,7 +2303,7 @@
           applyZoom(selectedPercentage);
         });
       }
-    
+
       // --- Pan (drag) Canvas functionality ---
       canvas.on("mouse:down", function (opt) {
         const evt = opt.e;
@@ -2261,7 +2319,7 @@
           canvas.setCursor("grab");
         }
       });
-    
+
       canvas.on("mouse:move", function (opt) {
         if (isDragging) {
           const evt = opt.e;
@@ -2274,13 +2332,13 @@
           canvas.setCursor("grabbing");
         }
       });
-    
+
       canvas.on("mouse:up", function (opt) {
         isDragging = false;
         canvas.selection = true;
         canvas.setCursor("default");
       });
-    
+
       // --- Switch Front/Back Shirt View (Bottom Panel) ---
       const panelFrontViewButton = document.querySelector(
         ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(1)"
@@ -2288,7 +2346,7 @@
       const panelBackViewButton = document.querySelector(
         ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(2)"
       ); // Get "Back" button
-    
+
       if (panelFrontViewButton) {
         panelFrontViewButton.addEventListener("click", () => {
           if (currentView !== "front") {
@@ -2299,10 +2357,14 @@
             updateDesignList();
             updateUIFromActiveObject();
             console.log("Switched to Front View (Panel)");
+            // Update active class for buttons
+            panelFrontViewButton.classList.add("bg-gray-200");
+            if (panelBackViewButton)
+              panelBackViewButton.classList.remove("bg-gray-200");
           }
         });
       }
-    
+
       if (panelBackViewButton) {
         panelBackViewButton.addEventListener("click", () => {
           if (currentView !== "back") {
@@ -2313,12 +2375,15 @@
             updateDesignList();
             updateUIFromActiveObject();
             console.log("Switched to Back View (Panel)");
+            // Update active class for buttons
+            panelBackViewButton.classList.add("bg-gray-200");
+            if (panelFrontViewButton)
+              panelFrontViewButton.classList.remove("bg-gray-200");
           }
         });
       }
-    
-    
-      // --- drag-guides.js ---
+    </script>
+    <script>
       canvas.on("object:moving", function (e) {
         const obj = e.target;
         if (
@@ -2338,15 +2403,15 @@
           canvas.renderAll();
           return;
         }
-    
+
         const centerX = canvas.getWidth() / 2;
         const centerY = canvas.getHeight() / 2;
         const objCenter = obj.getCenterPoint();
         const tolerance = 5;
-    
+
         const isCenterX = Math.abs(objCenter.x - centerX) < tolerance;
         const isCenterY = Math.abs(objCenter.y - centerY) < tolerance;
-    
+
         dragGuideLineX.set({
           x1: 0,
           y1: objCenter.y,
@@ -2356,7 +2421,7 @@
           strokeWidth: isCenterY ? 2.5 : 1,
           stroke: isCenterY ? "#dc2626" : "#10B981",
         });
-    
+
         dragGuideLineY.set({
           x1: objCenter.x,
           y1: 0,
@@ -2366,46 +2431,45 @@
           strokeWidth: isCenterX ? 2.5 : 1,
           stroke: isCenterX ? "#dc2626" : "#10B981",
         });
-    
+
         if (isCenterX) {
           obj.set({
             left: centerX - obj.getScaledWidth() / 2,
-            originX: 'left' // Ensure origin is set for consistent centering
+            originX: "left", // Ensure origin is set for consistent centering
           });
         }
         if (isCenterY) {
           obj.set({
             top: centerY - obj.getScaledHeight() / 2,
-            originY: 'top' // Ensure origin is set for consistent centering
+            originY: "top", // Ensure origin is set for consistent centering
           });
         }
-    
-    
+
         const x = Math.round(obj.left ?? 0);
         const y = Math.round(obj.top ?? 0);
-    
+
         labelX.set({
           text: `X: ${x}`,
           left: obj.left,
           top: obj.top - 20,
           visible: true,
         });
-    
+
         labelY.set({
           text: `Y: ${y}`,
           left: obj.left,
           top: obj.top - 35,
           visible: true,
         });
-    
+
         canvas.bringToFront(dragGuideLineX);
         canvas.bringToFront(dragGuideLineY);
         canvas.bringToFront(labelX);
         canvas.bringToFront(labelY);
-    
+
         canvas.renderAll();
       });
-    
+
       canvas.on("mouse:up", () => {
         dragGuideLineX.set("visible", false);
         dragGuideLineY.set("visible", false);
@@ -2413,35 +2477,36 @@
         labelY.set("visible", false);
         canvas.renderAll();
       });
-    
-    
-      // --- modal-preview.js ---
+    </script>
+    <script>
       // Function to generate a preview image for the modal (front or back)
       async function generatePreviewImageForModal(viewToPreview) {
         // Define internal rendering dimensions for the temporary canvas.
         const PREVIEW_RENDER_WIDTH = 500;
         let PREVIEW_RENDER_HEIGHT = PREVIEW_RENDER_WIDTH; // Default to square, will be updated
-    
+
         const tempCanvasElement = document.createElement("canvas");
-        // Do NOT set width/height directly for tempCanvasElement here, Fabric.js will manage it
-        // based on tempCanvas options.
-    
-        let tempBgImageUrl = viewToPreview === "front" ? frontImageUrl : backImageUrl;
-        let tempDataStorage = viewToPreview === "front" ? frontDesignData : backDesignData;
-    
+
+        let tempBgImageUrl =
+          viewToPreview === "front" ? frontImageUrl : backImageUrl;
+        let tempDataStorage =
+          viewToPreview === "front" ? frontDesignData : backDesignData;
+
         // Load actual product image to get its natural dimensions for aspect ratio calculation
         const imgTemp = new Image();
         imgTemp.src = tempBgImageUrl;
-        await new Promise(resolve => {
-            imgTemp.onload = resolve;
-            imgTemp.onerror = resolve; // Resolve even on error to prevent hanging
+        await new Promise((resolve) => {
+          imgTemp.onload = () => {
+            if (imgTemp.naturalWidth && imgTemp.naturalHeight) {
+              const imageAspectRatio =
+                imgTemp.naturalWidth / imgTemp.naturalHeight;
+              PREVIEW_RENDER_HEIGHT = PREVIEW_RENDER_WIDTH / imageAspectRatio;
+            }
+            resolve();
+          };
+          imgTemp.onerror = resolve; // Resolve even on error to prevent hanging
         });
-    
-        if (imgTemp.naturalWidth && imgTemp.naturalHeight) {
-            const imageAspectRatio = imgTemp.naturalWidth / imgTemp.naturalHeight;
-            PREVIEW_RENDER_HEIGHT = PREVIEW_RENDER_WIDTH / imageAspectRatio;
-        }
-    
+
         const tempCanvas = new fabric.Canvas(tempCanvasElement, {
           width: PREVIEW_RENDER_WIDTH,
           height: PREVIEW_RENDER_HEIGHT,
@@ -2450,48 +2515,58 @@
           interactive: false,
           renderOnAddRemove: false, // Prevents excessive rendering during load
         });
-    
+
         // Load background image to the temporary canvas
         const bgImgForModal = await new Promise((resolve) => {
-          fabric.Image.fromURL(tempBgImageUrl, (img) => {
-            if (!img) return resolve(null);
-    
-            const imgAspectRatio = img.width / img.height;
-            const canvasAspectRatio = tempCanvas.getWidth() / tempCanvas.getHeight();
-    
-            let scale;
-            if (imgAspectRatio > canvasAspectRatio) {
-              scale = tempCanvas.getHeight() / img.height;
-            } else {
-              scale = tempCanvas.getWidth() / img.width;
-            }
-    
-            img.scale(scale);
-            const centerX = (tempCanvas.getWidth() - img.width * scale) / 2;
-            const centerY = (tempCanvas.getHeight() - img.height * scale) / 2;
-    
-            img.set({
-              left: centerX,
-              top: centerY,
-              originX: "left",
-              originY: "top",
-              selectable: false,
-              evented: false,
-            });
-            resolve(img);
-          }, { crossOrigin: 'anonymous' });
+          fabric.Image.fromURL(
+            tempBgImageUrl,
+            (img) => {
+              if (!img) return resolve(null);
+
+              const imgAspectRatio = img.width / img.height;
+              const canvasAspectRatio =
+                tempCanvas.getWidth() / tempCanvas.getHeight();
+
+              let scale;
+              if (imgAspectRatio > canvasAspectRatio) {
+                scale = tempCanvas.getHeight() / img.height;
+              } else {
+                scale = tempCanvas.getWidth() / img.width;
+              }
+
+              img.scale(scale);
+              const centerX = (tempCanvas.getWidth() - img.width * scale) / 2;
+              const centerY = (tempCanvas.getHeight() - img.height * scale) / 2;
+
+              img.set({
+                left: centerX,
+                top: centerY,
+                originX: "left",
+                originY: "top",
+                selectable: false,
+                evented: false,
+              });
+              resolve(img);
+            },
+            { crossOrigin: "anonymous" }
+          );
         });
-    
+
         if (bgImgForModal) {
-          tempCanvas.setBackgroundImage(bgImgForModal, tempCanvas.renderAll.bind(tempCanvas));
+          tempCanvas.setBackgroundImage(
+            bgImgForModal,
+            tempCanvas.renderAll.bind(tempCanvas)
+          );
         }
-    
+
         // Load design objects to the temporary canvas
         const tempDataObjects = tempDataStorage.objects;
         // Gunakan dimensi kanvas yang tersimpan saat design dibuat sebagai referensi
-        const savedCanvasWidth = tempDataStorage.canvasWidth || canvas.getWidth();
-        const savedCanvasHeight = tempDataStorage.canvasHeight || canvas.getHeight();
-    
+        const savedCanvasWidth =
+          tempDataStorage.canvasWidth || canvas.getWidth();
+        const savedCanvasHeight =
+          tempDataStorage.canvasHeight || canvas.getHeight();
+
         // Load fonts dynamically if they are textboxes in the design data
         if (tempDataObjects && tempDataObjects.length > 0) {
           const fontFamiliesToLoad = new Set();
@@ -2506,7 +2581,10 @@
               / /g,
               "+"
             )}&display=swap`;
-            const linkId = `modal-font-link-${fontFamily.replace(/[^a-zA-Z0-9]/g, "")}`;
+            const linkId = `modal-font-link-${fontFamily.replace(
+              /[^a-zA-Z0-9]/g,
+              ""
+            )}`;
             if (!document.getElementById(linkId)) {
               const link = document.createElement("link");
               link.id = linkId;
@@ -2520,8 +2598,7 @@
             console.error("Error loading fonts for modal:", e)
           );
         }
-    
-    
+
         // After background is loaded, add design objects
         await new Promise((resolve) => {
           if (tempDataObjects && tempDataObjects.length > 0) {
@@ -2529,16 +2606,15 @@
               tempDataObjects,
               function (enlivenedObjects) {
                 // Calculate scaling factors from the *saved design's canvas size* to the *modal preview canvas size*
-                const widthScaleFactor = PREVIEW_RENDER_WIDTH / savedCanvasWidth;
-                const heightScaleFactor = PREVIEW_RENDER_HEIGHT / savedCanvasHeight;
-    
+                const widthScaleFactor =
+                  PREVIEW_RENDER_WIDTH / savedCanvasWidth;
+                const heightScaleFactor =
+                  PREVIEW_RENDER_HEIGHT / savedCanvasHeight;
+
                 enlivenedObjects.forEach((obj) => {
                   const clonedObj = fabric.util.object.clone(obj); // Clone the Fabric.js object JSON
-    
+
                   clonedObj.set({
-                    originX: obj.originX || 'left', // Preserve original originX/Y or set default
-                    originY: obj.originY || 'top', // Preserve original originX/Y or set default
-                    // Hitung posisi baru berdasarkan persentase atau rasio
                     left: obj.left * widthScaleFactor,
                     top: obj.top * heightScaleFactor,
                     scaleX: obj.scaleX * widthScaleFactor,
@@ -2547,6 +2623,10 @@
                     evented: false,
                     hasControls: false,
                     hasBorders: false,
+                    // Restore original originX/Y if needed, otherwise Fabric.js defaults to 'left'/'top'
+                    // when enlivening unless specified in JSON. Explicitly set to avoid issues.
+                    originX: obj.originX || "left",
+                    originY: obj.originY || "top",
                   });
                   // For textboxes, scale font size
                   if (clonedObj.type === "textbox") {
@@ -2560,10 +2640,10 @@
               }
             );
           } else {
-              resolve(); // Resolve if no objects to load
+            resolve(); // Resolve if no objects to load
           }
         });
-    
+
         // Generate final image from temp canvas
         const dataURL = tempCanvas.toDataURL({
           format: "png",
@@ -2572,17 +2652,24 @@
         tempCanvas.dispose(); // Clean up temporary canvas element and Fabric.js instance
         return dataURL;
       }
-    
+
       document.addEventListener("DOMContentLoaded", function () {
         const previewButton = document.getElementById("previewButton");
         const previewModal = document.getElementById("previewModal");
         const closeModalButton = document.getElementById("closeModalButton");
-        const designPreviewImage = document.getElementById("designPreviewImage");
-        const previewModalContent = document.getElementById("previewModalContent");
-    
-        const modalFrontViewButton = document.getElementById("frontViewButton");
-        const modalBackViewButton = document.getElementById("backViewButton");
-    
+        const designPreviewImage =
+          document.getElementById("designPreviewImage");
+        const previewModalContent = document.getElementById(
+          "previewModalContent"
+        );
+
+        const modalFrontViewButton = document.getElementById(
+          "modalFrontViewButton"
+        ); // Changed ID for clarity
+        const modalBackViewButton = document.getElementById(
+          "modalBackViewButton"
+        ); // Changed ID for clarity
+
         // Event listener to open the modal
         if (previewButton) {
           previewButton.addEventListener("click", async function () {
@@ -2590,7 +2677,7 @@
             saveCurrentDesignToData(
               currentView === "front" ? frontDesignData : backDesignData
             );
-    
+
             // Hide guide lines for modal preview on the main canvas
             const guideObjects = [
               centerGuideLineX,
@@ -2602,54 +2689,62 @@
             ];
             guideObjects.forEach((obj) => obj.set("visible", false));
             canvas.renderAll(); // Re-render main canvas to hide guides
-    
+
             const initialViewForModal = currentView;
-            const dataURL = await generatePreviewImageForModal(initialViewForModal);
+            const dataURL = await generatePreviewImageForModal(
+              initialViewForModal
+            );
             designPreviewImage.src = dataURL;
-    
+
             // Ensure the correct button is highlighted when opening the modal
-            if (modalFrontViewButton) {
-              modalFrontViewButton.classList.toggle("bg-gray-200", initialViewForModal === "front");
-              if (modalBackViewButton) modalBackViewButton.classList.toggle("bg-gray-200", initialViewForModal === "back");
+            if (modalFrontViewButton && modalBackViewButton) {
+              if (initialViewForModal === "front") {
+                modalFrontViewButton.classList.add("bg-gray-200");
+                modalBackViewButton.classList.remove("bg-gray-200");
+              } else {
+                modalBackViewButton.classList.add("bg-gray-200");
+                modalFrontViewButton.classList.remove("bg-gray-200");
+              }
             }
-    
+
             previewModal.classList.remove("hidden");
             document.body.classList.add("overflow-hidden");
-    
+
             setTimeout(() => {
               previewModalContent.classList.remove("opacity-0", "scale-95");
               previewModalContent.classList.add("opacity-100", "scale-100");
             }, 10);
-    
           });
         }
-    
+
         // Event listener for "Front" button in the modal
         if (modalFrontViewButton) {
           modalFrontViewButton.addEventListener("click", async () => {
             const dataURL = await generatePreviewImageForModal("front");
             designPreviewImage.src = dataURL;
             modalFrontViewButton.classList.add("bg-gray-200");
-            if (modalBackViewButton) modalBackViewButton.classList.remove("bg-gray-200");
+            if (modalBackViewButton)
+              modalBackViewButton.classList.remove("bg-gray-200");
           });
         }
-    
+
         // Event listener for "Back" button in the modal
         if (modalBackViewButton) {
           modalBackViewButton.addEventListener("click", async () => {
             const dataURL = await generatePreviewImageForModal("back");
             designPreviewImage.src = dataURL;
             modalBackViewButton.classList.add("bg-gray-200");
-            if (modalFrontViewButton) modalFrontViewButton.classList.remove("bg-gray-200");
+            if (modalFrontViewButton)
+              modalFrontViewButton.classList.remove("bg-gray-200");
           });
         }
-    
+
         // Close Modal Button Event Listener
         if (closeModalButton) {
           closeModalButton.addEventListener("click", function () {
             previewModalContent.classList.remove("opacity-100", "scale-100");
             previewModalContent.classList.add("opacity-0", "scale-95");
-    
+
             previewModalContent.addEventListener(
               "transitionend",
               function handler() {
@@ -2668,14 +2763,14 @@
             );
           });
         }
-    
+
         // Close Modal when clicking outside
         if (previewModal) {
           previewModal.addEventListener("click", function (event) {
             if (event.target === previewModal) {
               previewModalContent.classList.remove("opacity-100", "scale-100");
               previewModalContent.classList.add("opacity-0", "scale-95");
-    
+
               previewModalContent.addEventListener(
                 "transitionend",
                 function handler() {
@@ -2695,7 +2790,7 @@
             }
           });
         }
-    
+
         // Close Modal with Escape key
         document.addEventListener("keydown", function (event) {
           if (
@@ -2705,7 +2800,7 @@
           ) {
             previewModalContent.classList.remove("opacity-100", "scale-100");
             previewModalContent.classList.add("opacity-0", "scale-95");
-    
+
             previewModalContent.addEventListener(
               "transitionend",
               function handler() {
@@ -2725,15 +2820,14 @@
           }
         });
       });
-    
-    
-      // --- event-listeners.js ---
+    </script>
+    <script>
       document.addEventListener("DOMContentLoaded", () => {
         const savedFullDesign = localStorage.getItem("kaosDesign");
         // Penting: Panggil initializeCanvasAndBackground terlebih dahulu
         // Ini akan mengatur dimensi kanvas dan mengelola scaling awal objek kosong atau objek yang sudah ada
         initializeCanvasAndBackground();
-    
+
         if (savedFullDesign) {
           try {
             const parsedDesign = JSON.parse(savedFullDesign);
@@ -2748,6 +2842,17 @@
             // loadDesignFromData akan menskalakan objek sesuai dengan currentCanvasWidth/Height
             loadDesignFromData(frontDesignData);
             currentView = "front";
+            // Manually set initial active state for panel buttons
+            const initialPanelFrontButton = document.querySelector(
+              ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(1)"
+            );
+            const initialPanelBackButton = document.querySelector(
+              ".flex-shrink-0.flex.items-center.gap-1.sm\\:gap-2.bg-white.border.border-gray-300.hover\\:bg-gray-100.text-gray-800.text-\\[10px\\].sm\\:text-sm.px-1\\.5.sm\\:px-3.py-0\\.5.sm\\:py-1\\.5.rounded.transition.h-6.sm\\:h-8:nth-of-type(2)"
+            );
+            if (initialPanelFrontButton)
+              initialPanelFrontButton.classList.add("bg-gray-200");
+            if (initialPanelBackButton)
+              initialPanelBackButton.classList.remove("bg-gray-200");
           } catch (e) {
             console.error("Error parsing saved design from localStorage:", e);
             // Reset design data if parsing fails to avoid errors
@@ -2763,21 +2868,33 @@
           // If no saved design, ensure updateDesignList is called
           updateDesignList();
         }
-    
+
         // Set default zoom to 75% after all other initializations
         // Pastikan zoomSelect sudah tersedia
-        const zoomSelect = document.querySelector(".flex.items-center.gap-1.sm\\:gap-2.flex-shrink-0 > select");
+        const zoomSelect = document.querySelector(
+          ".flex.items-center.gap-1.sm\\:gap-2.flex-shrink-0 > select"
+        );
         if (zoomSelect) {
           zoomSelect.value = "75%"; // Set the dropdown to 75%
           applyZoom(75); // Apply the 75% zoom programmatically
         }
-    
+
         updateUIFromActiveObject();
-    
+
+        // Add event listeners for autosave
+        // Trigger autosave when an object is added, modified, or removed
+        if (canvas) {
+          canvas.on("object:added", saveDesignAutomatically);
+          canvas.on("object:modified", saveDesignAutomatically);
+          canvas.on("object:removed", saveDesignAutomatically);
+          // When selection is cleared (e.g., user clicks off object), it might also mean a change
+          canvas.on("selection:cleared", saveDesignAutomatically);
+        } else {
+          console.warn("Canvas not ready for autosave event listeners.");
+        }
+
         canvas.renderAll();
       });
-    
-      // window.addEventListener("resize", initializeCanvasAndBackground); // Already set in fabric-canvas-init.js
     </script>
   </body>
 </html>
