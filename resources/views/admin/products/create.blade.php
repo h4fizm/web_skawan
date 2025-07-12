@@ -24,7 +24,7 @@
                     <h5>Form Produk</h5>
                 </div>
                 <div class="card-body">
-                    <form id="form_product" action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="form_product" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="row mb-3">
