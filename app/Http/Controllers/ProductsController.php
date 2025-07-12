@@ -17,7 +17,7 @@ class ProductsController extends Controller
     {
         if (request()->ajax()) {
             try {
-                $products = Products::with('productCategories', 'productImages')->get();
+                $products = Products::with('productCategories.category', 'productImages')->get();
                 return formatResponse('success', 'Data berhasil diambil!', $products, null, 200);
             } catch (\Exception $e) {
                 return formatResponse('error', 'Gagal mengambil data produk!', null, $e->getMessage(), 500);
@@ -46,14 +46,16 @@ class ProductsController extends Controller
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
             'information' => 'nullable|string',
-            'categories' => 'required|array|min:1',  
-            'categories.*' => 'exists:categories,id', 
+            'categories' => 'required|array|min:1',
+            'categories.*' => 'string|max:255', // Allow string category names
             'images' => 'nullable|array',
             'images.*' => 'file|mimes:jpeg,png,jpg,gif|max:10240',
         ]);
+
         DB::beginTransaction();
 
         try {
+            // Create the product record
             $product = Products::create([
                 'name_product' => $request->name_product,
                 'total_stock' => $request->total_stock,
@@ -62,20 +64,20 @@ class ProductsController extends Controller
                 'information' => $request->information,
             ]);
 
-            $categories = $request->categories;
+            // Handle categories (check if the category already exists or create new ones)
+            $categories = [];
 
-            if ($request->new_category) {
-                $category = Categories::create([
-                    'name_category' => $request->new_category,
-                    'description' => 'New Category',
-                ]);
+            foreach ($request->categories as $categoryName) {
+                $category = Categories::firstOrCreate(['name_category' => $categoryName]);
                 $categories[] = $category->id;
             }
 
+            // Attach categories to the product
             if ($categories) {
                 $product->productCategories()->attach($categories);
             }
 
+            // Handle image uploads
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $path = $image->store('product_images', 'public');
@@ -92,9 +94,9 @@ class ProductsController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal menyimpan produk: ' . $e->getMessage());
-            // return formatResponse(false, 'Gagal menyimpan produk', null, $e->getMessage(), 500);
         }
     }
+
 
 
     /**

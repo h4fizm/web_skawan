@@ -1,8 +1,5 @@
 @extends('layouts.app')
 
-@section('style')
-@endsection
-
 @section('title')
     Data Produk
 @endsection
@@ -26,11 +23,8 @@
                             <th>Nama Produk</th>
                             <th>Stock</th>
                             <th>Harga</th>
-                            <th>Kategori</th>
-                            <th>Gambar Produk</th>
                             <th>Deskripsi</th>
                             <th>Tanggal Dibuat</th>
-                            <th>Status Produk</th>
                             <th>Detail</th>
                             <th>Aksi</th>
                         </tr>
@@ -59,6 +53,10 @@
                             <tr>
                                 <th>Informasi Ukuran</th>
                                 <td id="detail_information"></td>
+                            </tr>
+                            <tr>
+                                <th>Kategori</th>
+                                <td id="detail_categories"></td>
                             </tr>
                             <tr>
                                 <th>Gambar Produk</th>
@@ -97,24 +95,12 @@
                     name: 'price'
                 },
                 {
-                    data: 'category.name',  // assuming category relationship exists
-                    name: 'category.name'
-                },
-                {
-                    data: 'product_image.url',  // assuming product_image relationship exists
-                    name: 'product_image.url'
-                },
-                {
                     data: 'description',
                     name: 'description'
                 },
                 {
                     data: 'created_at',
                     name: 'created_at'
-                },
-                {
-                    data: 'status',
-                    name: 'status'
                 },
             ];
 
@@ -126,7 +112,7 @@
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [5],
                     render: function(data, type, full, meta) {
                         if (full.created_at) {
                             return formatDateIndonesian(full.created_at);
@@ -135,30 +121,14 @@
                     }
                 },
                 {
-                    targets: [8],
-                    render: function(data, type, full, meta) {
-                        let status = data.toUpperCase();
-                        let badgeClass = '';
-
-                        if (status === 'AVAILABLE') {
-                            badgeClass = 'bg-success';
-                        } else if (status === 'OUT OF STOCK') {
-                            badgeClass = 'bg-danger';
-                        } else {
-                            badgeClass = 'bg-secondary';
-                        }
-
-                        return `<span class="badge ${badgeClass}">${status}</span>`;
-                    }
-                },
-                {
-                    targets: [9],
+                    targets: [6],
                     data: 'id',
                     render: function(data, type, full, meta) {
                         const detailData = {
                             description: full.description,
                             information: full.information,
-                            image: full.product_image.url
+                            categories: full.product_categories.map(category => category.category.name_category).join(', '), // Join categories
+                            images: full.product_images.map(image => image.image_path), // Collect image paths
                         };
                         const jsonData = JSON.stringify(detailData).replace(/"/g, '&quot;');
                         return `<button class="btn btn-info btn-lg btn-detail" data-info="${jsonData}">
@@ -167,7 +137,7 @@
                     }
                 },
                 {
-                    targets: [10],
+                    targets: [7],
                     data: 'id',
                     render: function(data, type, full, meta) {
                         if (userRoles.includes('admin')) {
@@ -207,7 +177,34 @@
 
                 $('#detail_description').html(c.description);
                 $('#detail_information').text(c.information);
-                $('#detail_image').html(`<img src="${c.image}" class="img-fluid" />`);
+
+                // Display categories
+                $('#detail_categories').text(c.categories);
+                console.log(c.images);
+                // Display product images in a carousel
+                const images = c.images.map(image => {
+                    return `<div class="carousel-item">
+                                <img src="/storage/${image}" class="d-block w-100" alt="Product Image">
+                            </div>`;
+                }).join('');
+
+                const carousel = `
+                    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            ${images}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                `;
+
+                $('#detail_image').html(carousel);
 
                 $('#detailModal').modal('show');
             });

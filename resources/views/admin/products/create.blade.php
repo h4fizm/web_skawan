@@ -4,7 +4,8 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css"
+        rel="stylesheet" />
 @endsection
 
 @section('title')
@@ -24,13 +25,15 @@
                     <h5>Form Produk</h5>
                 </div>
                 <div class="card-body">
-                    <form id="form_product" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="form_product" action="{{ route('products.store') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
 
                         <div class="row mb-3">
                             <div class="col-md-6 py-3">
                                 <label for="name_product" class="form-label">Nama Produk</label>
-                                <input type="text" id="name_product" name="name_product" class="form-control" value="{{ old('name_product') }}" required>
+                                <input type="text" id="name_product" name="name_product" class="form-control"
+                                    value="{{ old('name_product') }}" required>
                                 @error('name_product')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -38,7 +41,8 @@
 
                             <div class="col-md-6 py-3">
                                 <label for="total_stock" class="form-label">Total Stok</label>
-                                <input type="number" id="total_stock" name="total_stock" class="form-control" value="{{ old('total_stock') }}" required>
+                                <input type="number" id="total_stock" name="total_stock" class="form-control"
+                                    value="{{ old('total_stock') }}" required>
                                 @error('total_stock')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -46,7 +50,8 @@
 
                             <div class="col-md-6 py-3">
                                 <label for="price" class="form-label">Harga</label>
-                                <input type="number" step="0.01" id="price" name="price" class="form-control" value="{{ old('price') }}" required>
+                                <input type="number" step="0.01" id="price" name="price" class="form-control"
+                                    value="{{ old('price') }}" required>
                                 @error('price')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -71,8 +76,11 @@
                             <div class="col-md-6 py-3">
                                 <label for="categories" class="form-label">Pilih Kategori</label>
                                 <select id="categories" name="categories[]" class="form-select" multiple required>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ in_array($category->id, old('categories', [])) ? 'selected' : '' }}>{{ $category->name_category }}</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->name_category }}"
+                                            {{ in_array($category->name_category, old('categories', [])) ? 'selected' : '' }}>
+                                            {{ $category->name_category }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('categories')
